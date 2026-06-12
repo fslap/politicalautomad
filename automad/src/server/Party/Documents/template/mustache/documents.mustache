@@ -1,0 +1,29 @@
+<div class="wp-block-group widthcontainer {{classes}}">
+    <a id="{{section_id}}"></a>
+
+    <div class="split-container">
+        <div class="split-left">
+            <svg class="split-image-container" {{#desktop_image}}viewBox="0 0 {{width}} {{height}}"{{/desktop_image}}{{#mobile_image}}viewBox="0 0 {{width}} {{height}}"{{/mobile_image}}>
+                {{#desktop_image}}
+                    <image class="split-image desktop-image-1000" href="{{desktop_image}}" alt="{{title}}" width="{{width}}px" height="{{height}}px">
+                {{/desktop_image}}
+                {{#mobile_image}}
+                    <image class="split-image mobile-image-1000" href="{{mobile_image}}" alt="{{title}}" width="{{width}}px" height="{{height}}px">
+                {{/mobile_image}}
+            </svg>
+        </div>
+
+        <div class="split-right">
+            {{#title}}<h1 class="wp-block-heading section-heading">{{title}}</h1>{{/title}}
+            {{#title}}<br>{{/title}}
+            {{#subtitle}}<h2 class="wp-block-heading bgwhite"><b>{{subtitle}}</b></h2>{{/subtitle}}
+            {{#subtitle}}<br>{{/subtitle}}
+            {{#subtitle_emphasis}}<h2 class="wp-block-heading"><i>{{subtitle_emphasis}}</i></h2>{{/subtitle_emphasis}}
+            {{#subtitle_emphasis}}<br>{{/subtitle_emphasis}}
+
+            {{#features}}
+                <h4 class="wp-block-heading">{{feature_prefix}} {{.}}</h4>
+            {{/features}}
+        </div>
+    </div>
+</div>
