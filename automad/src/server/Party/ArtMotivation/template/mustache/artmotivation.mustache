@@ -1,0 +1,17 @@
+<div class="wp-block-group art art-desktop-only {{classes}}">
+    {{#title}}<h1 class="wp-block-heading section-heading">{{title}}</h1>{{/title}}
+    <br><br>
+    <a id="{{section_id}}"></a>
+
+    {{#artworks}}
+        <img src="{{image}}" class="{{classes}}" alt="{{description}}">
+    {{/artworks}}
+</div>
+
+{{#mobile_art_image}}
+<div class="wp-block-group art art-mobile-only {{classes}}">
+    {{#title}}<h1 class="wp-block-heading section-heading">{{title}}</h1>{{/title}}
+    <br><br>
+    <img src="{{mobile_art_image}}" class="mobile-art-image" alt="{{title}}">
+</div>
+{{/mobile_art_image}}
