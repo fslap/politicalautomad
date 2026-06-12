@@ -1,0 +1,22 @@
+<div class="wp-block-group {{classes}}" style="text-align: center;">
+    {{#warning_text}}
+        <p class="wp-block-paragraph">{{warning_text}}</p>
+    {{/warning_text}}
+</div>
+
+<div class="party-header__title">
+    {{#party_name_parts}}
+        <h1 class="wp-block-heading party-header__line">{{.}}</h1>
+    {{/party_name_parts}}
+</div>
+
+<br><br>
+
+<div class="wp-block-group party-header__cta">
+    <a href="{{main_link}}" target="_blank" class="wp-element-button">
+        {{main_link_text}}
+    </a>
+    <br><br>
+    <p class="wp-block-paragraph">{{intro_text}}</p>
+</div>
+
