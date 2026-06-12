@@ -1,0 +1,21 @@
+<div class="wp-block-group {{classes}}">
+    <a id="{{section_id}}"></a>
+
+    {{#title}}<h1 class="wp-block-heading section-heading">{{title}}</h1>{{/title}}
+
+    {{#desktop_image}}
+        <img src="{{desktop_image}}" class="section-image" alt="{{title}}">
+    {{/desktop_image}}
+    {{#mobile_image}}
+        <img src="{{mobile_image}}" class="section-image mobile-image-1000" alt="{{title}}">
+    {{/mobile_image}}
+
+    {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
+
+    <div class="markdown-content wp-block-post-content">
+        {{{html_content}}}
+    </div>
+
+    {{#has_inner_container}}</div>{{/has_inner_container}}
+</div>
+
