@@ -1,0 +1,15 @@
+<div class="wp-block-group scroll {{classes}}">
+  {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
+
+  <div class="scroll-content">
+    {{#items}}
+      <div class="block">
+        {{#id}}<a id="{{id}}"></a>{{/id}}
+        {{#subject}}<h6 class="wp-block-heading">{{subject}}</h6>{{/subject}}
+        {{#text}}<p class="wp-block-paragraph">{{text}}</p>{{/text}}
+      </div>
+    {{/items}}
+  </div>
+
+  {{#has_inner_container}}</div>{{/has_inner_container}}
+</div>
