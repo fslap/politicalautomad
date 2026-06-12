@@ -1,0 +1,27 @@
+<div class="wp-block-group {{ classes }}">
+    <a id="{{ section_id }}"></a>
+    
+    <h1 class="wp-block-heading">{{ title }}</h1>
+    
+    {# Section image with responsive support #}
+    {% if desktop_image %}
+        {% if mobile_image != desktop_image %}
+            <img src="{{ mobile_image }}" class="section-image mobile-image-1000" alt="{{ title }}">
+            <img src="{{ desktop_image }}" class="section-image desktop-image-1000" alt="{{ title }}">
+        {% else %}
+            <img src="{{ desktop_image }}" class="section-image" alt="{{ title }}">
+        {% endif %}
+    {% endif %}
+    
+    {% if has_inner_container %}
+        <div class="inner-container">
+    {% endif %}
+    
+    <div class="markdown-content wp-block-post-content">
+        {{ html_content|raw }}
+    </div>
+    
+    {% if has_inner_container %}
+        </div>
+    {% endif %}
+</div>
