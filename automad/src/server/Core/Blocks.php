@@ -46,8 +46,10 @@ defined('AUTOMAD') or die('Direct access not permitted!');
  * The Blocks class.
  *
  * @author Marc Anton Dahmen
+ * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2020-2026 by Marc Anton Dahmen - https://marcdahmen.de
  * @license See LICENSE.md for license information
+ * @license See MULTI_LICENSE_PARTY_PURPOSE.md for extensive usage in case of political parties
  *
  * @psalm-import-type BlockData from \Automad\Blocks\AbstractBlock
  */
@@ -58,6 +60,10 @@ class Blocks {
 	 * A static state property that is true when rendering is in process.
 	 */
 	private static bool $isRendering = false;
+
+	protected static function resolveObjectCallback(string $blockType, string $method): callable|string {
+		return '\\Automad\\Blocks\\' . ucfirst($blockType) . '::' . $method;
+	}
 
 	/**
 	 * Inject block assets into the header of a page.
@@ -169,7 +175,7 @@ class Blocks {
 
 		$replaceInBlock = function (array $block) use ($ComponentCollection, $searchRegex, $replace, $replaceInPublishedComponent): array {
 			return call_user_func_array(
-				'\\Automad\\Blocks\\' . ucfirst($block['type']) . '::replace',
+				self::resolveObjectCallback($block['type'], 'replace'),
 				array($block, $ComponentCollection, $searchRegex, $replace, $replaceInPublishedComponent)
 			);
 		};
@@ -191,7 +197,7 @@ class Blocks {
 
 		$blockToString = function (array $block) use ($ComponentCollection): string {
 			return call_user_func_array(
-				'\\Automad\\Blocks\\' . ucfirst($block['type']) . '::toString',
+				self::resolveObjectCallback($block['type'], 'toString'),
 				array($block, $ComponentCollection)
 			);
 		};
@@ -249,7 +255,7 @@ class Blocks {
 	 */
 	private static function renderBlock(array $block, Automad $Automad): string {
 		return call_user_func_array(
-			'\\Automad\\Blocks\\' . ucfirst($block['type']) . '::render',
+			self::resolveObjectCallback($block['type'], 'render'),
 			array($block, $Automad)
 		);
 	}
