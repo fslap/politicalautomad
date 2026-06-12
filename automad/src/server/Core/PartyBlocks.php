@@ -36,6 +36,8 @@
 
 namespace Automad\Core;
 
+use Automad\DynamicBlockRegister;
+
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
@@ -47,8 +49,18 @@ defined('AUTOMAD') or die('Direct access not permitted!');
  *
  * @psalm-import-type BlockData from \Automad\Blocks\AbstractBlock
  */
-class PartyBlocks extends Blocks {
+final class PartyBlocks extends Blocks {
+    public function __construct(
+        private DynamicBlockRegister $register
+    ) {
+
+    }
+
     protected static function resolveObjectCallback(string $blockType, string $method): callable|string {
-		return '\\Automad\\Blocks\\' . ucfirst($blockType) . '::' . $method;
-	}
+        $callable = parent::resolveObjectCallback($blockType, $method);
+        if ($this->register->type($blockType)) {
+            return [$this->register->superobject($blockType), $method];
+        }
+        return $callable;
+    }
 }
