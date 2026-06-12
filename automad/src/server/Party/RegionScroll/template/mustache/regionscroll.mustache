@@ -1,0 +1,21 @@
+<div class="wp-block-group scroll {{classes}}">
+    {{#navigation_text}}
+        <div class="scroll-nav-compact">
+            <a href="{{navigation_target}}" class="nav-btn">{{navigation_text}}</a>
+        </div>
+    {{/navigation_text}}
+
+    <div class="scroll-content" style="width: {{scroll_width}};">
+        {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
+
+        {{#regions}}
+            <div class="block">
+                <a id="{{region_id}}"></a>
+                <h6 class="wp-block-heading">{{region_name}}</h6>
+                <p class="wp-block-paragraph">{{region_description}}</p>
+            </div>
+        {{/regions}}
+
+        {{#has_inner_container}}</div>{{/has_inner_container}}
+    </div>
+</div>
