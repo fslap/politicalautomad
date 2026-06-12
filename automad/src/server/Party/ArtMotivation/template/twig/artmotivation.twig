@@ -1,0 +1,19 @@
+<div class="wp-block-group art art-desktop-only {{ classes }}">
+    <h1 class="wp-block-heading">{{ title }}</h1>
+    <br><br>
+    <a id="{{ section_id }}"></a>
+    
+    {% for artwork in artworks %}
+        <img src="{{ artwork.image }}" 
+             class="{{ artwork.classes }}" 
+             alt="{{ artwork.description }}">
+    {% endfor %}
+</div>
+
+{% if mobile_art_image %}
+<div class="wp-block-group art art-mobile-only {{ classes }}">
+    <h1 class="wp-block-heading">{{ title }}</h1>
+    <br><br>
+    <img src="{{ mobile_art_image }}" class="mobile-art-image" alt="{{ title }}">
+</div>
+{% endif %}
