@@ -1,0 +1,27 @@
+<div class="wp-block-group scroll {{ classes }}">
+    <div class="scroll-nav-compact">
+        <a href="{{ navigation_target }}" class="nav-btn">{{ navigation_text }}</a>
+    </div>
+    
+    <div class="scroll-content" {% if scroll_width %}style="width: {{ scroll_width }};"{% endif %}>
+        {% if has_inner_container %}
+            <div class="inner-container">
+        {% endif %}
+        
+        {% for region in regions %}
+            <div class="block">
+                {% set ids = region.region_id|split(',') %}
+                {% for id in ids %}
+                    <a id="{{ id|trim }}"></a>
+                {% endfor %}
+                
+                <h6 class="wp-block-heading">{{ region.region_name }}</h6>
+                <p class="wp-block-paragraph">{{ region.region_description }}</p>
+            </div>
+        {% endfor %}
+        
+        {% if has_inner_container %}
+            </div>
+        {% endif %}
+    </div>
+</div>
