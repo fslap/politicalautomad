@@ -16,3 +16,19 @@
 node_modules
 dist
 .history
+*-legacy.*
+
+# Party grok tooling (local only)
+/bin/commit-party-branches.mjs
+/bin/extract-component-data.mjs
+/bin/extract-component-data.php
+/bin/generate-all-party-components.mjs
+/bin/generate-all-party-components.php
+/bin/generate-party-branches.mjs
+/bin/party-php-header.mjs
+/bin/stamp-party-headers.mjs
+/bin/sync-party-component.php
+/component_data.json
+/terminals/
+/lib/composer.json
+/lib/composer.lock
