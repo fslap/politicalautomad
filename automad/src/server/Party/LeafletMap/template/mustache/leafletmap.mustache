@@ -1,0 +1,26 @@
+<div class="wp-block-group {{classes}}">
+    <a id="{{section_id}}"></a>
+    <h1 class="wp-block-heading">{{title}}</h1>
+
+    {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
+
+    <div id="{{section_id}}_map" class="leaflet-map" style="height: {{map_height}};"></div>
+
+    {{#has_inner_container}}</div>{{/has_inner_container}}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var map = L.map('{{section_id}}_map').setView([{{map_center}}], {{map_zoom}});
+    L.tileLayer('{{tile_url}}', { maxZoom: 18, attribution: 'OpenStreetMap contributors' }).addTo(map);
+
+    {{#markers}}
+        L.marker([{{lat}}, {{lng}}]).addTo(map);
+    {{/markers}}
+
+    {{#geojson_content}}
+    var geojsonFeature = {{{geojson_content}}};
+    L.geoJSON(geojsonFeature).addTo(map);
+    {{/geojson_content}}
+});
+</script>
