@@ -1,0 +1,19 @@
+<div class="skyline-wrap {{classes}}" style="height: {{height}}px" data-seed="{{seed}}">
+  <svg class="skyline-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0%" stop-color="#0b1020"></stop>
+        <stop offset="60%" stop-color="#171c33"></stop>
+        <stop offset="100%" stop-color="#05060c"></stop>
+      </linearGradient>
+    </defs>
+
+    <rect x="0" y="0" width="100" height="100" fill="url(#skyGrad)"></rect>
+
+    {{#buildings}}
+      <rect class="sky-b sky-d{{depth}} {{#twinkle}}sky-tw{{/twinkle}}"
+            x="{{x}}" y="{{y}}"
+            width="{{w}}" height="{{h}}"></rect>
+    {{/buildings}}
+  </svg>
+</div>
