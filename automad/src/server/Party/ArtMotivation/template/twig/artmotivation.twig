@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="public/css/art.css">
+
+<div class="wp-block-group art {{ classes }}">
+    <h1 class="wp-block-heading">{{ title }}</h1>
+    <br><br>
+    <a id="{{ section_id }}"></a>
+    
+    {% for artwork in artworks %}
+        <img src="{{ artwork.image }}" 
+             class="{{ artwork.classes }}" 
+             alt="{{ artwork.description }}">
+    {% endfor %}
+</div>
