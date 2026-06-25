@@ -36,6 +36,7 @@
 namespace Automad\Core;
 
 use Automad\Blocks\Utils\Attr;
+use Automad\DynamicBlockRegister;
 use Automad\Engine\Document\Head;
 use Automad\Models\ComponentCollection;
 use Automad\System\Asset;
@@ -61,7 +62,25 @@ class Blocks {
 	 */
 	private static bool $isRendering = false;
 
+	private static ?DynamicBlockRegister $dynamicRegister = null;
+
+	public static function setDynamicRegister(DynamicBlockRegister $register): void {
+		self::$dynamicRegister = $register;
+	}
+
+	public static function getDynamicRegister(): ?DynamicBlockRegister {
+		return self::$dynamicRegister;
+	}
+
 	protected static function resolveObjectCallback(string $blockType, string $method): callable|string {
+		if (self::$dynamicRegister !== null && self::$dynamicRegister->type($blockType)) {
+			$block = self::$dynamicRegister->superobject($blockType);
+
+			if ($block !== null && $block !== false) {
+				return [$block, $method];
+			}
+		}
+
 		return '\\Automad\\Blocks\\' . ucfirst($blockType) . '::' . $method;
 	}
 

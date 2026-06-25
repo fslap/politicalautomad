@@ -85,7 +85,9 @@ class App {
 
 		Autoload::init();
 
-		date_default_timezone_set(@date_default_timezone_get());
+		\Automad\Party\BlockBootstrap::init();
+
+		date_default_timezone_set(@date_default_timezone_set());
 
 		Config::init();
 		Debug::setup();

@@ -36,71 +36,136 @@ namespace Automad\Blocks;
 
 use Automad\Core\Automad;
 use Automad\Models\ComponentCollection;
+use Automad\Party\Traits\PartyBlockDefaults;
 
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
  * The abstract base block for usage of external templates dynamic.
  *
+ * Each component lives under Party/{ComponentName}/ with:
+ * - template/mustache/{blockname}.mustache  (primary)
+ * - template/twig/{blockname}.twig          (fallback; self-contained, no {% include %} stubs)
+ *
  * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2026 by Florian Leon Steenbuck - https://kil.ls
  * @license See LICENSE_PARTY_PURPOSE.md for license information
  *
  */
-abstract class AbstractDynamicTemplateBlock extends AbstractBlock {
-    private string $name = '';
+abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
+	use PartyBlockDefaults;
 
-    public __construct(
-        private string $path,
-        false|string $name = false,
-        private string $engine = /* Mustache_Engine::class */ 'Mustache_Engine',
-        private string|array $source = []
-    ) {
-        if ($name === false) {
-            $name = $this::class;
-        }
-        $this->name = $name;
-    }
+	private string $blockName = '';
 
-    abstract public function context(array $config): array;
+	public function __construct(
+		private string $path,
+		false|string $name = false,
+		private string $engine = 'mustache',
+		private string|array $source = []
+	) {
+		if ($name === false) {
+			$name = strtolower((new \ReflectionClass($this))->getShortName());
+		}
+		$this->blockName = $name;
+	}
+
+	public function name(): string {
+		return $this->blockName;
+	}
+
+	public function getPath(): string {
+		return $this->path;
+	}
+
+	abstract public function context(array $config): array;
 
 	/**
-	 * Render a paragraph block.
+	 * Render a party dynamic block.
 	 *
-	 * @param BlockData $block
+	 * @param array $block
 	 * @param Automad $Automad
 	 * @return string the rendered HTML
 	 */
 	public function render(array $block, Automad $Automad): string {
-        if ((!is_array($this->source)) && class_exists($this->source)) {
+		$config = $block['data'] ?? [];
+		$ctx = $this->context($config);
 
-        }
-    }
+		if ($this->engine === 'twig') {
+			$html = $this->renderTwig($ctx);
+			if ($html !== '') {
+				return $html;
+			}
+		}
 
-	/**
-	 * Search and replace inside a block.
-	 *
-	 * @param BlockData $block
-	 * @param ?ComponentCollection $ComponentCollection
-	 * @param string $searchRegex
-	 * @param string $replace
-	 * @param bool $replaceInPublishedComponent
-	 * @return BlockData
-	 */
-	abstract public function replace(
-		array $block,
-		?ComponentCollection $ComponentCollection,
-		string $searchRegex,
-		string $replace,
-		bool $replaceInPublishedComponent
-	): array;
+		$html = $this->renderMustache($ctx);
+		if ($html !== '') {
+			return $html;
+		}
 
-	/**
-	 * Return a searchable string representation of a block.
-	 *
-	 * @param BlockData $block
-	 * @param ?ComponentCollection $ComponentCollection
-	 * @return string
-	 */
-	abstract public function toString(array $block, ?ComponentCollection $ComponentCollection): string;
+		return $this->renderTwig($ctx);
+	}
+
+	protected function renderMustache(array $ctx): string {
+		$templateFile = $this->path . '/template/mustache/' . $this->blockName . '.mustache';
+		if (!is_file($templateFile)) {
+			return '';
+		}
+
+		$this->loadVendor();
+
+		if (!class_exists(\Mustache_Engine::class)) {
+			return '';
+		}
+
+		$loader = new \Mustache_Loader_FilesystemLoader(
+			$this->path . '/template/mustache',
+			['extension' => '.mustache']
+		);
+
+		$engine = new \Mustache_Engine([
+			'loader' => $loader,
+			'entity_flags' => ENT_QUOTES,
+		]);
+
+		return $engine->render($this->blockName, $ctx);
+	}
+
+	protected function renderTwig(array $ctx): string {
+		$templateFile = $this->path . '/template/twig/' . $this->blockName . '.twig';
+		if (!is_file($templateFile)) {
+			return '';
+		}
+
+		$this->loadVendor();
+
+		if (!class_exists(\Twig\Environment::class)) {
+			return '';
+		}
+
+		$loader = new \Twig\Loader\FilesystemLoader($this->path . '/template/twig');
+		$twig = new \Twig\Environment($loader, [
+			'autoescape' => 'html',
+			'strict_variables' => false,
+		]);
+
+		return $twig->render($this->blockName . '.twig', $ctx);
+	}
+
+	private function loadVendor(): void {
+		static $loaded = false;
+		if ($loaded) {
+			return;
+		}
+
+		$autoload = AM_BASE_DIR . '/lib/vendor/autoload.php';
+		if (is_readable($autoload)) {
+			require_once $autoload;
+		}
+
+		if (class_exists(\Mustache_Autoloader::class)) {
+			\Mustache_Autoloader::register();
+		}
+
+		$loaded = true;
+	}
 }
