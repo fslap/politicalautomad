@@ -1,0 +1,19 @@
+<div class="event-block" data-component="eventblock">
+  <h2>{{ title }}</h2>
+  <div class="events-list">
+    {{#events}}
+    <div class="event-card">
+      <div class="event-date">
+        <span class="date">{{ date }}</span>
+        <span class="time">{{ time }}</span>
+      </div>
+      <div class="event-content">
+        <h3>{{ title }}</h3>
+        <p class="location">{{ location }}</p>
+        <p class="description">{{ description }}</p>
+        <a href="#rsvp" class="btn btn-small">RSVP →</a>
+      </div>
+    </div>
+    {{/events}}
+  </div>
+</div>
