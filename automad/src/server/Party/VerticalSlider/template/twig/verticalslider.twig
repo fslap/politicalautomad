@@ -1,0 +1,16 @@
+<div class="wp-block-group {{ classes }}">
+  {% if section_id %}<a id="{{ section_id }}"></a>{% endif %}
+  {% if title %}<h1 class="wp-block-heading">{{ title }}</h1>{% endif %}
+
+  {% if has_inner_container %}<div class="inner-container">{% endif %}
+  <div class="vertical-slider">
+    {% for item in items %}
+      <div class="vertical-slide">
+        {% if item.template_twig %}
+          {% include item.template_twig with item %}
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  {% if has_inner_container %}</div>{% endif %}
+</div>
