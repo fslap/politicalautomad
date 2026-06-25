@@ -1,0 +1,11 @@
+<div class="wp-block-group {{ classes }}">
+  {% for layer in layers %}
+    <div class="{{ layer.position }}">
+      {% for svg in layer.svgs %}
+        <img src="{{ svg.file }}"
+             class="absolute {{ svg.position }} svg {{ svg.animation }}"
+             alt="{{ svg.animation }}">
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
