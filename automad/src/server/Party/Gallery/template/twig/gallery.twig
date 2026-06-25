@@ -1,0 +1,20 @@
+<div class="wp-block-gallery">
+    {% if title %}
+        <h2 class="wp-block-heading">{{ title }}</h2>
+    {% endif %}
+    
+    <div class="wp-block-gallery__inner-container">
+        {% for image in images %}
+            <figure class="wp-block-image">
+                <img src="{{ image.src }}" 
+                     alt="{{ image.alt|default('') }}"
+                     {% if image.caption %}
+                         title="{{ image.caption }}"
+                     {% endif %}>
+                {% if image.caption %}
+                    <figcaption>{{ image.caption }}</figcaption>
+                {% endif %}
+            </figure>
+        {% endfor %}
+    </div>
+</div>
