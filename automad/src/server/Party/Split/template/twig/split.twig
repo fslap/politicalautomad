@@ -1,0 +1,49 @@
+<div class="wp-block-group {{ classes }}">
+    <a id="{{ section_id }}"></a>
+    
+    <h1 class="wp-block-heading">{{ title }}</h1>
+    
+    {# Section image with responsive support #}
+    {% if desktop_image %}
+        {% if mobile_image != desktop_image %}
+            <img src="{{ mobile_image }}" class="section-image mobile-image-1000" alt="{{ title }}">
+            <img src="{{ desktop_image }}" class="section-image desktop-image-1000" alt="{{ title }}">
+        {% else %}
+            <img src="{{ desktop_image }}" class="section-image" alt="{{ title }}">
+        {% endif %}
+    {% endif %}
+    
+    {% if has_inner_container %}
+        <div class="inner-container">
+    {% endif %}
+    
+    <div class="split-container">
+        <div class="split-left {{ split_hover_border ? 'split-hover-border' : '' }}">
+            {% if left_type == 'leaflet' %}
+                {% include 'partials/leaflet-split.twig' with left_map_config %}
+            {% elseif left_type == 'image' %}
+                <img src="{{ left_content }}" class="split-image" alt="Left section">
+            {% else %}
+                <div class="markdown-content">
+                    {{ left_html_content|raw }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="split-right {{ split_hover_border ? 'split-hover-border' : '' }}">
+            {% if right_type == 'leaflet' %}
+                {% include 'partials/leaflet-split.twig' with right_map_config %}
+            {% elseif right_type == 'image' %}
+                <img src="{{ right_content }}" class="split-image" alt="Right section">
+            {% else %}
+                <div class="markdown-content">
+                    {{ right_html_content|raw }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if has_inner_container %}
+        </div>
+    {% endif %}
+</div>
