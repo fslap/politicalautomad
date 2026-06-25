@@ -1,0 +1,241 @@
+<div class="case-leaflet-region {{ classes }}" id="{{ section_id }}_case">
+  <a id="{{ section_id }}"></a>
+  {% if title %}<h2 class="wp-block-heading">{{ title }}</h2>{% endif %}
+
+  {% if has_inner_container %}
+    <div class="inner-container">
+  {% endif %}
+
+  <div class="case-leaflet-region__layout">
+    <div class="case-leaflet-region__mapcol">
+      <div class="case-leaflet-region__map" id="{{ section_id }}_map" style="height: {{ map_height }};"></div>
+    </div>
+    <div class="case-leaflet-region__listcol">
+      <div class="case-leaflet-region__controls">
+        <input class="case-leaflet-region__search" type="text" placeholder="Suche">
+        <select class="case-leaflet-region__filter">
+          <option value="">Alle Gruppen</option>
+          {% for region in regions %}
+            <option value="{{ region.name|e }}">{{ region.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="case-leaflet-region__list"></div>
+    </div>
+  </div>
+
+  {% if has_inner_container %}
+    </div>
+  {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var root = document.getElementById('{{ section_id }}_case');
+  if (!root || !window.L) return;
+
+  var mapEl = root.querySelector('.case-leaflet-region__map');
+  var listEl = root.querySelector('.case-leaflet-region__list');
+  var searchEl = root.querySelector('.case-leaflet-region__search');
+  var filterEl = root.querySelector('.case-leaflet-region__filter');
+
+  var markersData = {{ markers_json|raw }};
+  var itemsData = {{ items_json|raw }};
+  var geojsonData = {{ geojson_json|raw }};
+  var groupsData = {{ groups_json|raw }};
+  var regionPriority = {{ region_priority ? 'true' : 'false' }};
+
+  var map = L.map(mapEl).setView([{{ map_center }}], {{ map_zoom }});
+  L.tileLayer('{{ tile_url }}', { maxZoom: 19, attribution: '© OpenStreetMap contributors' }).addTo(map);
+
+  var markerLayer = L.layerGroup().addTo(map);
+  var markerById = {};
+
+  function buildPopupContent(marker) {
+    var wrap = document.createElement('div');
+    var title = document.createElement('div');
+    title.className = 'case-leaflet-region__popup-title';
+    title.textContent = marker.title || '';
+    var desc = document.createElement('div');
+    desc.className = 'case-leaflet-region__popup-desc';
+    desc.textContent = marker.description || '';
+    wrap.appendChild(title);
+    if (marker.description) wrap.appendChild(desc);
+    return wrap;
+  }
+
+  function addMarkers(group) {
+    markerLayer.clearLayers();
+    markerById = {};
+    var groupIds = group && group.marker_ids ? group.marker_ids : null;
+
+    markersData.forEach(function(m) {
+      if (groupIds && groupIds.length && m.id && groupIds.indexOf(m.id) === -1) return;
+      if (!groupIds && group && group.name && m.region && m.region !== group.name) return;
+      var marker = L.marker([m.lat, m.lng]).addTo(markerLayer);
+      marker.on('click', function() {
+        selectItemByMarkerId(m.id, true);
+      });
+      marker.bindPopup(buildPopupContent(m));
+      if (m.id) markerById[m.id] = marker;
+    });
+
+    if (geojsonData && geojsonData.type) {
+      L.geoJSON(geojsonData, {
+        onEachFeature: function (feature, layer) {
+          if (feature.properties && feature.properties.name) {
+            var title = document.createElement('div');
+            title.textContent = feature.properties.name;
+            layer.bindPopup(title);
+          }
+        }
+      }).addTo(markerLayer);
+    }
+  }
+
+  function fitRegion(group) {
+    var bounds = [];
+    var ids = group && group.marker_ids ? group.marker_ids : null;
+    markersData.forEach(function(m) {
+      if (ids && ids.length) {
+        if (m.id && ids.indexOf(m.id) !== -1) bounds.push([m.lat, m.lng]);
+      } else if (group && group.name && m.region === group.name) {
+        bounds.push([m.lat, m.lng]);
+      }
+    });
+    if (bounds.length) {
+      map.fitBounds(bounds, { padding: [24, 24] });
+    }
+  }
+
+  function selectItem(item, scrollIntoView) {
+    var items = listEl.querySelectorAll('.case-leaflet-region__item');
+    items.forEach(function(el) { el.classList.remove('is-active'); });
+    var active = listEl.querySelector('[data-marker-id="' + item.marker_id + '"]');
+    if (active) {
+      active.classList.add('is-active');
+      if (scrollIntoView) active.scrollIntoView({ block: 'nearest' });
+    }
+
+    if (item.marker_id && markerById[item.marker_id]) {
+      if (regionPriority && item.region) {
+        var group = groupsData.find(function(g) { return g.name === item.region; });
+        fitRegion(group || { name: item.region });
+      } else {
+        var marker = markerById[item.marker_id];
+        map.setView(marker.getLatLng(), marker.options.zoom || {{ map_zoom }});
+        marker.openPopup();
+      }
+    }
+  }
+
+  function selectItemByMarkerId(markerId, scrollIntoView) {
+    if (!markerId) return;
+    var found = itemsData.find(function(it) { return it.marker_id === markerId; });
+    if (found) {
+      selectItem(found, scrollIntoView);
+    }
+  }
+
+  function matchesSearch(item, q) {
+    if (!q) return true;
+    var linkText = (item.links || []).map(function(l) {
+      return (l.label || '') + ' ' + (l.url || '');
+    }).join(' ');
+    var text = ((item.title || '') + ' ' + (item.description || '') + ' ' + linkText).toLowerCase();
+    return text.indexOf(q) !== -1;
+  }
+
+  function renderList() {
+    var q = (searchEl.value || '').trim().toLowerCase();
+    var groupName = filterEl.value || '';
+    var group = groupsData.find(function(g) { return g.name === groupName; });
+    var ids = group && group.marker_ids ? group.marker_ids : null;
+    listEl.innerHTML = '';
+
+    itemsData.forEach(function(item) {
+      if (ids && ids.length) {
+        if (!item.marker_id || ids.indexOf(item.marker_id) === -1) return;
+      } else if (groupName && item.region && item.region !== groupName) {
+        return;
+      }
+      if (!matchesSearch(item, q)) return;
+
+      var card = document.createElement('div');
+      card.className = 'case-leaflet-region__item';
+      card.dataset.markerId = item.marker_id || '';
+
+      var title = document.createElement('div');
+      title.className = 'case-leaflet-region__item-title';
+      title.textContent = item.title || '';
+
+      var desc = document.createElement('div');
+      desc.className = 'case-leaflet-region__item-desc';
+      desc.textContent = item.description || '';
+
+      var links = document.createElement('div');
+      links.className = 'case-leaflet-region__links';
+
+      (item.links || []).forEach(function(link) {
+        var a = document.createElement('a');
+        a.className = 'case-leaflet-region__link';
+        a.href = link.url || '#';
+        a.target = '_blank';
+        a.rel = 'noopener';
+
+        if (link.type === 'fragdenstaat' && link.status_icon) {
+          var icon = document.createElement('img');
+          icon.className = 'case-leaflet-region__status';
+          icon.src = link.status_icon;
+          icon.alt = link.status || 'status';
+          a.appendChild(icon);
+        } else if (link.type === 'external' && link.favicon) {
+          var fav = document.createElement('img');
+          fav.className = 'case-leaflet-region__favicon';
+          fav.src = link.favicon;
+          fav.alt = '';
+          a.appendChild(fav);
+        }
+
+        var label = document.createElement('span');
+        label.textContent = link.label || link.url || '';
+        a.appendChild(label);
+        links.appendChild(a);
+      });
+
+      card.appendChild(title);
+      if (item.description) card.appendChild(desc);
+      if ((item.links || []).length) card.appendChild(links);
+
+      card.addEventListener('click', function() {
+        selectItem(item, false);
+      });
+
+      listEl.appendChild(card);
+    });
+  }
+
+  if (!Array.isArray(groupsData) || !groupsData.length) {
+    groupsData = (markersData || []).reduce(function(acc, m) {
+      if (!m.region) return acc;
+      if (!acc.find(function(g) { return g.name === m.region; })) {
+        acc.push({ name: m.region, marker_ids: [] });
+      }
+      return acc;
+    }, []);
+  }
+
+  filterEl.value = '{{ default_region|e('js') }}' || '';
+  var activeGroup = groupsData.find(function(g) { return g.name === filterEl.value; });
+  addMarkers(activeGroup);
+  renderList();
+
+  searchEl.addEventListener('input', renderList);
+  filterEl.addEventListener('change', function() {
+    var g = groupsData.find(function(x) { return x.name === filterEl.value; });
+    addMarkers(g);
+    renderList();
+    if (regionPriority && filterEl.value) fitRegion(g || { name: filterEl.value });
+  });
+});
+</script>
