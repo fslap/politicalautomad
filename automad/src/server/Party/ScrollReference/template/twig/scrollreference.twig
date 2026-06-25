@@ -1,0 +1,15 @@
+<div class="wp-block-group scroll {{ classes }}">
+  {% if has_inner_container %}<div class="inner-container">{% endif %}
+
+  <div class="scroll-content">
+    {% for item in items %}
+      <div class="block">
+        {% if item.id %}<a id="{{ item.id }}"></a>{% endif %}
+        {% if item.subject %}<h6 class="wp-block-heading">{{ item.subject }}</h6>{% endif %}
+        {% if item.text %}<p class="wp-block-paragraph">{{ item.text }}</p>{% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if has_inner_container %}</div>{% endif %}
+</div>
