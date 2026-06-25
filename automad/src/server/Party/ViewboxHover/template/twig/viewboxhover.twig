@@ -1,0 +1,70 @@
+<div class="wp-block-group {{ classes }}">
+    <a id="{{ section_id }}"></a>
+    
+    <h1 class="wp-block-heading">{{ title }}</h1>
+    
+    {% if description %}
+        <p class="wp-block-paragraph">{{ description }}</p>
+    {% endif %}
+    
+    {% if has_inner_container %}
+        <div class="inner-container">
+    {% endif %}
+    
+    <div class="viewbox-stack-container">
+        {# Hidden radio buttons for CSS-only interaction #}
+        {% for image in images %}
+            <input type="radio" 
+                   name="viewbox-{{ section_id }}" 
+                   id="viewbox-{{ section_id }}-{{ loop.index0 }}" 
+                   class="viewbox-radio"
+                   {{ loop.first ? 'checked' : '' }}>
+        {% endfor %}
+        
+        {# Image stack #}
+        <div class="image-stack">
+            {% for image in images %}
+                {% set has_custom_position = image.x_percent != 0 or image.y_percent != 0 %}
+                {% set container_style %}
+                    position: {{ loop.first and not has_custom_position ? 'relative' : 'absolute' }};
+                    {% if has_custom_position %}
+                        top: {{ image.y_percent }}%;
+                        left: {{ image.x_percent }}%;
+                    {% elseif not loop.first %}
+                        top: {{ (loop.index0 * 15) }}px;
+                        left: {{ (loop.index0 * 15) }}px;
+                    {% endif %}
+                    z-index: {{ images|length - loop.index0 }};
+                {% endset %}
+                
+                <div class="stack-item stack-item-{{ loop.index0 }}" style="{{ container_style|trim }}">
+                    <label for="viewbox-{{ section_id }}-{{ loop.index0 }}">
+                        <img src="{{ image.file }}" 
+                             class="stack-image" 
+                             alt="{{ image.title }}"
+                             style="width: 100%; max-width: 400px; height: auto;">
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+        
+        {# Info block #}
+        <div class="info-block">
+            {% for image in images %}
+                <div class="info-item-{{ loop.index0 }}">
+                    <h3>{{ image.title }}</h3>
+                    {% set description_lines = image.description|split('\n') %}
+                    {% for line in description_lines %}
+                        {% if line|trim %}
+                            <p>{{ line|trim }}</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    {% if has_inner_container %}
+        </div>
+    {% endif %}
+</div>
