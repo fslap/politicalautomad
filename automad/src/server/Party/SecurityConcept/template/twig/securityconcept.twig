@@ -1,0 +1,24 @@
+<div class="wp-block-group widthcontainer {{ classes }}">
+    <a id="{{ section_id }}"></a>
+    
+    {# Responsive images #}
+    {% if mobile_image != desktop_image %}
+        <img class="half cell mobile-image-1000" src="{{ mobile_image }}" alt="{{ title }}">
+        <img class="half cell desktop-image-1000" src="{{ desktop_image }}" alt="{{ title }}">
+    {% else %}
+        <img class="half cell" src="{{ desktop_image }}" alt="{{ title }}">
+    {% endif %}
+    
+    <div class="half mid cell">
+        <h1 class="wp-block-heading">{{ title }}</h1>
+        <br>
+        <h2 class="wp-block-heading bgwhite"><b>{{ subtitle }}</b></h2>
+        <br>
+        <h2 class="wp-block-heading"><i>{{ subtitle_emphasis }}</i></h2>
+        <br>
+        
+        {% for feature in features %}
+            <h4 class="wp-block-heading">{{ feature_prefix }} {{ feature }}</h4>
+        {% endfor %}
+    </div>
+</div>
