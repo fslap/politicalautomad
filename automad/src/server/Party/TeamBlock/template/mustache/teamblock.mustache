@@ -1,0 +1,13 @@
+<div class="team-block" data-component="teamblock">
+  <h2>{{ title }}</h2>
+  <div class="team-grid">
+    {{#members}}
+    <div class="team-member">
+      {{#image}}<img src="{{ image }}" alt="{{ name }}" class="member-photo">{{/image}}
+      <h3>{{ name }}</h3>
+      <p class="role">{{ role }}</p>
+      <p class="bio">{{ bio }}</p>
+    </div>
+    {{/members}}
+  </div>
+</div>
