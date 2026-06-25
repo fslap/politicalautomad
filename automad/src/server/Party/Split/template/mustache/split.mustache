@@ -1,0 +1,42 @@
+<div class="wp-block-group {{classes}}">
+    <a id="{{section_id}}"></a>
+
+    <h1 class="wp-block-heading">{{title}}</h1>
+
+    {{#desktop_image}}
+        <img src="{{desktop_image}}" class="section-image" alt="{{title}}">
+    {{/desktop_image}}
+    {{#mobile_image}}
+        <img src="{{mobile_image}}" class="section-image mobile-image-1000" alt="{{title}}">
+    {{/mobile_image}}
+
+    {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
+
+    <div class="split-container">
+        <div class="split-left">
+            {{#left_is_leaflet}}
+                {{#left_map_config}}{{> partials/leaflet-split }}{{/left_map_config}}
+            {{/left_is_leaflet}}
+            {{#left_is_image}}
+                <img src="{{left_content}}" class="split-image" alt="Left section">
+            {{/left_is_image}}
+            {{#left_is_markdown}}
+                <div class="markdown-content">{{{left_html_content}}}</div>
+            {{/left_is_markdown}}
+        </div>
+
+        <div class="split-right">
+            {{#right_is_leaflet}}
+                {{#right_map_config}}{{> partials/leaflet-split }}{{/right_map_config}}
+            {{/right_is_leaflet}}
+            {{#right_is_image}}
+                <img src="{{right_content}}" class="split-image" alt="Right section">
+            {{/right_is_image}}
+            {{#right_is_markdown}}
+                <div class="markdown-content">{{{right_html_content}}}</div>
+            {{/right_is_markdown}}
+        </div>
+    </div>
+
+    {{#has_inner_container}}</div>{{/has_inner_container}}
+</div>
