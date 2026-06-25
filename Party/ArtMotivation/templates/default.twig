@@ -1,0 +1,57 @@
+{# Self-contained Twig template for ArtMotivation - imports/references removed #}
+<div class="artmotivation-split {{ theme|default('default') }}" data-component="artmotivation">
+  <div class="split-header">
+    <h2>{{ title }}</h2>
+    {% if subtitle %}<p class="subtitle">{{ subtitle }}</p>{% endif %}
+  </div>
+
+  <div class="split-container">
+    {# LEFT #}
+    <div class="split-block left">
+      <div class="block-inner">
+        {% if left.image %}
+        <div class="block-image">
+          <img src="{{ left.image }}" alt="{{ left.title }}" loading="lazy">
+        </div>
+        {% endif %}
+        
+        <h3 class="block-title">{{ left.title }}</h3>
+        
+        <div class="block-content">
+          {{ left.content|raw }}
+        </div>
+        
+        {% if left.link %}
+        <a href="{{ left.link }}" class="block-cta">Learn more →</a>
+        {% endif %}
+      </div>
+    </div>
+
+    {# RIGHT #}
+    <div class="split-block right">
+      <div class="block-inner">
+        {% if right.image %}
+        <div class="block-image">
+          <img src="{{ right.image }}" alt="{{ right.title }}" loading="lazy">
+        </div>
+        {% endif %}
+        
+        <h3 class="block-title">{{ right.title }}</h3>
+        
+        <div class="block-content">
+          {{ right.content|raw }}
+        </div>
+        
+        {% if right.link %}
+        <a href="{{ right.link }}" class="block-cta">Learn more →</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if cta %}
+  <div class="split-cta">
+    <a href="#join" class="btn btn-primary">{{ cta }}</a>
+  </div>
+  {% endif %}
+</div>

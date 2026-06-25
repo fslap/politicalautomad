@@ -1,0 +1,26 @@
+<div class="manifesto-block" data-component="manifestoblock">
+  <div class="manifesto-header">
+    <h2>{{ title }}</h2>
+    {{#intro}}<p class="intro">{{ intro }}</p>{{/intro}}
+  </div>
+
+  <div class="manifesto-sections">
+    {{#sections}}
+    <div class="manifesto-section">
+      <h3>{{ title }}</h3>
+      <p>{{ content }}</p>
+      {{#points}}
+      <ul>
+        {{#points}}<li>{{ . }}</li>{{/points}}
+      </ul>
+      {{/points}}
+    </div>
+    {{/sections}}
+  </div>
+
+  {{#cta}}
+  <div class="manifesto-cta">
+    <a href="#program" class="btn">{{ cta }}</a>
+  </div>
+  {{/cta}}
+</div>

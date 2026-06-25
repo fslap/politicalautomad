@@ -1,0 +1,39 @@
+/* DonateBlock specific styles only */
+
+.donate-block {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f8f9fa;
+  border-radius: 20px;
+  max-width: 700px;
+  margin: 3rem auto;
+}
+
+.amount-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.amount-btn {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  border: 2px solid #457b9d;
+  background: white;
+  color: #457b9d;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.amount-btn:hover, .amount-btn.active {
+  background: #457b9d;
+  color: white;
+}
+
+.btn-large {
+  padding: 1rem 3rem;
+  font-size: 1.3rem;
+}

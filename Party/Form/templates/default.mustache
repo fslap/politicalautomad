@@ -1,0 +1,19 @@
+<form class="party-form" action="{{ action }}" method="post">
+  <h3>{{ title }}</h3>
+  
+  {{#fields}}
+  <div class="form-group">
+    <label for="{{ name }}">{{ label }}</label>
+    {{#required}}<span class="required">*</span>{{/required}}
+    
+    {{#equals type "textarea"}}
+      <textarea name="{{ name }}" id="{{ name }}" {{required}}></textarea>
+    {{/equals}}
+    {{^equals type "textarea"}}
+      <input type="{{ type }}" name="{{ name }}" id="{{ name }}" {{required}}>
+    {{/equals}}
+  </div>
+  {{/fields}}
+  
+  <button type="submit" class="btn btn-primary">{{ submit }}</button>
+</form>

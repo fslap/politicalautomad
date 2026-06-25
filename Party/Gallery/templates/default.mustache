@@ -1,0 +1,10 @@
+<div class="gallery-block">
+  <div class="gallery-grid">
+    {{#images}}
+    <div class="gallery-item">
+      <img src="{{ url }}" alt="{{ alt|default('') }}" loading="lazy">
+      {{#caption}}<p class="caption">{{ caption }}</p>{{/caption}}
+    </div>
+    {{/images}}
+  </div>
+</div>

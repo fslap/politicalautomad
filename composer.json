@@ -1,0 +1,27 @@
+{
+    "name": "fslap/politicalautomad",
+    "description": "Political party components and classes for Automad CMS - self-contained port from politicalpartysite v2- branches",
+    "type": "library",
+    "license": "proprietary-see-LICENSE_PARTY_PURPOSE",
+    "authors": [
+        {
+            "name": "Florian Leon Steenbuck",
+            "email": "florian@kil.ls",
+            "homepage": "https://kil.ls"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "automad/automad": "^1.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Automad\\Party\\": "Party/"
+        }
+    },
+    "extra": {
+        "automad": {
+            "components": "Party"
+        }
+    }
+}

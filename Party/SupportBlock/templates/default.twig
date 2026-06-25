@@ -1,0 +1,12 @@
+{# Self-contained #}
+<div class="support-block" data-component="supportblock">
+  <h2>{{ title }}</h2>
+  <div class="support-options">
+    {% for opt in options %}
+    <a href="{{ opt.action }}" class="support-option">
+      <span class="icon">{{ opt.icon }}</span>
+      <span class="label">{{ opt.label }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</div>

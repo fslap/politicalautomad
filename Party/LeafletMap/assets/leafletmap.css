@@ -1,0 +1,20 @@
+/* LeafletMap component specific styles.
+   Only include leaflet.js / leaflet.css here if they are NOT already
+   merged into your main theme base files (as per original rules).
+*/
+
+.leaflet-map-block .map-container {
+  height: 420px;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  background: #f0f0f0;
+}
+
+.map-note {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.5rem;
+  text-align: center;
+}

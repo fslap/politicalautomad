@@ -1,0 +1,20 @@
+{# Self-contained - imports removed #}
+<div class="event-block" data-component="eventblock">
+  <h2>{{ title }}</h2>
+  <div class="events-list">
+    {% for event in events %}
+    <div class="event-card">
+      <div class="event-date">
+        <span class="date">{{ event.date }}</span>
+        <span class="time">{{ event.time }}</span>
+      </div>
+      <div class="event-content">
+        <h3>{{ event.title }}</h3>
+        <p class="location">{{ event.location }}</p>
+        <p class="description">{{ event.description }}</p>
+        <a href="#rsvp" class="btn btn-small">RSVP →</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,54 @@
+/* EventBlock specific styles - no theme base copied */
+
+.event-block {
+  max-width: 1000px;
+  margin: 3rem auto;
+}
+
+.events-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.event-card {
+  display: flex;
+  gap: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  border-left: 5px solid #457b9d;
+}
+
+.event-date {
+  min-width: 90px;
+  text-align: center;
+}
+
+.event-date .date {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e63946;
+}
+
+.event-date .time {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.event-content h3 {
+  margin: 0 0 0.5rem;
+  color: #1a1a2e;
+}
+
+.btn-small {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.4rem 1.2rem;
+  background: #457b9d;
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-size: 0.9rem;
+}

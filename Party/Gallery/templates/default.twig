@@ -1,0 +1,11 @@
+{# Self-contained gallery #}
+<div class="gallery-block">
+  <div class="gallery-grid">
+    {% for img in images %}
+    <div class="gallery-item">
+      <img src="{{ img.url }}" alt="{{ img.alt|default('') }}" loading="lazy">
+      {% if img.caption %}<p class="caption">{{ img.caption }}</p>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>

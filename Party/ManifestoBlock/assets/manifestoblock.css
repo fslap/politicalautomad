@@ -1,0 +1,43 @@
+/* ManifestoBlock component-specific styles only - no theme base copied */
+
+.manifesto-block {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 16px;
+}
+
+.manifesto-header h2 {
+  font-size: 2.2rem;
+  color: #1a1a2e;
+  text-align: center;
+}
+
+.manifesto-sections {
+  display: grid;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.manifesto-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 5px solid #e63946;
+}
+
+.manifesto-section h3 {
+  color: #457b9d;
+  margin-top: 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background: #e63946;
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+}

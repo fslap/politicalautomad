@@ -1,0 +1,10 @@
+<div class="leaflet-map-block" data-component="leafletmap">
+  <h2>{{ title }}</h2>
+  <div id="map-{{ uniqid() }}" class="map-container" 
+       data-center="{{ center.0 }},{{ center.1 }}" 
+       data-zoom="{{ zoom }}"
+       data-markers='{{ markers }}'>
+    <!-- Leaflet map will be initialized here via JS -->
+  </div>
+  <p class="map-note">Interactive map – requires Leaflet (include only if not in theme base)</p>
+</div>

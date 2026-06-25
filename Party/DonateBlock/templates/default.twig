@@ -1,0 +1,14 @@
+{# Self-contained #}
+<div class="donate-block" data-component="donateblock">
+  <h2>{{ title }}</h2>
+  <p class="message">{{ message }}</p>
+  
+  <div class="amount-buttons">
+    {% for amount in amounts %}
+    <button class="amount-btn" data-amount="{{ amount }}">€{{ amount }}</button>
+    {% endfor %}
+  </div>
+  
+  <a href="#donate-form" class="btn btn-primary btn-large">Donate Now</a>
+  <p class="secure">Secure &amp; encrypted donation</p>
+</div>

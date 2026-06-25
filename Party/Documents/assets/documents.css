@@ -1,0 +1,17 @@
+/* Documents component specific */
+
+.documents-block ul {
+  list-style: none;
+  padding: 0;
+}
+
+.documents-block li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.documents-block .meta {
+  font-size: 0.85rem;
+  color: #888;
+  margin-left: 0.5rem;
+}

@@ -1,0 +1,23 @@
+/* StatementBlock specific styles only */
+
+.statement-block {
+  max-width: 900px;
+  margin: 3rem auto;
+}
+
+.statements {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.statement {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  border-left: 6px solid #e63946;
+}
+
+.statement h3 {
+  color: #1a1a2e;
+  margin-top: 0;
+}

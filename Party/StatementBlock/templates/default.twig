@@ -1,0 +1,12 @@
+{# Self-contained #}
+<div class="statement-block" data-component="statementblock">
+  <h2>{{ title }}</h2>
+  <div class="statements">
+    {% for s in statements %}
+    <div class="statement">
+      <h3>{{ s.title }}</h3>
+      <p>{{ s.text }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>

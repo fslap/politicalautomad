@@ -1,0 +1,113 @@
+/* ArtMotivation component specific styles - only this, no theme base copied from roots */
+/* Special case: if leaflet was needed, would include here only if not merged */
+
+.artmotivation-split {
+  max-width: 1200px;
+  margin: 2rem auto;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.split-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.split-header h2 {
+  font-size: 2.5rem;
+  margin: 0 0 0.5rem;
+  color: #1a1a2e;
+}
+
+.split-header .subtitle {
+  color: #4a4a6a;
+  font-size: 1.1rem;
+}
+
+.split-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .split-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.split-block {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.split-block:hover {
+  transform: translateY(-4px);
+}
+
+.split-block.left { border-left: 6px solid #e63946; }
+.split-block.right { border-left: 6px solid #457b9d; }
+
+.block-inner {
+  padding: 1.5rem;
+}
+
+.block-image {
+  margin: -1.5rem -1.5rem 1.5rem;
+  overflow: hidden;
+}
+
+.block-image img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.block-title {
+  font-size: 1.4rem;
+  margin: 0 0 1rem;
+  color: #1a1a2e;
+}
+
+.block-content {
+  color: #333;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.block-cta {
+  display: inline-block;
+  color: #e63946;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.block-cta:hover {
+  color: #457b9d;
+}
+
+.split-cta {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.85rem 2.5rem;
+  background: linear-gradient(135deg, #e63946, #457b9d);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(69, 123, 157, 0.4);
+}

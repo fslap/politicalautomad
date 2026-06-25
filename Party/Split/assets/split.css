@@ -1,0 +1,11 @@
+/* Split component specific styles */
+
+.split-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .split-block { grid-template-columns: 1fr; }
+}

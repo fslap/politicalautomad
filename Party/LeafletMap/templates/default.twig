@@ -1,0 +1,10 @@
+{# Self-contained #}
+<div class="leaflet-map-block" data-component="leafletmap">
+  <h2>{{ title }}</h2>
+  <div id="map-{{ random() }}" class="map-container" 
+       data-center="{{ center[0] }},{{ center[1] }}" 
+       data-zoom="{{ zoom }}"
+       data-markers='{{ markers|json_encode }}'>
+  </div>
+  <p class="map-note">Interactive map – include Leaflet assets only if not already in your theme base.</p>
+</div>

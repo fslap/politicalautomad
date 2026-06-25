@@ -1,0 +1,27 @@
+{# Self-contained - no imports #}
+<div class="manifesto-block" data-component="manifestoblock">
+  <div class="manifesto-header">
+    <h2>{{ title }}</h2>
+    {% if intro %}<p class="intro">{{ intro }}</p>{% endif %}
+  </div>
+
+  <div class="manifesto-sections">
+    {% for section in sections %}
+    <div class="manifesto-section">
+      <h3>{{ section.title }}</h3>
+      <p>{{ section.content }}</p>
+      {% if section.points %}
+      <ul>
+        {% for point in section.points %}<li>{{ point }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if cta %}
+  <div class="manifesto-cta">
+    <a href="#program" class="btn">{{ cta }}</a>
+  </div>
+  {% endif %}
+</div>

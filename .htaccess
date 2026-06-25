@@ -1,0 +1,18 @@
+# Automad + Political components
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Security
+<FilesMatch "\.(php|twig|mustache)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+<Files index.php>
+    Order Allow,Deny
+    Allow from all
+</Files>

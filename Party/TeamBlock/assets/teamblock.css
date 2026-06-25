@@ -1,0 +1,40 @@
+/* TeamBlock specific styles only */
+
+.team-block {
+  max-width: 1100px;
+  margin: 3rem auto;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.team-member {
+  text-align: center;
+  background: white;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+}
+
+.member-photo {
+  width: 140px;
+  height: 140px;
+  border-radius: 9999px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 4px solid #e63946;
+}
+
+.team-member h3 {
+  margin: 0.5rem 0 0.25rem;
+  color: #1a1a2e;
+}
+
+.role {
+  color: #e63946;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}

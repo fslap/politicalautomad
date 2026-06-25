@@ -1,0 +1,56 @@
+<div class="artmotivation-split {{ theme }}" data-component="artmotivation">
+  <div class="split-header">
+    <h2>{{ title }}</h2>
+    {{#subtitle}}<p class="subtitle">{{ subtitle }}</p>{{/subtitle}}
+  </div>
+
+  <div class="split-container">
+    <!-- LEFT BLOCK -->
+    <div class="split-block left">
+      <div class="block-inner">
+        {{#left.image}}
+        <div class="block-image">
+          <img src="{{ left.image }}" alt="{{ left.title }}" loading="lazy">
+        </div>
+        {{/left.image}}
+        
+        <h3 class="block-title">{{ left.title }}</h3>
+        
+        <div class="block-content">
+          {{{ left.content }}}
+        </div>
+        
+        {{#left.link}}
+        <a href="{{ left.link }}" class="block-cta">Learn more →</a>
+        {{/left.link}}
+      </div>
+    </div>
+
+    <!-- RIGHT BLOCK -->
+    <div class="split-block right">
+      <div class="block-inner">
+        {{#right.image}}
+        <div class="block-image">
+          <img src="{{ right.image }}" alt="{{ right.title }}" loading="lazy">
+        </div>
+        {{/right.image}}
+        
+        <h3 class="block-title">{{ right.title }}</h3>
+        
+        <div class="block-content">
+          {{{ right.content }}}
+        </div>
+        
+        {{#right.link}}
+        <a href="{{ right.link }}" class="block-cta">Learn more →</a>
+        {{/right.link}}
+      </div>
+    </div>
+  </div>
+
+  {{#cta}}
+  <div class="split-cta">
+    <a href="#join" class="btn btn-primary">{{ cta }}</a>
+  </div>
+  {{/cta}}
+</div>
