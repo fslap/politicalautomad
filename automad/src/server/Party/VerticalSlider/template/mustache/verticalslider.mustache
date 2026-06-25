@@ -1,0 +1,38 @@
+<div class="wp-block-group {{classes}}">
+  {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+  {{#title}}<h1 class="wp-block-heading">{{title}}</h1>{{/title}}
+
+  {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
+  <div class="vertical-slider">
+    {{#items}}
+      <div class="vertical-slide">
+        {{#is_party_header}}{{> components/mustache/party-header }}{{/is_party_header}}
+        {{#is_region_scroll}}{{> components/mustache/region-scroll }}{{/is_region_scroll}}
+        {{#is_contact_closer}}{{> components/mustache/contact-closer }}{{/is_contact_closer}}
+        {{#is_water_animation}}{{> components/mustache/water-animation }}{{/is_water_animation}}
+        {{#is_security_concept}}{{> components/mustache/security-concept }}{{/is_security_concept}}
+        {{#is_documents}}{{> components/mustache/documents }}{{/is_documents}}
+        {{#is_art_motivation}}{{> components/mustache/art-motivation }}{{/is_art_motivation}}
+        {{#is_form}}{{> components/mustache/form }}{{/is_form}}
+        {{#is_split}}{{> components/mustache/split }}{{/is_split}}
+        {{#is_markdown}}{{> components/mustache/markdown }}{{/is_markdown}}
+        {{#is_quote}}{{> components/mustache/quote }}{{/is_quote}}
+        {{#is_landscape_scene}}{{> components/mustache/landscape-scene }}{{/is_landscape_scene}}
+        {{#is_music_anchor}}{{> components/mustache/music-anchor }}{{/is_music_anchor}}
+        {{#is_music_player}}{{> components/mustache/music-player }}{{/is_music_player}}
+        {{#is_image}}{{> components/mustache/image }}{{/is_image}}
+        {{#is_scroll_element}}{{> components/mustache/scroll-element }}{{/is_scroll_element}}
+        {{#is_wp_heading}}{{> components/mustache/wp-heading }}{{/is_wp_heading}}
+        {{#is_wp_paragraph}}{{> components/mustache/wp-paragraph }}{{/is_wp_paragraph}}
+        {{#is_wp_button}}{{> components/mustache/wp-button }}{{/is_wp_button}}
+        {{#is_wp_columns}}{{> components/mustache/wp-columns }}{{/is_wp_columns}}
+        {{#is_wp_group}}{{> components/mustache/wp-group }}{{/is_wp_group}}
+        {{#is_wp_quote}}{{> components/mustache/wp-quote }}{{/is_wp_quote}}
+        {{#is_wp_separator}}{{> components/mustache/wp-separator }}{{/is_wp_separator}}
+        {{#is_wp_spacer}}{{> components/mustache/wp-spacer }}{{/is_wp_spacer}}
+        {{#is_wp_image}}{{> components/mustache/wp-image }}{{/is_wp_image}}
+      </div>
+    {{/items}}
+  </div>
+  {{#has_inner_container}}</div>{{/has_inner_container}}
+</div>
