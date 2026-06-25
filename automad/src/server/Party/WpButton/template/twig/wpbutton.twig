@@ -1,0 +1,5 @@
+<div class="{{ classes }}">
+  {% for b in buttons %}
+    <a class="{{ b.classes }}" href="{{ b.href }}" {% if b.target %}target="{{ b.target }}"{% endif %}>{{ b.label }}</a>
+  {% endfor %}
+</div>
