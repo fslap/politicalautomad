@@ -1,0 +1,9 @@
+<div class="scroll-element {{ classes }}"
+     data-ref-section="{{ ref_section_id }}"
+     data-ref-path="{{ ref_path }}"
+     data-ref-key="{{ ref_key }}">
+  {% if title %}<h3 class="wp-block-heading">{{ title }}</h3>{% endif %}
+  {% if ref_section_id %}
+    <a class="scroll-element-link" href="#{{ ref_section_id }}">{{ ref_section_id }}</a>
+  {% endif %}
+</div>
