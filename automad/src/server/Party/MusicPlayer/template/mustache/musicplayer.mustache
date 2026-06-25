@@ -1,0 +1,23 @@
+<div class="wp-block-group widthcontainer {{classes}}">
+    <h1 class="wp-block-heading">{{title}}</h1>
+    <br><br>
+
+    {{#platforms}}
+        <a href="{{url}}" target="{{section_id}}" class="{{class}}">{{text}}</a>&nbsp;
+    {{/platforms}}
+
+    <br><br>
+
+    <iframe name="{{section_id}}"
+            id="{{section_id}}"
+            class="music-iframe"
+            style="border-radius:{{iframe_border_radius}}"
+            src="{{default_source}}"
+            width="{{player_width}}"
+            height="{{player_height}}"
+            frameborder="0"
+            allowfullscreen
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy">
+    </iframe>
+</div>
