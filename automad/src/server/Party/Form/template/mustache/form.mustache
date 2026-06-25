@@ -1,0 +1,57 @@
+<div class="wp-block-group {{classes}}">
+    <a id="{{section_id}}"></a>
+
+    <h1 class="wp-block-heading">{{title}}</h1>
+
+    {{#description}}
+        <p class="wp-block-paragraph">{{description}}</p>
+    {{/description}}
+
+    {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
+
+    <form method="{{form_method}}" action="{{form_action}}" class="wp-block-form">
+        <input type="hidden" name="form_section_id" value="{{section_id}}">
+        <input type="hidden" name="turnstile_key" value="{{turnstile_key}}">
+
+        {{#fields}}
+            <div class="wp-block-group form-field">
+                <label for="{{name}}" class="wp-block-label">
+                    {{label}}
+                    {{#required}}<span class="required">*</span>{{/required}}
+                </label>
+
+                {{#is_textarea}}
+                    <textarea name="{{name}}" id="{{name}}" class="wp-block-input" {{required_attr}}></textarea>
+                {{/is_textarea}}
+
+                {{#is_select}}
+                    <select name="{{name}}" id="{{name}}" class="wp-block-select" {{required_attr}}>
+                        <option value="">Bitte waehlen...</option>
+                        {{#options}}
+                            <option value="{{.}}">{{.}}</option>
+                        {{/options}}
+                    </select>
+                {{/is_select}}
+
+                {{#is_input}}
+                    <input type="{{type}}" name="{{name}}" id="{{name}}" class="wp-block-input" {{required_attr}}>
+                {{/is_input}}
+            </div>
+        {{/fields}}
+
+        <div class="wp-block-group form-field">
+            <label class="wp-block-label">Sicherheitsverifizierung:</label>
+            <div class="cf-turnstile" data-sitekey="{{turnstile_site_key}}" data-theme="{{turnstile_theme}}"></div>
+        </div>
+
+        <div class="wp-block-buttons">
+            <div class="wp-block-button">
+                <input type="submit" value="Absenden" class="wp-element-button">
+            </div>
+        </div>
+    </form>
+
+    {{#has_inner_container}}</div>{{/has_inner_container}}
+</div>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
