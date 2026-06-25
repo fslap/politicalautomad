@@ -1,0 +1,11 @@
+<div class="wp-block-group {{classes}}">
+  {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+  {{#title}}<h1 class="wp-block-heading">{{title}}</h1>{{/title}}
+
+  {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
+  <figure class="wp-block-image">
+    {{#src}}<img src="{{src}}" alt="{{alt}}">{{/src}}
+    {{#caption}}<figcaption>{{caption}}</figcaption>{{/caption}}
+  </figure>
+  {{#has_inner_container}}</div>{{/has_inner_container}}
+</div>
