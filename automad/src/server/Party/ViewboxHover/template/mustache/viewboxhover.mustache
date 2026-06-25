@@ -1,0 +1,23 @@
+<div class="wp-block-group {{classes}}">
+    <a id="{{section_id}}"></a>
+
+    <h1 class="wp-block-heading">{{title}}</h1>
+
+    {{#description}}
+        <p class="wp-block-paragraph">{{description}}</p>
+    {{/description}}
+
+    {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
+
+    <div class="viewbox-stack-container">
+        {{#images}}
+            <div class="viewbox-item">
+                <img src="{{file}}" class="stack-image" alt="{{title}}">
+                <h3>{{title}}</h3>
+                {{#description}}<p>{{description}}</p>{{/description}}
+            </div>
+        {{/images}}
+    </div>
+
+    {{#has_inner_container}}</div>{{/has_inner_container}}
+</div>
