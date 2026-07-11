@@ -34,6 +34,8 @@
  */
 namespace Automad\Party\RegionScroll;
 
+use Automad\Blocks\AbstractDynamicTemplateBlock;
+
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
@@ -44,8 +46,9 @@ defined('AUTOMAD') or die('Direct access not permitted!');
  * @license See LICENSE_PARTY_PURPOSE.md for license information
  *
  */
-class RegionScroll extends AbstractMultiBlock {
-    public __construct() {
+class RegionScroll extends AbstractDynamicTemplateBlock {
+	use ComponentConfig;
+    public function __construct() {
         parent::__construct(__DIR__, 'regionscroll');
     }
 
