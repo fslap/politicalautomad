@@ -1,0 +1,478 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ *                      #;:#;:#;:
+ *                       #;:#;:            #;:#;:#;
+ *            %&                         #;: #;:;:#;:#;:#;:#
+ *    %$%    %$%           #;:    #;:     #;: #;:;:#;:#;:
+ *    ____________                ;:      #;:  #;: #;:#;:#;:#;
+ *   /§§§§§§§§§§§|                                    ;:#;:#;:
+ *   |###########/  / &/      #;:#;:#;:#;:#;:        #;:#;: #;: #;
+ *   /%%%%%%%%%%/   |$$$/        #;:#;:#;:#;:#;#;:#;:;:#;:#;:
+ *  /######### /   |$$$/          #;:#;:#;:#;:#;:#;:#;:#;:#;:#;:
+ * /%%%%%%%%%%/   \CCC/           #;:#;:#;:#;:#;:#;:#;:#;:
+ * \#########|   \\|      _\    :#;:  :#;:#;:  #;:#;:#;:#;:
+ *  \________/   /[[]]\  \_/   :#\:#\:#\:#\:#;:
+ *   \====__/    \xxxx/              #\:#\:#;:#;:
+ *   |""""""\    |yyy/                #;: #;:#;:#;: |#;:\
+ *   |~~~~~~/ #   |c|                 ;:#;:\;:#;:   |#;:;:
+ *   +~~~~~/  |   \t/                  #\:#;\       |##;/
+ *    +~~~/   |#
+ *     +~/\       \*+ ~
+ *                      #
+ *
+ *
+ *
+ * https://north.sbdp.ro https://mid.sbdp.ro/ https://pacif.sbdp.ro/ https://low.sbdp.ro/
+ * (c) Florian Leon Steenbuck
+ *
+ * Copyright (c) 2026 by Florian Leon Steenbuck
+ * https://kil.ls https://fslap.de
+ *
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// Styles of components that are new in the Automad version or that rely on
+// stylesheets of the original site that are not part of politicalpartysite.
+
+.am-party {
+	// Party header
+	.party-header__title {
+		padding: 0 3%;
+		text-align: center;
+	}
+
+	.party-header__line {
+		margin: 0;
+		line-height: 1;
+		text-transform: uppercase;
+	}
+
+	.party-header__cta {
+		padding: 2% 3%;
+		text-align: center;
+	}
+
+	// Gallery
+	.party-gallery__grid {
+		display: grid;
+		grid-template-columns: repeat(
+			var(--party-gallery-columns, 3),
+			minmax(0, 1fr)
+		);
+		gap: var(--party-gap);
+
+		@media (max-width: 781px) {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		@media (max-width: 480px) {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	.party-gallery__item {
+		margin: 0;
+
+		img {
+			width: 100%;
+			aspect-ratio: 4 / 3;
+			object-fit: cover;
+			border-radius: 6px;
+		}
+	}
+
+	// SVG scenes (water animation and landscape)
+	.party-svg-scene {
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+		padding: 0;
+	}
+
+	.party-svg-layer {
+		position: absolute;
+		inset: 0;
+	}
+
+	.svgoffsetleft {
+		left: 0;
+	}
+
+	.svgoffsetmid {
+		left: 15%;
+	}
+
+	.svgoffsetright {
+		left: 30%;
+	}
+
+	.svgoffsettop {
+		top: -10%;
+	}
+
+	.svgoffsetbottom {
+		top: 10%;
+	}
+
+	.party-svg-scene img.svg {
+		bottom: 0;
+		max-width: 60%;
+		height: auto;
+		pointer-events: none;
+	}
+
+	each(range(16), {
+		.party-svg-scene img.pos@{value} {
+			left: ((@value - 1) * 6.25%);
+		}
+	});
+
+	@keyframes party-wave {
+		0%,
+		100% {
+			transform: translateX(0) translateY(0);
+		}
+
+		50% {
+			transform: translateX(-3%) translateY(4%);
+		}
+	}
+
+	each(range(8), {
+		.party-svg-scene img.water@{value} {
+			animation: party-wave (4s + @value * 0.7s) ease-in-out infinite;
+			animation-delay: (-0.6s * @value);
+		}
+	});
+
+	@media (max-width: 781px) {
+		.party-hide-mobile {
+			display: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.party-svg-scene img.svg,
+		.sky-win {
+			animation: none !important;
+		}
+	}
+
+	// Skyline breaker (SVG version)
+	.skyline-wrap {
+		position: relative;
+		width: 100%;
+		overflow: hidden;
+		line-height: 0;
+	}
+
+	.skyline-svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.sky-b {
+		fill: #0d1226;
+	}
+
+	.sky-d1 {
+		fill: #05060c;
+	}
+
+	.sky-d2 {
+		fill: #111632;
+		opacity: 0.9;
+	}
+
+	.sky-d3 {
+		fill: #1c2347;
+		opacity: 0.75;
+	}
+
+	@keyframes party-twinkle {
+		0%,
+		100% {
+			opacity: 1;
+		}
+
+		50% {
+			opacity: 0.3;
+		}
+	}
+
+	.sky-win {
+		opacity: 0.75;
+		animation: party-twinkle 4s ease-in-out infinite;
+	}
+
+	.sky-d2 + .sky-win {
+		animation-delay: -1.3s;
+	}
+
+	.sky-d3 + .sky-win {
+		opacity: 0.45;
+		animation-delay: -2.6s;
+	}
+
+	// Viewbox stack: support more than five images and both info positions
+	.viewbox-info-right {
+		.image-stack {
+			left: 20px;
+			right: auto;
+		}
+
+		.info-block {
+			left: auto;
+			right: 20px;
+		}
+	}
+
+	.viewbox-radio:checked ~ .info-block > div {
+		display: none;
+	}
+
+	each(range(12), {
+		@index: (@value - 1);
+
+		.viewbox-radio:nth-of-type(@{value}):checked ~ .info-block .info-item-@{index} {
+			display: block;
+		}
+	});
+
+	@media (max-width: 781px) {
+		.viewbox-stack-container {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+			min-height: 0;
+		}
+
+		.image-stack,
+		.info-block {
+			position: relative;
+			inset: auto;
+			width: 100%;
+			height: auto;
+		}
+
+		.image-stack {
+			min-height: 320px;
+		}
+	}
+
+	// Form
+	.party-form__hp {
+		position: absolute;
+		left: -10000px;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+	}
+
+	.party-form__checkbox {
+		display: flex;
+		gap: 0.5em;
+		align-items: flex-start;
+		font-weight: normal;
+	}
+
+	.party-form__message {
+		padding: 2%;
+		margin: 2% 0;
+		border-radius: 8px;
+
+		&--success {
+			background: #e8f5e8;
+			border: 1px solid #4caf50;
+			color: #2e7d32;
+		}
+
+		&--error {
+			background: #ffebee;
+			border: 1px solid #f44336;
+			color: #c62828;
+		}
+	}
+
+	// Region scroller with navigation button
+	.scroll:has(> .scroll-nav-compact) {
+		padding-top: 3.25rem;
+	}
+
+	// Scroll element
+	.scroll-element {
+		margin: 1em 0;
+	}
+
+	// Vertical slider
+	.vertical-slider {
+		max-height: 100vh;
+	}
+
+	.vertical-slide {
+		min-height: 100%;
+		overflow: hidden;
+	}
+
+	// Music player
+	.music-iframe {
+		display: block;
+		max-width: 100%;
+		border: 0;
+	}
+
+	.spotify,
+	.tidal,
+	.youtube,
+	.soundcloud {
+		display: inline-block;
+		margin: 0 0.4em 0.4em 0;
+		padding: 0.5rem 1rem;
+		border-radius: 999px;
+		color: #fff;
+		text-decoration: none;
+		font-weight: 700;
+	}
+
+	.spotify {
+		background: #1db954;
+	}
+
+	.tidal {
+		background: #000;
+	}
+
+	.youtube {
+		background: #ff0000;
+	}
+
+	.soundcloud {
+		background: #ff5500;
+	}
+
+	// Donate block
+	.donate-block {
+		text-align: center;
+	}
+
+	.donate-block__amounts {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.75rem;
+		margin: 1.5em 0;
+	}
+
+	.donate-block__amount {
+		min-width: 5em;
+		padding: 0.6em 1em;
+		border: 2px solid currentColor;
+		border-radius: 0.25rem;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		font-weight: 700;
+		cursor: pointer;
+
+		&.is-active,
+		&:hover {
+			background: #fff;
+			color: var(--wp--preset--color--primary);
+		}
+	}
+
+	.donate-block__note {
+		margin-top: 1em;
+		font-size: 0.75em;
+		opacity: 0.8;
+	}
+
+	// Event block
+	.event-block__list {
+		display: flex;
+		flex-direction: column;
+		gap: var(--party-gap);
+	}
+
+	.event-block__card {
+		display: grid;
+		grid-template-columns: minmax(7em, auto) 1fr;
+		gap: var(--party-gap);
+		padding: 1em;
+		border: 1px solid rgba(0, 0, 0, 0.12);
+		border-radius: 8px;
+
+		@media (max-width: 600px) {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.event-block__date {
+		display: flex;
+		flex-direction: column;
+		font-weight: 950;
+		color: var(--wp--preset--color--primary);
+	}
+
+	.event-block__time {
+		font-weight: 400;
+		font-size: 0.8em;
+	}
+
+	.event-block__location {
+		font-weight: 700;
+		margin: 0 0 0.25em;
+	}
+
+	// Team block
+	.team-block__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+		gap: calc(var(--party-gap) * 1.5);
+	}
+
+	.team-block__member {
+		text-align: center;
+
+		h3 {
+			margin: 0.5em 0 0.1em;
+			font-size: 1.2em;
+		}
+	}
+
+	.team-block__photo {
+		width: 10rem;
+		height: 10rem;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	.team-block__role {
+		margin: 0 0 0.5em;
+		color: var(--wp--preset--color--primary);
+		font-weight: 700;
+	}
+
+	.team-block__bio {
+		font-size: 0.85em;
+	}
+
+	// Leaflet
+	.leaflet-container {
+		font: inherit;
+		font-size: 0.75rem;
+		z-index: 0;
+	}
+
+	.party-map-marker {
+		width: 22px;
+		height: 22px;
+		border: 3px solid #fff;
+		border-radius: 50% 50% 50% 0;
+		background: var(--wp--preset--color--primary);
+		transform: rotate(-45deg);
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+	}
+}

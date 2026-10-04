@@ -474,6 +474,7 @@ const commonConfig = {
 		'.svg': 'text',
 		'.woff': 'file',
 		'.woff2': 'file',
+		'.png': 'dataurl',
 	},
 	metafile: true,
 	define: { DEVELOPMENT: isDev.toString() },

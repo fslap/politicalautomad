@@ -1,0 +1,261 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ *                      #;:#;:#;:
+ *                       #;:#;:            #;:#;:#;
+ *            %&                         #;: #;:;:#;:#;:#;:#
+ *    %$%    %$%           #;:    #;:     #;: #;:;:#;:#;:
+ *    ____________                ;:      #;:  #;: #;:#;:#;:#;
+ *   /§§§§§§§§§§§|                                    ;:#;:#;:
+ *   |###########/  / &/      #;:#;:#;:#;:#;:        #;:#;: #;: #;
+ *   /%%%%%%%%%%/   |$$$/        #;:#;:#;:#;:#;#;:#;:;:#;:#;:
+ *  /######### /   |$$$/          #;:#;:#;:#;:#;:#;:#;:#;:#;:#;:
+ * /%%%%%%%%%%/   \CCC/           #;:#;:#;:#;:#;:#;:#;:#;:
+ * \#########|   \\|      _\    :#;:  :#;:#;:  #;:#;:#;:#;:
+ *  \________/   /[[]]\  \_/   :#\:#\:#\:#\:#;:
+ *   \====__/    \xxxx/              #\:#\:#;:#;:
+ *   |""""""\    |yyy/                #;: #;:#;:#;: |#;:\
+ *   |~~~~~~/ #   |c|                 ;:#;:\;:#;:   |#;:;:
+ *   +~~~~~/  |   \t/                  #\:#;\       |##;/
+ *    +~~~/   |#
+ *     +~/\       \*+ ~
+ *                      #
+ *
+ *
+ *
+ * https://north.sbdp.ro https://mid.sbdp.ro/ https://pacif.sbdp.ro/ https://low.sbdp.ro/
+ * (c) Florian Leon Steenbuck
+ *
+ * Copyright (c) 2026 by Florian Leon Steenbuck
+ * https://kil.ls https://fslap.de
+ *
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// A compact subset of the WordPress block styles (Twenty Twenty-Four) that are used
+// by the party templates. The full theme stylesheet is intentionally not included.
+
+.am-party {
+	--wp--preset--color--base: #ffffff;
+	--wp--preset--color--contrast: #000000;
+	--wp--preset--color--primary: #bd2f3e;
+	--wp--preset--color--secondary: #8b0e1c;
+	--wp--preset--color--tertiary: #323239;
+	--party-font-size: 16pt;
+	--party-gap: 1.2rem;
+
+	position: relative;
+	font-size: var(--party-font-size);
+	line-height: 1.6;
+	box-sizing: border-box;
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: inherit;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-weight: 950;
+		word-break: break-word;
+		line-height: 1.15;
+		margin: 0 0 0.5em;
+	}
+
+	h1 {
+		font-size: 3.5em;
+	}
+
+	h2 {
+		font-size: 2.5em;
+	}
+
+	h3 {
+		font-size: 1.85em;
+	}
+
+	h4 {
+		font-size: 1.7em;
+	}
+
+	h5 {
+		font-size: 1.65em;
+	}
+
+	h6 {
+		font-size: 1.6em;
+	}
+
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+
+	a:hover {
+		color: var(--wp--preset--color--primary);
+	}
+
+	.wp-block-group {
+		margin-block-start: 0;
+		margin-block-end: 0;
+	}
+
+	// Colored sections get some breathing space.
+	.wp-block-group[class*='bg'],
+	.wp-block-group.widthcontainer {
+		padding: 3% 4%;
+	}
+
+	.wp-block-heading {
+		margin-top: 0;
+	}
+
+	.wp-block-paragraph {
+		margin: 0 0 1em;
+	}
+
+	.wp-block-buttons {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		align-items: center;
+		margin: 1em 0;
+	}
+
+	.wp-element-button,
+	input[type='submit'].wp-element-button {
+		display: inline-block;
+		border: none;
+		cursor: pointer;
+		font: inherit;
+		font-size: 0.9em;
+		line-height: 1.4;
+	}
+
+	.wp-element-button:hover {
+		color: #ffffff;
+	}
+
+	.wp-block-columns {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2em;
+
+		> .wp-block-column {
+			flex: 1 1 0;
+			min-width: 0;
+		}
+
+		@media (max-width: 781px) {
+			flex-direction: column;
+		}
+	}
+
+	.wp-block-image {
+		margin: 0 0 1em;
+
+		img {
+			display: block;
+		}
+
+		figcaption {
+			margin-top: 0.5em;
+			font-size: 0.8em;
+			opacity: 0.8;
+			text-align: center;
+		}
+	}
+
+	.wp-block-quote {
+		margin: 1.5em 0;
+		padding: 0.5em 0 0.5em 1.5em;
+		border-left: 0.25em solid var(--wp--preset--color--primary);
+
+		p {
+			font-size: 1.3em;
+			font-style: italic;
+			margin: 0 0 0.5em;
+		}
+
+		cite {
+			font-style: normal;
+			font-size: 0.85em;
+			opacity: 0.8;
+		}
+	}
+
+	.wp-block-separator {
+		border: none;
+		border-top: 2px solid currentColor;
+		opacity: 0.4;
+		margin: 2em auto;
+		width: 100%;
+	}
+
+	.wp-block-spacer {
+		clear: both;
+	}
+
+	.section-heading {
+		margin-bottom: 0.4em;
+	}
+
+	.half {
+		width: 50%;
+	}
+
+	.cell {
+		display: inline-block;
+		vertical-align: middle;
+		padding: 1%;
+	}
+
+	.mid {
+		vertical-align: middle;
+	}
+
+	.widthcontainer .half.cell {
+		width: 49%;
+	}
+
+	.relative {
+		position: relative;
+	}
+
+	.absolute {
+		position: absolute;
+	}
+
+	.mobile-image-1000,
+	.art-mobile-only {
+		display: none;
+	}
+
+	@media (max-width: 1000px) {
+		.half,
+		.widthcontainer .half.cell {
+			width: 100%;
+		}
+
+		.art-desktop-only {
+			display: none;
+		}
+
+		.art-mobile-only {
+			display: block;
+		}
+
+		h1 {
+			font-size: 2.4em;
+		}
+
+		h2 {
+			font-size: 1.9em;
+		}
+	}
+}

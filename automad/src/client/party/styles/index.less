@@ -1,0 +1,52 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ *                      #;:#;:#;:
+ *                       #;:#;:            #;:#;:#;
+ *            %&                         #;: #;:;:#;:#;:#;:#
+ *    %$%    %$%           #;:    #;:     #;: #;:;:#;:#;:
+ *    ____________                ;:      #;:  #;: #;:#;:#;:#;
+ *   /§§§§§§§§§§§|                                    ;:#;:#;:
+ *   |###########/  / &/      #;:#;:#;:#;:#;:        #;:#;: #;: #;
+ *   /%%%%%%%%%%/   |$$$/        #;:#;:#;:#;:#;#;:#;:;:#;:#;:
+ *  /######### /   |$$$/          #;:#;:#;:#;:#;:#;:#;:#;:#;:#;:
+ * /%%%%%%%%%%/   \CCC/           #;:#;:#;:#;:#;:#;:#;:#;:
+ * \#########|   \\|      _\    :#;:  :#;:#;:  #;:#;:#;:#;:
+ *  \________/   /[[]]\  \_/   :#\:#\:#\:#\:#;:
+ *   \====__/    \xxxx/              #\:#\:#;:#;:
+ *   |""""""\    |yyy/                #;: #;:#;:#;: |#;:\
+ *   |~~~~~~/ #   |c|                 ;:#;:\;:#;:   |#;:;:
+ *   +~~~~~/  |   \t/                  #\:#;\       |##;/
+ *    +~~~/   |#
+ *     +~/\       \*+ ~
+ *                      #
+ *
+ *
+ *
+ * https://north.sbdp.ro https://mid.sbdp.ro/ https://pacif.sbdp.ro/ https://low.sbdp.ro/
+ * (c) Florian Leon Steenbuck
+ *
+ * Copyright (c) 2026 by Florian Leon Steenbuck
+ * https://kil.ls https://fslap.de
+ *
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+/*
+ * Party block styles.
+ *
+ * All styles are scoped to the .am-party wrapper that is rendered around every party block
+ * in order to not interfere with the active Automad theme. The original politicalpartysite
+ * stylesheets are imported unchanged into that scope.
+ */
+
+@import (css) url('leaflet/dist/leaflet.css');
+@import 'base.less';
+
+.am-party {
+	@import (less) 'site/fsl-custom.css';
+	@import (less) 'site/scrollbars.css';
+	@import (less) 'site/art.css';
+}
+
+@import 'components.less';

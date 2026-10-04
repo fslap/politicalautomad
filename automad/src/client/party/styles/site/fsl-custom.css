@@ -1,0 +1,152 @@
+/* FSL custom styles (politicalpartysite) – global element rules moved to ../base.less */
+
+/* Background color utilities */
+.bgorange {
+	background: #bd400a;
+	color: #ffffff;
+}
+
+.bgblue {
+	background: #191c79;
+	color: #ffffff;
+}
+
+.bgpink {
+	background: #e91e63;
+	color: #ffffff;
+}
+
+.bgextrared {
+	background: #d32f2f;
+	color: #ffffff;
+}
+
+.bgcoolgreen {
+	background: #4caf50;
+	color: #ffffff;
+}
+
+.bggold {
+	background: #ff8f00;
+	color: #ffffff;
+}
+
+.bgpurple {
+	background: #9c27b0;
+	color: #ffffff;
+}
+
+.bgwhite {
+	background: #ffffff;
+	color: #000000;
+}
+
+/* Inner container for background sections */
+.inner-container {
+	width: auto;
+	max-width: none;
+	margin: 0;
+	padding: 0;
+}
+
+/* Width container for full-width colored sections */
+.widthcontainer {
+	width: auto;
+	max-width: none;
+	margin-left: 0;
+	padding: 0;
+	display: block;
+}
+
+/* WordPress-like button styles */
+.wp-element-button {
+	background: var(--wp--preset--color--primary);
+	color: #ffffff;
+	padding: 0.75rem 1.5rem;
+	border-radius: 0.25rem;
+	text-decoration: none;
+	display: inline-block;
+	transition: background 0.3s ease;
+}
+
+.wp-element-button:hover {
+	background: var(--wp--preset--color--secondary);
+}
+
+.section-image {
+	width: 100%;
+	height: auto;
+	display: block;
+	margin: 2% 0;
+}
+
+/* Mobile responsiveness at 1000px */
+@media (max-width: 1000px) {
+	.mobile-image-1000 {
+		display: block !important;
+	}
+
+	.desktop-image-1000 {
+		display: none !important;
+	}
+
+	.inner-container {
+		width: auto;
+	}
+
+	.widthcontainer {
+		width: auto;
+		margin-left: 0;
+		padding: 0;
+	}
+}
+
+/* Overlay helpers (keep layout size, shift visually) */
+[data-overlay='up'],
+.overlay-up {
+	position: relative;
+	z-index: 2;
+	transform: translateY(-120px);
+}
+
+[data-overlay='down'],
+.overlay-down {
+	position: relative;
+	z-index: 2;
+	transform: translateY(120px);
+}
+
+/* Vertical slider utility */
+.vertical-slider {
+	overflow-y: auto;
+	overflow-x: hidden;
+	scroll-snap-type: y mandatory;
+}
+
+.vertical-slider > * {
+	scroll-snap-align: start;
+	min-height: 100%;
+}
+
+.vertical-slide {
+	min-height: 100%;
+}
+
+.document-scroller.vertical-slider {
+	position: relative;
+	overflow-y: auto;
+	overflow-x: hidden;
+	scroll-snap-type: y mandatory;
+}
+
+.document-scroller.vertical-slider .document-content {
+	display: block;
+	white-space: normal;
+}
+
+.document-scroller.vertical-slider .document-item {
+	display: block;
+	min-width: auto;
+	scroll-snap-align: start;
+	min-height: 100%;
+}
