@@ -91,6 +91,7 @@ class Debug {
 		ini_set('log_errors', 1);
 
 		if (self::$isEnabled) {
+			ini_set('display_errors', '1');
 			error_reporting(E_ALL);
 
 			if (!file_exists(dirname(AM_DEBUG_LOG_PATH))) {
@@ -98,6 +99,7 @@ class Debug {
 			}
 
 			self::timerStart();
+			self::log(array('Server software' => $_SERVER['SERVER_SOFTWARE'] ?? '', 'Sapi' => php_sapi_name()), 'Server');
 			self::log(AM_DIR_TMP, 'AM_DIR_TMP');
 		} else {
 			error_reporting(E_ERROR);

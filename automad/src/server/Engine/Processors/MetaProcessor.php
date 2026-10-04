@@ -39,7 +39,6 @@ use Automad\App;
 use Automad\Core\Automad;
 use Automad\Core\Cache;
 use Automad\Core\Debug;
-use Automad\Core\FileSystem;
 use Automad\Core\I18n;
 use Automad\Core\Resolve;
 use Automad\Core\Str;
@@ -47,6 +46,7 @@ use Automad\Engine\Document\Head;
 use Automad\Models\Page;
 use Automad\Models\Shared;
 use Automad\System\Fields;
+use Automad\System\FileSystem;
 
 defined('AUTOMAD') or die('Direct access not permitted!');
 
@@ -228,7 +228,12 @@ class MetaProcessor {
 	 * @return string Return the image URL
 	 */
 	private function createOpenGraphImage(): string {
-		$title = $this->Page->get(Fields::TITLE);
+		$title = $this->Page->get(Fields::OPEN_GRAPH_TITLE);
+
+		if (empty($title)) {
+			$title = $this->Page->get(Fields::TITLE);
+		}
+
 		$sitename = $this->Shared->get(Fields::SITENAME);
 		$baseDir = AM_BASE_DIR;
 		$baseUrl = AM_SERVER . AM_BASE_URL;

@@ -38,12 +38,13 @@ namespace Automad\Models;
 use Automad\Core\Automad;
 use Automad\Core\Cache;
 use Automad\Core\Debug;
-use Automad\Core\FileSystem;
-use Automad\Core\FileUtils;
 use Automad\Core\Image;
 use Automad\Core\Messenger;
 use Automad\Core\Str;
 use Automad\Core\Text;
+use Automad\System\DiskUsage;
+use Automad\System\FileSystem;
+use Automad\System\FileUtils;
 
 defined('AUTOMAD') or die('Direct access not permitted!');
 
@@ -83,6 +84,7 @@ class FileCollection {
 			}
 
 			Cache::clear();
+			DiskUsage::refresh();
 
 			if (!empty($success)) {
 				$Messenger->setSuccess(Text::get('deteledSuccess') . '<br />' . implode('<br />', $success));
@@ -241,6 +243,8 @@ class FileCollection {
 			rename($cache, $target);
 			Cache::clear();
 		}
+
+		DiskUsage::refresh();
 	}
 
 	/**

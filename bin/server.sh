@@ -1,7 +1,8 @@
 #!/bin/bash
+
 PID_FILE=".php-server.pid"
 LOG_FILE=".php-server.log"
-URL="localhost:8000"
+URL="0.0.0.0:8000"
 
 getProcessStartTime() {
 	local processId="$1"

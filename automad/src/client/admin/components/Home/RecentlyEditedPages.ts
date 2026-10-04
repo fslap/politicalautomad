@@ -44,10 +44,18 @@ import {
 	requestAPI,
 	resolveFileUrl,
 	resolvePageUrl,
-	Route,
+	routes,
 } from '@/admin/core';
-import { PageRecentlyEditedCardData } from '@/admin/types';
 import { Section } from '@/common';
+
+interface PageRecentlyEditedCardData {
+	title: string;
+	url: string;
+	lastModified: string;
+	private: boolean;
+	thumbnail: string;
+	fileCount: number;
+}
 
 /**
  * A grid of recently edited pages.
@@ -78,7 +86,7 @@ class RecentlyEditedPagesComponent extends BaseComponent {
 		this.setAttribute('style', '--min: 12rem;');
 
 		data.forEach((page: PageRecentlyEditedCardData) => {
-			const editRoute = `${Route.page}?url=${page.url}`;
+			const editRoute = `${routes.page}?url=${page.url}`;
 			const visitUrl = resolvePageUrl(page.url);
 
 			create(

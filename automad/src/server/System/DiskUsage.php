@@ -36,7 +36,6 @@
 namespace Automad\System;
 
 use Automad\Core\Debug;
-use Automad\Core\FileSystem;
 use Exception;
 use FilesystemIterator;
 use RecursiveCallbackFilterIterator;
@@ -101,6 +100,13 @@ class DiskUsage {
 	}
 
 	/**
+	 * Clear the disk usage cache.
+	 */
+	public static function clearCache(): void {
+		unlink(self::FILE_CACHE);
+	}
+
+	/**
 	 * Check whether the disk quota is exeeded.
 	 *
 	 * @return bool
@@ -110,6 +116,22 @@ class DiskUsage {
 			return false;
 		}
 
-		return (self::calculate() > AM_DISK_QUOTA);
+		$isExceeded = self::calculate() > AM_DISK_QUOTA;
+
+		// Remove cache when exeeded in order to reflect updated disk usage
+		// after removing files.
+		if ($isExceeded) {
+			self::clearCache();
+		}
+
+		return $isExceeded;
+	}
+
+	/**
+	 * Clear the cache and re-calculate disk usage.
+	 */
+	public static function refresh(): void {
+		self::clearCache();
+		self::calculate();
 	}
 }

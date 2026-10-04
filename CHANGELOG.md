@@ -1,8 +1,189 @@
 # Changelog
 
-## [v2.0.0-beta.44](https://github.com/marcantondahmen/automad/commit/5719c15ba70ffba792a21759de3e87be48151e96)
+## [v2.0.0-beta.59](https://github.com/marcantondahmen/automad/commit/55ca50aaf591a7d70e10f27134e1475d5eb70be8)
 
-Sat, 20 Jun 2026 11:46:22 +0200
+Sun, 20 Sep 2026 09:53:46 +0200
+
+### Bugfixes
+
+- fix search errors with incomplete mail form block ([55ca50aaf](https://github.com/marcantondahmen/automad/commit/55ca50aaf591a7d70e10f27134e1475d5eb70be8))
+
+## [v2.0.0-beta.58](https://github.com/marcantondahmen/automad/commit/1272edbbc54a8b9634fe0759d2a12fdb26a825ce)
+
+Mon, 14 Sep 2026 20:45:02 +0200
+
+### New Features
+
+- change api request content type to json ([a8eef1718](https://github.com/marcantondahmen/automad/commit/a8eef171890c695f4ff2c9317597789d0231c045))
+
+### Bugfixes
+
+- fix block handle position in in-page edit mode ([2317e2c53](https://github.com/marcantondahmen/automad/commit/2317e2c537f550144a001e6c9bc4e9a00ba2fd50))
+- fix download option not working in file card dropdown ([d3eae49d2](https://github.com/marcantondahmen/automad/commit/d3eae49d2636c2ade4a441572a68dba0e76339f6))
+- fix focal point picker in responsive image settings when installed in a subdirectory ([284993819](https://github.com/marcantondahmen/automad/commit/284993819aa495c350798df9d333e2d83e9c8af4))
+
+## [v2.0.0-beta.57](https://github.com/marcantondahmen/automad/commit/be88dc727a403c6685c0be84a7895124535eda87)
+
+Sat, 12 Sep 2026 17:48:22 +0200
+
+### New Features
+
+- sort saved data objects by key in order to have deterministic output that produces stable diffs on changes ([7e610d166](https://github.com/marcantondahmen/automad/commit/7e610d16665a126cb75a0ee7755b77821320fc20))
+
+### Bugfixes
+
+- always return submitted name or email in password reset code request form ([8256fb835](https://github.com/marcantondahmen/automad/commit/8256fb835dc47fbaa866c9fc1c261cb52bc90895))
+- only allow post requests to private api routes ([95fcb7862](https://github.com/marcantondahmen/automad/commit/95fcb786262369e367b67d152dec709d4a2a8e30))
+
+## [v2.0.0-beta.56](https://github.com/marcantondahmen/automad/commit/e1f7850199a997155d03e79817f8145d57c8320a)
+
+Sat, 5 Sep 2026 21:35:01 +0200
+
+### Bugfixes
+
+- fix loading pipe extensions with a non-lowercase base directory path ([26cdec629](https://github.com/marcantondahmen/automad/commit/26cdec6292955f64b3e59b692edcb8850e2d876f))
+- fix missing slugs and templates in migrate command ([e76da9fdb](https://github.com/marcantondahmen/automad/commit/e76da9fdbf2186fe1d27779b16c8182956246729))
+- fix routes for disabled dashboard ([6c7ac8403](https://github.com/marcantondahmen/automad/commit/6c7ac8403cf1376f81a9ff6453bc9388e3e80e0e))
+
+## [v2.0.0-beta.55](https://github.com/marcantondahmen/automad/commit/73a36f0f0247933ade49c5174d7ee32f62a3b1b0)
+
+Sat, 5 Sep 2026 10:49:36 +0200
+
+### New Features
+
+- keep block handles visible on scroll ([918293b65](https://github.com/marcantondahmen/automad/commit/918293b6534d728f42d0f0dbacd788e19fd3dcda))
+- lazy load images in file section ([be1c12a22](https://github.com/marcantondahmen/automad/commit/be1c12a225d70fc7bbfa1df0012ef8cb6b4e8ef6))
+- optimize thumbnails in aspect ratio previews ([de2f84830](https://github.com/marcantondahmen/automad/commit/de2f84830c7d00f72892714689118b1436356c22))
+- process images with imagick if installed in order to preserve image meta data and only use gd as fallback ([4e4f953c4](https://github.com/marcantondahmen/automad/commit/4e4f953c4df458dc03ac16af2861380fba4cd828))
+
+### Bugfixes
+
+- apply overflow hidden to layout sections that have a defined aspect ratio ([f36844bb6](https://github.com/marcantondahmen/automad/commit/f36844bb6162acf1e62adade32cd13810af9371b))
+- fix aspect ratio breakpoints not saving in layout section settings ([a43921aeb](https://github.com/marcantondahmen/automad/commit/a43921aebbc606c17d8c33a2ec48c85a12b4cec4))
+- fix edit toggle animation inside in-page editing dock ([79c05a0a5](https://github.com/marcantondahmen/automad/commit/79c05a0a5a1b2a094e93b79f9e08e113c6acb768))
+- fix layout section overflow and height in block editor when aspect ratio is defined ([1156c7fc7](https://github.com/marcantondahmen/automad/commit/1156c7fc7218c36180e2d10b986e90838ea1b54a))
+- fix minor dashboard color issues ([30fd98b22](https://github.com/marcantondahmen/automad/commit/30fd98b22cda0c187228c7878a1c4f41de817282))
+- remove option to resize images using query string parameters in image block ([9ee20e10d](https://github.com/marcantondahmen/automad/commit/9ee20e10d32781a6913f50c1d7fba9b73b6de29a))
+
+## [v2.0.0-beta.54](https://github.com/marcantondahmen/automad/commit/253fece1a8553443c7a196fa8a1838e9ae5a5b9f)
+
+Sun, 16 Aug 2026 17:58:24 +0200
+
+### Bugfixes
+
+- fix toggles in layout section style dialog and refactor the section focal point field ([6fb5e48e2](https://github.com/marcantondahmen/automad/commit/6fb5e48e2c36957b60b7e58e154d848e2c5a5d78))
+
+## [v2.0.0-beta.53](https://github.com/marcantondahmen/automad/commit/5651d20dd27252627ebefb03cf02a8dc691c0f8e)
+
+Sat, 15 Aug 2026 23:07:45 +0200
+
+### Bugfixes
+
+- fix link styles in dashboard ([3ea162f81](https://github.com/marcantondahmen/automad/commit/3ea162f81492a63ef596ca1910645bc02d4229dc))
+
+## [v2.0.0-beta.52](https://github.com/marcantondahmen/automad/commit/f6f910f11ab7d5f53185c8abddaa7004c43f7f28)
+
+Sat, 15 Aug 2026 17:36:14 +0200
+
+### New Features
+
+- add responsive image settings with breakpoints and focal point ([57b081416](https://github.com/marcantondahmen/automad/commit/57b081416ee75607c41407716c6eeab8711416a3))
+- add support for caddy and frankenphp web servers ([867053a16](https://github.com/marcantondahmen/automad/commit/867053a16c4a474cb46a113a5bd41659fc8f521f))
+- filter saved block data and reduce data file sizes ([3cb40dc56](https://github.com/marcantondahmen/automad/commit/3cb40dc562b0a5ace83a0bc3bdefb686cb175bb0))
+- implement background image focal point and responsive aspect ratios for layout sections ([429975a7a](https://github.com/marcantondahmen/automad/commit/429975a7a1315f2f4055b7a97ce20b927e50ad67))
+- improve account recovery and setup completion flow ([36ab98922](https://github.com/marcantondahmen/automad/commit/36ab989224e9835ee390fdbee6b71b6eb7fe2c05))
+- improve disk usage calculation and quota handling ([0e3c2da63](https://github.com/marcantondahmen/automad/commit/0e3c2da632380e19e0c525709823dd929f4dc8c4))
+- support query string parameters in email links ([0e1c759b0](https://github.com/marcantondahmen/automad/commit/0e1c759b01be89886c22e1a1d10a171b8481489e))
+- update editorjs ([b2fa009a8](https://github.com/marcantondahmen/automad/commit/b2fa009a8966e3e594809efd5a13d4e0c20d08c0))
+- update prism themes ([2a10556ec](https://github.com/marcantondahmen/automad/commit/2a10556ec2ce4dd0f2ddfb60f459309bab5bf990))
+- update standard lite theme ([aeb4c61b5](https://github.com/marcantondahmen/automad/commit/aeb4c61b58c4027b6428ff54b9051eb4c7385ead))
+
+### Bugfixes
+
+- fix automad language syntax highlighting grammar ([25357f304](https://github.com/marcantondahmen/automad/commit/25357f304f9a4d458a278e6e5f177303bf280d96))
+- fix modal field buttons ([6d7974296](https://github.com/marcantondahmen/automad/commit/6d7974296bbbac99fc55226b7a031267a96edc13))
+- remove resize feature from image picker ([7d90332f2](https://github.com/marcantondahmen/automad/commit/7d90332f2a68359bca031e959e9d191ac8846290))
+- replace &nbsp; with normal whitespace and fix hyperlink arrows in blocks ([991ba785d](https://github.com/marcantondahmen/automad/commit/991ba785dbaa2aa771bdec559a3649833ec2e9a1))
+
+## [v2.0.0-beta.51](https://github.com/marcantondahmen/automad/commit/fe6d332b9eae41c86e7fad228b2a07ca935b31ce)
+
+Sun, 19 Jul 2026 15:55:09 +0200
+
+### Bugfixes
+
+- fix search and replace in shared data ([ce9789472](https://github.com/marcantondahmen/automad/commit/ce97894725bf17a46586f45e2f1f9b1e43198057))
+
+## [v2.0.0-beta.50](https://github.com/marcantondahmen/automad/commit/3e88122efeb22c8147912f8457ba61ee1e45afb6)
+
+Sun, 19 Jul 2026 14:57:18 +0200
+
+### Bugfixes
+
+- fix search and replace with html special characters ([395d62584](https://github.com/marcantondahmen/automad/commit/395d62584987b5fb149a9b322b8206b708f57818))
+
+## [v2.0.0-beta.49](https://github.com/marcantondahmen/automad/commit/c1c0bbe84dbca1ee70db59d5b89967d0193da1b1)
+
+Sat, 18 Jul 2026 17:45:06 +0200
+
+### New Features
+
+- update standard lite theme ([ef38ad1d6](https://github.com/marcantondahmen/automad/commit/ef38ad1d6590d0a9208812981bb907f9074f1257))
+
+### Bugfixes
+
+- fix automad prism grammar ([8db618a29](https://github.com/marcantondahmen/automad/commit/8db618a298340d4ebf65761d15023bd1c35db94a))
+- fix focus of ai assistance prompt when opening it ([bfd4391c7](https://github.com/marcantondahmen/automad/commit/bfd4391c7121a781a7d176517b584429bfbf3856))
+
+## [v2.0.0-beta.48](https://github.com/marcantondahmen/automad/commit/0a2e57f010fad719dda4781a92323e0624d80f5f)
+
+Thu, 16 Jul 2026 19:40:21 +0200
+
+### New Features
+
+- add option to set a custom title that is displayed on open-graph images ([73e8fb6e4](https://github.com/marcantondahmen/automad/commit/73e8fb6e4578ad7b8b16990019dd6226f8c17ed8))
+- update image slideshow and gallery block ui ([37ee8da29](https://github.com/marcantondahmen/automad/commit/37ee8da29a2c0290f7c739f6b8d16761900fb24b))
+- update standard lite theme ([f542c9827](https://github.com/marcantondahmen/automad/commit/f542c98275e53da3b46e9f9c482228cd042ff10f))
+- wait for confirmation before discarding unsaved changes in the in-page editing dialog ([6c574cfb4](https://github.com/marcantondahmen/automad/commit/6c574cfb45a9fb067e883a36086c6a593b074575))
+
+### Bugfixes
+
+- exclude aliases from sitemap.xml ([0807eaf07](https://github.com/marcantondahmen/automad/commit/0807eaf07f136214a27c1532107e65fefc73f8d4))
+- fix syntax highlighting of foreach keyword in automad language ([b18246a5e](https://github.com/marcantondahmen/automad/commit/b18246a5ec38eda64f44ab6d61b70f4a22dd13ab))
+
+## [v2.0.0-beta.47](https://github.com/marcantondahmen/automad/commit/9b22f9a7cc1df09a3f882334244145f9206fc6ad)
+
+Sun, 12 Jul 2026 12:00:13 +0200
+
+### New Features
+
+- show latest commit details of private repository packages ([e6b241fe0](https://github.com/marcantondahmen/automad/commit/e6b241fe094238471765e8fd7194a103597e24e3))
+- show relative dates ([bc3098994](https://github.com/marcantondahmen/automad/commit/bc30989944d92c752b8ac7b213ccdcfa0478bf7a))
+- update standard lite theme ([925f40e94](https://github.com/marcantondahmen/automad/commit/925f40e948a5efe6df38e1fc5b0b5bbd62afe27e))
+
+### Bugfixes
+
+- fix change event not being fired when clearing date field ([58213b762](https://github.com/marcantondahmen/automad/commit/58213b7625f99762767967077ee78b6ce7bab9b7))
+
+## [v2.0.0-beta.46](https://github.com/marcantondahmen/automad/commit/d5ed72c6e462b39125b828f865b8cc235a415e7b)
+
+Mon, 6 Jul 2026 20:05:06 +0200
+
+### New Features
+
+- show notification if a package was not updated due to version constraints ([3fb922077](https://github.com/marcantondahmen/automad/commit/3fb922077d3d2284f6354cb1b4f38d3b7e3b3e9a))
+- update standard lite theme ([47e69ac26](https://github.com/marcantondahmen/automad/commit/47e69ac2639a2adb48548f78cdbe0acfa152551a))
+
+## [v2.0.0-beta.45](https://github.com/marcantondahmen/automad/commit/327cb9772549a6b088277ad41746c90c7b9b60fb)
+
+Sun, 5 Jul 2026 17:15:23 +0200
+
+### New Features
+
+- update standard lite theme to version 0.2.0 ([b2c28bbe3](https://github.com/marcantondahmen/automad/commit/b2c28bbe32258abf10b49cab6f8de58bf2417d0a))
+
+## [v2.0.0-beta.44](https://github.com/marcantondahmen/automad/commit/f8b63dc9b17efb09f2f3f2c6e6db3e3f80ff6aaf)
+
+Sat, 20 Jun 2026 11:48:40 +0200
 
 ### New Features
 

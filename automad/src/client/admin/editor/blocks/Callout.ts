@@ -34,8 +34,17 @@
 
 import { ConversionConfig } from '@/vendor/editorjs';
 import { App, create, CSS, html } from '@/admin/core';
-import { CalloutBlockData, CalloutBlockInputs } from '@/admin/types';
 import { BaseBlock } from './BaseBlock';
+
+interface CalloutBlockData {
+	title: string;
+	text: string;
+}
+
+interface CalloutBlockInputs {
+	title: HTMLDivElement;
+	text: HTMLDivElement;
+}
 
 export class CalloutBlock extends BaseBlock<CalloutBlockData> {
 	/**
@@ -141,7 +150,7 @@ export class CalloutBlock extends BaseBlock<CalloutBlockData> {
 	 *
 	 * @return the saved data
 	 */
-	save(): CalloutBlockData {
+	getData(): CalloutBlockData {
 		return {
 			title: this.inputs.title.innerHTML,
 			text: this.inputs.text.innerHTML,

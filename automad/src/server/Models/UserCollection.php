@@ -39,9 +39,9 @@ use Automad\Admin\Email\InvitationEmail;
 use Automad\Auth\Session;
 use Automad\Auth\User;
 use Automad\Core\Cache;
-use Automad\Core\FileSystem;
 use Automad\Core\Messenger;
 use Automad\Core\Text;
+use Automad\System\FileSystem;
 use Automad\System\Mail;
 
 defined('AUTOMAD') or die('Direct access not permitted!');
@@ -324,12 +324,14 @@ class UserCollection {
 	 *
 	 * @param string $username
 	 * @param string $email
+	 * @param string $sitename
+	 * @param string $origin
 	 * @param Messenger $Messenger
 	 * @return bool true on success
 	 */
-	public function sendInvitation(string $username, string $email, Messenger $Messenger): bool {
+	public function sendInvitation(string $username, string $email, string $sitename, string $origin, Messenger $Messenger): bool {
 		$subject = Text::get('emailInviteSubject');
-		$message = InvitationEmail::render($username);
+		$message = InvitationEmail::render($username, $sitename, $origin);
 
 		return Mail::send($email, $subject, $message, null, $Messenger);
 	}

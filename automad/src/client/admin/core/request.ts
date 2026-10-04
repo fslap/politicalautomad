@@ -44,11 +44,11 @@ import {
 	getLogger,
 	listen,
 	notifyFormError,
+	post,
 	query,
-	RequestKey,
 } from '.';
 import { FormComponent } from '@/admin/components/Forms/Form';
-import { KeyValueMap, APIResponse } from '@/admin/types';
+import type { KeyValueMap, APIResponse } from '@/admin/types';
 
 /**
  * Get the current CSRF token that is stored in the meta tag.
@@ -136,10 +136,7 @@ const transformToTree = (data: KeyValueMap): KeyValueMap => {
 };
 
 /**
- * Request a given URL and optionally post a stringified object as data.
- * When no data is passed, the request mehod will automatically be `GET`.
- * In case data is passed, it will be send as a stringified object in the '__json__' field
- * that will be converted back to an array on the backend.
+ * The basic dashboard api post request wrapper.
  *
  * @param url
  * @param [data]
@@ -152,20 +149,7 @@ export const request = async (
 	data: KeyValueMap = null,
 	signal: AbortSignal = null
 ): Promise<Response> => {
-	const init: RequestInit = { method: 'GET', signal };
-
-	if (data !== null) {
-		const formData = new FormData();
-
-		formData.append(RequestKey.csrf, getCsrfToken());
-		formData.append(RequestKey.json, JSON.stringify(data));
-
-		init.method = 'POST';
-		init.body = formData;
-		init.headers = {};
-	}
-
-	return fetch(url, init);
+	return await post(url, data || {}, getCsrfToken(), signal);
 };
 
 /**

@@ -34,8 +34,11 @@
 
 import { App, Attr, create, CSS, html, query } from '@/admin/core';
 import { CodeEditor } from '@/admin/core/code';
-import { RawBlockData } from '@/admin/types';
 import { BaseBlock } from './BaseBlock';
+
+interface RawBlockData {
+	code: string;
+}
 
 export class RawBlock extends BaseBlock<RawBlockData> {
 	/**
@@ -70,11 +73,6 @@ export class RawBlock extends BaseBlock<RawBlockData> {
 			icon: '<i class="bi bi-markdown"></i>',
 		};
 	}
-
-	/**
-	 * The CodeFlask instance.
-	 */
-	private editor: CodeEditor;
 
 	/**
 	 * Prepare the data that is passed to the constructor.
@@ -125,7 +123,7 @@ export class RawBlock extends BaseBlock<RawBlockData> {
 	 * @param editor
 	 */
 	private initEditor(container: HTMLDivElement): void {
-		this.editor = new CodeEditor({
+		new CodeEditor({
 			element: container,
 			code: this.data.code,
 			language: 'html',
@@ -151,7 +149,7 @@ export class RawBlock extends BaseBlock<RawBlockData> {
 	 *
 	 * @return the saved data
 	 */
-	save(): RawBlockData {
+	getData(): RawBlockData {
 		return this.data;
 	}
 }

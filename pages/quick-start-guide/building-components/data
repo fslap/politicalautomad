@@ -11,8 +11,8 @@
                     "id": "vqEmK6nU6LCYbdyra-vi-Nfzar7SM5iv",
                     "type": "paragraph",
                     "data": {
-                        "text": "Components are sections you can reuse across multiple pages. They maintain consistency and speed up your workflow.",
-                        "large": true
+                        "large": true,
+                        "text": "Components are sections you can reuse across multiple pages. They maintain consistency and speed up your workflow."
                     },
                     "tunes": []
                 },
@@ -20,6 +20,7 @@
                     "id": "iST9TM3hM9mCtLd6oRVwnXG77c3EKm--",
                     "type": "layoutSection",
                     "data": {
+                        "align": "start",
                         "content": {
                             "blocks": [
                                 {
@@ -32,10 +33,7 @@
                                         "layout": {
                                             "stretched": false,
                                             "width": "1/2"
-                                        },
-                                        "spacing": null,
-                                        "className": "",
-                                        "id": ""
+                                        }
                                     }
                                 },
                                 {
@@ -48,29 +46,24 @@
                                         "layout": {
                                             "stretched": false,
                                             "width": "1/2"
-                                        },
-                                        "spacing": null,
-                                        "className": "",
-                                        "id": ""
+                                        }
                                     }
                                 }
                             ]
                         },
+                        "gap": "2rem",
+                        "justify": "fill-row",
                         "style": {
-                            "card": false,
-                            "shadow": false,
                             "backgroundBlendMode": "normal",
                             "borderStyle": "none",
-                            "overflowHidden": false
-                        },
-                        "justify": "fill-row",
-                        "align": "start",
-                        "gap": "2rem"
+                            "card": false,
+                            "overflowHidden": false,
+                            "shadow": false
+                        }
                     },
                     "tunes": {
                         "layout": {
-                            "stretched": false,
-                            "width": null
+                            "stretched": false
                         },
                         "spacing": {
                             "top": "2rem"
@@ -82,8 +75,8 @@
         "template": "page_sidebar",
         "private": false,
         ":created": "2025-12-20T17:27:34+00:00",
-        ":lastModified": "2026-03-12T18:35:51+00:00",
-        ":automadVersion": "2.0.0-beta.17",
-        ":lastPublished": "2026-03-12T18:35:54+00:00"
+        ":lastModified": "2026-08-15T15:27:39+00:00",
+        ":automadVersion": "2.0.0-beta.56",
+        ":lastPublished": "2026-09-11T17:29:41+00:00"
     }
 }

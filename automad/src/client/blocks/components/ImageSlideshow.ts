@@ -32,8 +32,22 @@
  * See LICENSE.md for license information.
  */
 
-import { SliderData } from '@/blocks/types';
 import { create } from '@/common';
+import type { ImageSlideshowBlockData } from '@/admin/editor/blocks/ImageSlideshow';
+import type { ComponentImplementation } from '../types';
+
+interface SliderData {
+	imageSets: {
+		imageSet: {
+			image: string;
+			width: number;
+			height: number;
+			preload: string;
+		};
+		caption: string;
+	}[];
+	settings: Omit<ImageSlideshowBlockData, 'files'>;
+}
 
 /**
  * A slider component based on Swiper.js.
@@ -41,7 +55,7 @@ import { create } from '@/common';
  * @see {@link docs https://swiperjs.com}
  * @see {@link github https://github.com/nolimits4web/swiper}
  */
-export default class Slider {
+export default class Slider implements ComponentImplementation {
 	/**
 	 * The gallery settings and files.
 	 */
@@ -123,6 +137,7 @@ export default class Slider {
 			speed: 300,
 			loop: settings.loop ?? true,
 			autoplay,
+			autoHeight: false,
 			effect: settings.effect ?? 'slide',
 			slidesPerView: settings.slidesPerView || 1,
 			spaceBetween: settings.gapPx ?? 0,

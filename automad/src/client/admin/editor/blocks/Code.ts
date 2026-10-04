@@ -44,9 +44,14 @@ import {
 	uniqueId,
 } from '@/admin/core';
 import { CodeEditor } from '@/admin/core/code';
-import { CodeBlockData } from '@/admin/types';
-import { supportedLanguages } from '@/prism/prism';
+import { CodeLanguage, supportedLanguages } from '@/prism/prism';
 import { BaseBlock } from './BaseBlock';
+
+interface CodeBlockData {
+	code: string;
+	language: CodeLanguage;
+	lineNumbers: boolean;
+}
 
 export class CodeBlock extends BaseBlock<CodeBlockData> {
 	/**
@@ -81,11 +86,6 @@ export class CodeBlock extends BaseBlock<CodeBlockData> {
 			icon: '<i class="bi bi-code-slash"></i>',
 		};
 	}
-
-	/**
-	 * The CodeFlask instance.
-	 */
-	private editor: CodeEditor;
 
 	/**
 	 * Prepare the data that is passed to the constructor.
@@ -199,7 +199,7 @@ export class CodeBlock extends BaseBlock<CodeBlockData> {
 	 * @param editor
 	 */
 	private initEditor(container: HTMLDivElement): void {
-		this.editor = new CodeEditor({
+		new CodeEditor({
 			element: container,
 			code: this.data.code,
 			language: this.data.language,
@@ -219,7 +219,7 @@ export class CodeBlock extends BaseBlock<CodeBlockData> {
 	 *
 	 * @return the saved data
 	 */
-	save(): CodeBlockData {
+	getData(): CodeBlockData {
 		return this.data;
 	}
 }

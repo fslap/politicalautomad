@@ -44,11 +44,12 @@ import {
 	fire,
 	html,
 } from '@/admin/core';
-import { create, Route, Section } from '@/common';
+import { create, routes, Section } from '@/common';
 import { EditorJSComponent } from '@/admin/components/EditorJS';
-import { AiProvider, SelectComponentOption } from '@/admin/types';
 import { AiRuntime } from '@/admin/editor/ai';
 import { BaseComponent } from './Base';
+import type { AiProvider } from '@/admin/components/System/AiProviderSetup';
+import type { SelectComponentOption } from './Select';
 
 /**
  * Navigate to the AI settings page.
@@ -56,7 +57,7 @@ import { BaseComponent } from './Base';
 const openSettings = (): void => {
 	const base = `${window.location.origin}${App.dashboardURL}/`;
 
-	App.root.setView(new URL(`${Route.system}?section=${Section.ai}`, base));
+	App.root.setView(new URL(`${routes.system}?section=${Section.ai}`, base));
 };
 
 /**
@@ -294,7 +295,9 @@ export class EditorAiAssistanceComponent extends BaseComponent {
 		this.listen(details, 'toggle', () => {
 			setTimeout(() => {
 				if (details.open) {
-					prompt.focus();
+					setTimeout(() => {
+						prompt.focus();
+					}, 250);
 				} else {
 					prompt.blur();
 				}

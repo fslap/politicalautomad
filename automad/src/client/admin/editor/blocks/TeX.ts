@@ -34,8 +34,11 @@
 
 import { create, CSS, debounce, html, query } from '@/admin/core';
 import { CodeEditor } from '@/admin/core/code';
-import { TeXBlockData } from '@/admin/types';
 import { BaseBlock } from './BaseBlock';
+
+interface TeXBlockData {
+	code: string;
+}
 
 export class TeXBlock extends BaseBlock<TeXBlockData> {
 	/**
@@ -144,7 +147,7 @@ export class TeXBlock extends BaseBlock<TeXBlockData> {
 				throwOnError: false,
 				output: 'html',
 				displayMode: true,
-				errorColor: 'hsl(var(--am-clr-text-danger))',
+				errorColor: 'var(--am-clr-text-danger)',
 			});
 		}, 500);
 
@@ -186,7 +189,7 @@ export class TeXBlock extends BaseBlock<TeXBlockData> {
 	 *
 	 * @return the saved data
 	 */
-	save(): TeXBlockData {
+	getData() {
 		return this.data;
 	}
 }

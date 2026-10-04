@@ -44,31 +44,32 @@ import {
 	notifyError,
 	query,
 	queryAll,
-	Route,
+	routes,
 	Section,
+	sortByKeys,
 	titleCase,
 } from '.';
-import {
+import { FormComponent } from '../components/Forms/Form';
+import { FormErrorComponent } from '../components/Forms/FormError';
+import type { InputElement, KeyValueMap, Listener } from '@/admin/types';
+import type {
 	FieldGroupData,
 	FieldGroups,
 	FieldSectionCollection,
-	InputElement,
-	KeyValueMap,
-	Listener,
-} from '@/admin/types';
-import { FormComponent } from '../components/Forms/Form';
-import { FormErrorComponent } from '../components/Forms/FormError';
+} from '@/admin/components/Forms/types';
 
 /**
  * The tag names enum for fields.
  */
 export const enum FieldTag {
+	aspectRatioBreakpoints = 'am-aspect-ratio-breakpoints',
 	code = 'am-code-field',
 	color = 'am-color-field',
 	date = 'am-date-field',
 	editor = 'am-editor-field',
 	email = 'am-email-field',
 	feedFieldSelect = 'am-feed-field-select-field',
+	focalPoint = 'am-focal-point-field',
 	image = 'am-image-field',
 	input = 'am-input-field',
 	mainTheme = 'am-main-theme-field',
@@ -164,7 +165,7 @@ export const collectFieldData = (container: HTMLElement): KeyValueMap => {
 		}
 	);
 
-	return data;
+	return sortByKeys(data);
 };
 
 /**
@@ -210,7 +211,7 @@ export const createCustomizationFields = (
 					<div>${App.text('customizationMerge')}</div>
 					<div>
 						<am-link
-							${Attr.target}="${Route.shared}?section=${Section.customizations}"
+							${Attr.target}="${routes.shared}?section=${Section.customizations}"
 							class="${CSS.button} ${CSS.buttonPrimary}"
 						>
 							${App.text('sharedTitle')}

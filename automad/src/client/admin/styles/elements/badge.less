@@ -37,25 +37,31 @@
 	--bg: var(--am-clr-background-badge);
 
 	box-sizing: border-box;
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	gap: 0.35em;
-	font-size: 0.75rem;
-	line-height: 1.15;
-	min-width: 2.65em;
+	min-width: 32px;
 	max-width: 100%;
-	padding: 0.4em 0.85em 0.3em 0.85em;
+	padding: 0 9px;
+	font-size: 11px;
 	border-radius: 100px;
-	color: hsl(var(--text));
-	background-color: hsl(var(--bg));
-	font-weight: 740;
+	color: var(--text);
+	background-color: var(--bg);
+	border: 1px solid transparent;
+	font-weight: 720;
+	overflow: hidden;
 
 	&,
 	& > * {
-		overflow: hidden;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		gap: 4px;
+		line-height: 21px !important;
+		height: 23px;
 		white-space: nowrap;
 		text-overflow: ellipsis;
+	}
+
+	&:has(> .bi:first-child) {
+		padding-left: 6px;
 	}
 
 	[class*='--danger'] & {
@@ -66,5 +72,14 @@
 	&--muted {
 		--text: var(--am-clr-text-muted);
 		--bg: var(--am-clr-background-faded);
+		border: @am-border;
+
+		a& {
+			transition: color 0.2s;
+		}
+
+		a&:hover {
+			--text: var(--am-clr-text-paragraph);
+		}
 	}
 }

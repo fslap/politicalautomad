@@ -34,13 +34,7 @@
 
 import { EditorConfig } from '@/vendor/editorjs';
 import { ModalComponent } from '@/admin/components/Modal/Modal';
-import {
-	EditorOutputData,
-	FieldInitData,
-	FieldSectionCollection,
-	KeyValueMap,
-	SelectComponentOption,
-} from '@/admin/types';
+import { ModalFieldComponent } from '@/admin/components/Modal/ModalField';
 import {
 	App,
 	Attr,
@@ -56,15 +50,24 @@ import {
 	query,
 	uniqueId,
 } from '.';
+import { debounce, queryAll, Section } from '@/common';
 import { PageDataFormComponent } from '@/admin/components/Forms/PageDataForm';
 import { SwitcherSectionComponent } from '@/admin/components/Switcher/SwitcherSection';
 import { FormComponent } from '@/admin/components/Forms/Form';
 import { SharedDataFormComponent } from '@/admin/components/Forms/SharedDataForm';
 import { AutocompleteUrlComponent } from '@/admin/components/AutocompleteUrl';
-import { BaseFieldComponent } from '@/admin/components/Fields/BaseField';
-import { SelectComponent } from '@/admin/components/Select';
+import {
+	BaseFieldComponent,
+	type FieldInitData,
+} from '@/admin/components/Fields/BaseField';
+import {
+	SelectComponent,
+	type SelectComponentOption,
+} from '@/admin/components/Select';
 import { EditorJSComponent } from '@/admin/components/EditorJS';
-import { debounce, queryAll, Section } from '@/common';
+import type { KeyValueMap } from '@/admin/types';
+import type { FieldSectionCollection } from '@/admin/components/Forms/types';
+import type { EditorOutputData } from '@/admin/editor/types';
 
 /**
  * Create a new EditorJSComponent element.
@@ -104,21 +107,21 @@ export const createEditor = (
  * @param [allowModal]
  * @returns the generated field
  */
-export const createField = (
+export const createField = <T extends BaseFieldComponent = BaseFieldComponent>(
 	fieldType: FieldTag,
 	parent: HTMLElement,
 	data: FieldInitData,
 	cls: string[] = [],
 	attributes: KeyValueMap = {},
 	allowModal: boolean = false
-): BaseFieldComponent => {
+): T => {
 	const field = create(
 		fieldType,
 		cls,
 		attributes,
 		allowModal && !data.isUnused
 			? create(
-					'am-modal-field',
+					ModalFieldComponent.TAG_NAME,
 					[],
 					{
 						[Attr.page]: getPageURL(),
@@ -280,42 +283,9 @@ export const createImagePickerModal = (
 
 	const idUrl = uniqueId();
 	const idUrlButton = uniqueId();
-	const idWidth = uniqueId();
-	const idHeight = uniqueId();
 	const idSelectButton = uniqueId();
 	const pageUrl = getPageURL();
 	const multipleAttr = isMultiSelect ? Attr.multiple : '';
-
-	const resizeForm = isMultiSelect
-		? ''
-		: html`
-				<div class="${CSS.flex} ${CSS.flexGap}">
-					<div class="${CSS.flexItemGrow}">
-						<div class="${CSS.field}">
-							<label class="${CSS.fieldLabel}">
-								${App.text('resizeWidthTitle')}
-							</label>
-							<input
-								type="number"
-								class="${CSS.input}"
-								id="${idWidth}"
-							/>
-						</div>
-					</div>
-					<div class="${CSS.flexItemGrow}">
-						<div class="${CSS.field} ${CSS.flexItemGrow}">
-							<label class="${CSS.fieldLabel}">
-								${App.text('resizeHeightTitle')}
-							</label>
-							<input
-								type="number"
-								class="${CSS.input}"
-								id="${idHeight}"
-							/>
-						</div>
-					</div>
-				</div>
-			`;
 
 	const pageImagePicker = pageUrl
 		? html`
@@ -357,7 +327,7 @@ export const createImagePickerModal = (
 				<div>
 					<p>${App.text('useUploadedImage')}</p>
 					<am-upload></am-upload>
-					${resizeForm} ${pageImagePicker}
+					${pageImagePicker}
 					<am-image-picker
 						${Attr.label}="${App.text('sharedImages')}"
 						${multipleAttr}
@@ -384,19 +354,6 @@ export const createImagePickerModal = (
 	const urlInput = query<HTMLInputElement>(`#${idUrl}`, modal);
 	const urlButton = query<HTMLButtonElement>(`#${idUrlButton}`, modal);
 	const selectButton = query<HTMLButtonElement>(`#${idSelectButton}`, modal);
-
-	const getResizeQuery = (file: string) => {
-		const inputWidth = query<HTMLInputElement>(`#${idWidth}`);
-		const inputHeight = query<HTMLInputElement>(`#${idHeight}`);
-		const width = inputWidth.value;
-		const height = inputHeight.value;
-
-		return `${file}${
-			width && height && !file.match(/\:\/\//)
-				? `?${width}x${height}`
-				: ''
-		}`;
-	};
 
 	const getSelection = () => {
 		return queryAll('am-image-picker', modal).reduce(
@@ -436,7 +393,7 @@ export const createImagePickerModal = (
 			return;
 		}
 
-		onSelect(isMultiSelect ? files : [getResizeQuery(files[0])]);
+		onSelect(files);
 
 		modal.close();
 	});

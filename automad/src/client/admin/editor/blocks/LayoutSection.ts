@@ -44,23 +44,20 @@ import {
 	createGenericModal,
 	createSelect,
 	CSS,
+	debounce,
 	FieldTag,
 	html,
+	query,
 	queryAll,
 	resolveFileUrl,
 	uniqueId,
+	type AspectRatioBreakpoints,
 } from '@/admin/core';
-import {
-	SectionAlignItemsOption,
-	LayoutSectionBlockData,
-	SectionJustifyContentOption,
-	SectionStyle,
-	SectionToolbarRadioOptions,
-	SelectComponentOption,
-} from '@/admin/types';
 import { BaseBlock } from './BaseBlock';
 import { EditorJSComponent } from '@/admin/components/EditorJS';
-import { filterEmptyData } from '../utils';
+import { BaseFieldComponent } from '@/admin/components/Fields/BaseField';
+import { FocalPointFieldComponent } from '@/admin/components/Fields/FocalPointField';
+import { filterEmptyData, saveEditorBlocks } from '../utils';
 import iconAlignStart from '@/common/svg/flex/align-start.svg';
 import iconAlignCenter from '@/common/svg/flex/align-center.svg';
 import iconAlignEnd from '@/common/svg/flex/align-end.svg';
@@ -73,6 +70,55 @@ import iconJustifyBetween from '@/common/svg/flex/justify-between.svg';
 import iconJustifyEvenly from '@/common/svg/flex/justify-evenly.svg';
 import iconGap from '@/common/svg/flex/gap.svg';
 import iconMin from '@/common/svg/flex/min.svg';
+import type { EditorOutputData } from '../types';
+import type { KeyValueMap, FocalPoint } from '@/admin/types';
+import type { SelectComponentOption } from '@/admin/components/Select';
+
+type SectionToolbarRadioOptions<T extends string> = {
+	[key in T]: { icon: string; tooltip: string };
+};
+
+type SectionJustifyContentOption =
+	| 'start'
+	| 'center'
+	| 'end'
+	| 'space-between'
+	| 'space-evenly'
+	| 'fill-row';
+
+type SectionAlignItemsOption = 'start' | 'center' | 'end' | 'stretch';
+
+type SectionBackgroundBlendMode = (typeof sectionBackgroundBlendModes)[number];
+
+type SectionBorderStyle = (typeof sectionBorderStyles)[number];
+
+interface SectionStyle {
+	aspectRatio?: string;
+	aspectRatioBreakpoints?: AspectRatioBreakpoints;
+	card?: boolean;
+	shadow?: boolean;
+	color?: string;
+	backgroundBlendMode?: SectionBackgroundBlendMode | '';
+	backgroundColor?: string;
+	backgroundImage?: string;
+	backgroundImageFocalPoint?: FocalPoint | null;
+	borderColor?: string;
+	borderWidth?: string;
+	borderRadius?: string;
+	borderStyle?: SectionBorderStyle | '';
+	paddingTop?: string;
+	paddingBottom?: string;
+	overflowHidden?: boolean;
+}
+
+interface LayoutSectionBlockData {
+	content: EditorOutputData;
+	style: SectionStyle;
+	justify: SectionJustifyContentOption;
+	align: SectionAlignItemsOption;
+	gap: string;
+	minBlockWidth: string;
+}
 
 /**
  * The flexbox option for "justify-content".
@@ -149,20 +195,23 @@ export const sectionBorderStyles = [
 /**
  * Section style defaults.
  */
-export const styleDefaults: SectionStyle = {
-	card: null,
-	shadow: null,
-	color: '',
-	backgroundColor: '',
+const styleDefaults: SectionStyle = {
+	aspectRatio: '',
+	aspectRatioBreakpoints: {},
 	backgroundBlendMode: '',
+	backgroundColor: '',
+	backgroundImage: '',
+	backgroundImageFocalPoint: null,
 	borderColor: '',
-	borderWidth: '',
 	borderRadius: '',
 	borderStyle: '',
-	backgroundImage: '',
-	paddingTop: '',
-	paddingBottom: '',
+	borderWidth: '',
+	card: null,
+	color: '',
 	overflowHidden: null,
+	paddingBottom: '',
+	paddingTop: '',
+	shadow: null,
 } as const;
 
 /**
@@ -327,7 +376,7 @@ export class LayoutSectionBlock extends BaseBlock<LayoutSectionBlockData> {
 							return;
 						}
 
-						const { blocks } = await api.saver.save();
+						const blocks = await saveEditorBlocks(api);
 
 						this.data.content = { blocks };
 						this.blockAPI.dispatchChange();
@@ -360,11 +409,11 @@ export class LayoutSectionBlock extends BaseBlock<LayoutSectionBlockData> {
 	 *
 	 * @return the saved data
 	 */
-	save(): LayoutSectionBlockData {
-		return filterEmptyData({
+	getData(): LayoutSectionBlockData {
+		return {
 			...this.data,
 			style: filterEmptyData(this.data.style),
-		});
+		};
 	}
 
 	/**
@@ -466,9 +515,9 @@ export class LayoutSectionBlock extends BaseBlock<LayoutSectionBlockData> {
 		const button = create(
 			'am-modal-toggle',
 			[CSS.button, CSS.buttonIcon, CSS.buttonPrimary],
-			{ [Attr.tooltip]: App.text('editStyle') },
+			{ [Attr.tooltip]: App.text('editLayoutSectionStyles') },
 			toolbar,
-			'<i class="bi bi-palette2"></i>'
+			'<i class="bi bi-sliders"></i>'
 		);
 
 		this.listen(button, 'click', () => {
@@ -589,34 +638,92 @@ export class LayoutSectionBlock extends BaseBlock<LayoutSectionBlockData> {
 	 * Render the styles modal and append it to root.
 	 */
 	private renderStylesModal(): void {
-		const { modal, body } = createGenericModal(App.text('editStyle'));
+		const { modal, body } = createGenericModal(
+			App.text('editLayoutSectionStyles')
+		);
 
-		const field = (
+		query(`.${CSS.modalDialog}`, modal).classList.add(CSS.modalDialogLarge);
+
+		const grid = create(
+			'div',
+			[CSS.editorBlockLayoutSectionStyles],
+			{},
+			body
+		);
+
+		const areaTopLeft = create(
+			'div',
+			[CSS.editorBlockLayoutSectionStylesAreaTopLeft],
+			{},
+			grid
+		);
+
+		const areaTopRight = create(
+			'div',
+			[CSS.editorBlockLayoutSectionStylesAreaTopRight],
+			{},
+			grid
+		);
+
+		const areaBottomLeft = create(
+			'div',
+			[CSS.editorBlockLayoutSectionStylesAreaBottomLeft],
+			{},
+			grid
+		);
+
+		const areaBottomRight = create(
+			'div',
+			[
+				CSS.editorBlockLayoutSectionStylesAreaBottomRight,
+				CSS.flex,
+				CSS.flexColumn,
+				CSS.flexBetween,
+				CSS.flexGapLarge,
+			],
+			{},
+			grid
+		);
+
+		const field = <T extends BaseFieldComponent = BaseFieldComponent>(
 			type: FieldTag,
 			name: keyof SectionStyle,
 			text: string,
-			parent: HTMLElement
-		): void => {
-			createField(type, parent, {
-				name: name,
-				value: this.data.style[name],
-				key: uniqueId(),
-				label: App.text(text),
-			});
+			parent: HTMLElement,
+			attributes: KeyValueMap = {}
+		): T => {
+			return createField(
+				type,
+				parent,
+				{
+					name: name,
+					value: this.data.style[name],
+					key: uniqueId(),
+					label: App.text(text),
+				},
+				[],
+				attributes
+			) as T;
 		};
 
-		field(FieldTag.toggle, 'card', 'optimizeContentForCards', body);
+		field(FieldTag.toggle, 'card', 'optimizeContentForCards', areaTopLeft);
 
-		const group1 = create('div', [CSS.grid, CSS.gridAuto], {}, body);
+		const group1 = create('div', [CSS.grid, CSS.gridAuto], {}, areaTopLeft);
 
 		field(FieldTag.toggle, 'overflowHidden', 'overflowHidden', group1);
 		field(FieldTag.toggle, 'shadow', 'addShadow', group1);
-		const group2 = create('div', [CSS.grid, CSS.gridAuto], {}, body);
+
+		const group2 = create('div', [CSS.grid, CSS.gridAuto], {}, areaTopLeft);
 
 		field(FieldTag.color, 'color', 'textColor', group2);
 		field(FieldTag.color, 'backgroundColor', 'backgroundColor', group2);
 
-		const group3 = create('div', [CSS.grid, CSS.gridAuto], {}, body);
+		const group3 = create(
+			'div',
+			[CSS.grid, CSS.gridAuto],
+			{ style: '--min: 10rem;' },
+			areaTopRight
+		);
 
 		const borderStyleId = uniqueId();
 		const borderStyle = create(
@@ -652,14 +759,61 @@ export class LayoutSectionBlock extends BaseBlock<LayoutSectionBlockData> {
 
 		field(FieldTag.color, 'borderColor', 'borderColor', group3);
 
-		field(FieldTag.image, 'backgroundImage', 'backgroundImage', body);
+		const group4 = create(
+			'div',
+			[CSS.grid, CSS.gridAuto],
+			{},
+			areaTopRight
+		);
+
+		field(FieldTag.numberUnit, 'borderWidth', 'borderWidth', group4);
+		field(FieldTag.numberUnit, 'borderRadius', 'borderRadius', group4);
+
+		const group5 = create(
+			'div',
+			[CSS.grid, CSS.gridAuto],
+			{},
+			areaTopRight
+		);
+
+		field(FieldTag.numberUnit, 'paddingTop', 'paddingTop', group5);
+		field(FieldTag.numberUnit, 'paddingBottom', 'paddingBottom', group5);
+
+		field(FieldTag.input, 'aspectRatio', 'aspectRatio', areaBottomRight, {
+			pattern: '[0-9.]+/[0-9.]+',
+			placeholder: '16/9',
+			[Attr.error]: App.text('aspectRatioError'),
+		});
+
+		const breakpointsWrapper = create(
+			'div',
+			[CSS.flex, CSS.flexColumn],
+			{},
+			areaBottomRight
+		);
+
+		create(
+			'small',
+			[CSS.textWrapPretty],
+			{},
+			breakpointsWrapper,
+			App.text('aspectRatioBreakpointsHelp')
+		);
+
+		field(
+			FieldTag.aspectRatioBreakpoints,
+			'aspectRatioBreakpoints',
+			'aspectRatioBreakpoints',
+			breakpointsWrapper,
+			{}
+		);
 
 		const blendModeId = uniqueId();
 		const blendMode = create(
 			'div',
 			[CSS.field],
 			{},
-			body,
+			areaBottomLeft,
 			html`
 				<div>
 					<label for="${blendModeId}" class="${CSS.fieldLabel}">
@@ -688,21 +842,35 @@ export class LayoutSectionBlock extends BaseBlock<LayoutSectionBlockData> {
 			blendModeId
 		);
 
-		const group4 = create('div', [CSS.grid, CSS.gridAuto], {}, body);
-		field(FieldTag.numberUnit, 'borderWidth', 'borderWidth', group4);
-		field(FieldTag.numberUnit, 'borderRadius', 'borderRadius', group4);
-		const group5 = create('div', [CSS.grid, CSS.gridAuto], {}, body);
+		field(
+			FieldTag.image,
+			'backgroundImage',
+			'backgroundImage',
+			areaBottomLeft
+		);
 
-		field(FieldTag.numberUnit, 'paddingTop', 'paddingTop', group5);
-		field(FieldTag.numberUnit, 'paddingBottom', 'paddingBottom', group5);
+		const focalPointField = field<FocalPointFieldComponent>(
+			FieldTag.focalPoint,
+			'backgroundImageFocalPoint',
+			'focalPoint',
+			areaBottomLeft
+		);
+
+		focalPointField.image = this.data.style?.backgroundImage;
 
 		Bindings.connectElements(body);
 
-		this.listen(body, 'change', () => {
-			this.data.style = collectFieldData(body) as SectionStyle;
-			this.setStyle();
-			this.blockAPI.dispatchChange();
-		});
+		this.listen(
+			body,
+			'change input',
+			debounce(() => {
+				this.data.style = collectFieldData(body);
+				this.setStyle();
+				this.blockAPI.dispatchChange();
+
+				focalPointField.image = this.data.style?.backgroundImage;
+			})
+		);
 
 		setTimeout(() => {
 			modal.open();
@@ -770,6 +938,55 @@ export class LayoutSectionBlock extends BaseBlock<LayoutSectionBlockData> {
 			inline.push(`--minBlockWidth: ${minBlockWidth};`);
 		}
 
+		inline.push(`--aspect-ratio: ${style.aspectRatio || 'auto'};`);
+
+		if (style.backgroundImageFocalPoint) {
+			const { x, y } = style.backgroundImageFocalPoint;
+
+			inline.push(`--focalPointX: ${x}%;`, `--focalPointY: ${y}%;`);
+		}
+
 		this.holder.setAttribute('style', inline.join(' '));
+		this.renderAspectRatioStyles();
+	}
+
+	/**
+	 * Render the local style tag with the responsive settings.
+	 */
+	private renderAspectRatioStyles(): void {
+		const unique = `section-${this.blockAPI.id}`;
+		const styleWrapper =
+			query(`style#${unique}`, this.wrapper) ||
+			create('style', [], { id: unique }, this.wrapper);
+
+		this.wrapper.classList.add(unique);
+
+		let styles = `
+			.${unique} {
+				container-type: inline-size;
+				container-name: ${unique};
+			}
+		`;
+
+		const maxWidths = Object.keys(
+			this.data.style?.aspectRatioBreakpoints ?? {}
+		).sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+
+		maxWidths.forEach((maxWidth) => {
+			const { aspectRatio } =
+				this.data.style?.aspectRatioBreakpoints[maxWidth];
+
+			if (aspectRatio) {
+				styles += `
+					@container ${unique} (max-width: ${maxWidth}px) {
+						.${unique} .codex-editor {
+							--aspect-ratio: ${aspectRatio} !important;
+						}
+					}
+				`;
+			}
+		});
+
+		styleWrapper.textContent = styles;
 	}
 }

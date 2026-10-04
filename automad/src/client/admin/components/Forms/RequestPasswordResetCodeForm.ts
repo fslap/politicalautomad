@@ -1,0 +1,191 @@
+/*
+ *                    ....
+ *                  .:   '':.
+ *                  ::::     ':..
+ *                  ::.         ''..
+ *       .:'.. ..':.:::'    . :.   '':.
+ *      :.   ''     ''     '. ::::.. ..:
+ *      ::::.        ..':.. .''':::::  .
+ *      :::::::..    '..::::  :. ::::  :
+ *      ::'':::::::.    ':::.'':.::::  :
+ *      :..   ''::::::....':     ''::  :
+ *      :::::.    ':::::   :     .. '' .
+ *   .''::::::::... ':::.''   ..''  :.''''.
+ *   :..:::'':::::  :::::...:''        :..:
+ *   ::::::. '::::  ::::::::  ..::        .
+ *   ::::::::.::::  ::::::::  :'':.::   .''
+ *   ::: '::::::::.' '':::::  :.' '':  :
+ *   :::   :::::::::..' ::::  ::...'   .
+ *   :::  .::::::::::   ::::  ::::  .:'
+ *    '::'  '':::::::   ::::  : ::  :
+ *              '::::   ::::  :''  .:
+ *               ::::   ::::    ..''
+ *               :::: ..:::: .:''
+ *                 ''''  '''''
+ *
+ *
+ * AUTOMAD
+ *
+ * Copyright (c) 2026 by Marc Anton Dahmen
+ * https://marcdahmen.de
+ *
+ * See LICENSE.md for license information.
+ */
+
+import {
+	App,
+	Attr,
+	CSS,
+	getSearchParam,
+	html,
+	isInvite,
+	routes,
+} from '@/admin/core';
+import { FormComponent } from './Form';
+import type { KeyValueMap } from '@/admin/types';
+
+const text = () => {
+	return isInvite()
+		? {
+				startButton: App.text('completeAccountSetupRequestCodeButton'),
+				startHeading: App.text(
+					'completeAccountSetupRequestCodeHeading'
+				),
+				startText: App.text('completeAccountSetupRequestCodeText'),
+				successHeading: App.text('completeAccountSetupCodeSentHeading'),
+				successText: App.text('completeAccountSetupCodeSentText'),
+			}
+		: {
+				startButton: App.text('accountRecoveryRequestCodeButton'),
+				startHeading: App.text('accountRecoveryRequestCodeHeading'),
+				startText: App.text('accountRecoveryRequestCodeText'),
+				successHeading: App.text('accountRecoveryCodeSentHeading'),
+				successText: App.text('accountRecoveryCodeSentText'),
+			};
+};
+
+const cancel = () => {
+	return isInvite()
+		? ''
+		: html`
+				<p>
+					<am-link
+						class="${CSS.link}"
+						${Attr.target}="${routes.login}"
+					>
+						${App.text('accountRecoveryCancel')}
+					</am-link>
+				</p>
+			`;
+};
+
+/**
+ * The token request form.
+ *
+ * @extends FormComponent
+ */
+class RequestPasswordResetCodeFormComponent extends FormComponent {
+	/**
+	 * Process the response that is received after submitting the form.
+	 *
+	 * @param response
+	 * @async
+	 */
+	protected async processResponse(response: KeyValueMap): Promise<void> {
+		if (!!response.data?.nameOrEmail) {
+			this.renderSuccess(response.data.nameOrEmail);
+		}
+	}
+
+	/**
+	 * Render the initial form.
+	 */
+	protected init(): void {
+		const inputInvite = isInvite()
+			? html`
+					<input
+						type="hidden"
+						name="nameOrEmail"
+						value="$${getSearchParam('username')}"
+					/>
+				`
+			: '';
+
+		const inputReset = isInvite()
+			? ''
+			: html`
+					<input
+						type="text"
+						class="${CSS.input}"
+						name="nameOrEmail"
+						placeholder="${App.text('usernameOrEmail')}"
+						required
+					/>
+				`;
+
+		this.innerHTML = html`
+			<h2>${text().startHeading}</h2>
+			<am-form-error></am-form-error>
+			<div class="${CSS.card}">
+				<div class="${CSS.cardBody} ${CSS.cardBodyLarge}">
+					${text().startText}
+				</div>
+				<input
+					type="hidden"
+					name="type"
+					value="${getSearchParam('type')}"
+				/>
+				${inputInvite}
+				<div class="${CSS.cardForm}">
+					${inputReset}
+					<div class="${CSS.cardFormButtons}">
+						<am-submit class="${CSS.button} ${CSS.buttonPrimary}">
+							${text().startButton}
+						</am-submit>
+					</div>
+				</div>
+			</div>
+			${cancel()}
+		`;
+	}
+
+	/**
+	 * Render the success message.
+	 *
+	 * @param nameOrEmail
+	 */
+	private renderSuccess(nameOrEmail: string): void {
+		const params = new URLSearchParams(window.location.search);
+
+		if (!!nameOrEmail) {
+			params.set('nameOrEmail', nameOrEmail);
+		}
+
+		const query = params.toString();
+		const continueLink = `${routes.setPassword}${query ? `?${query}` : ''}`;
+
+		this.innerHTML = html`
+			<h2>${text().successHeading}</h2>
+			<div class="${CSS.card}">
+				<div class="${CSS.cardIcon}">
+					<i class="bi bi-envelope-paper"></i>
+				</div>
+				<div class="${CSS.cardBody} ${CSS.cardBodyLarge}">
+					${text().successText}
+				</div>
+				<div class="${CSS.cardForm}">
+					<a
+						href="${continueLink}"
+						class="${CSS.button} ${CSS.buttonPrimary}"
+						>${App.text('continue')}</a
+					>
+				</div>
+			</div>
+		`;
+	}
+}
+
+customElements.define(
+	'am-request-password-reset-code-form',
+	RequestPasswordResetCodeFormComponent
+);

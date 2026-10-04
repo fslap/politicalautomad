@@ -41,12 +41,13 @@ import {
 	FieldTag,
 	html,
 	query,
-	Route,
+	routes,
 	uniqueId,
 } from '@/admin/core';
-import { SelectComponentOption, Theme } from '@/admin/types';
 import { ModalComponent } from '@/admin/components/Modal/Modal';
 import { BaseFieldComponent } from '@/admin/components/Fields/BaseField';
+import type { Theme } from '@/admin/types';
+import type { SelectComponentOption } from '@/admin/components/Select';
 
 /**
  * A theme select field.
@@ -136,7 +137,7 @@ class MainThemeFieldComponent extends BaseFieldComponent {
 			create(
 				'am-link',
 				[CSS.textLink],
-				{ [Attr.target]: Route.packages },
+				{ [Attr.target]: routes.packages },
 				links
 			)
 		);

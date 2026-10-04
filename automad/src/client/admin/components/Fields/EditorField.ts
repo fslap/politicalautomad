@@ -44,12 +44,13 @@ import {
 	FormDataProviders,
 	listenToClassChange,
 	query,
+	type UndoValue,
 } from '@/admin/core';
+import { outputIsEqual, saveEditorBlocks } from '@/admin/editor/utils';
 import { BaseFieldComponent } from './BaseField';
-import { EditorOutputData, KeyValueMap, UndoValue } from '@/admin/types';
 import { LayoutTune } from '@/admin/editor/tunes/Layout';
 import { EditorJSComponent } from '@/admin/components/EditorJS';
-import { filterEmptyData, outputIsEqual } from '@/admin/editor/utils';
+import type { EditorOutputData } from '@/admin/editor/types';
 
 /**
  * A block editor field.
@@ -98,17 +99,7 @@ export class EditorFieldComponent extends BaseFieldComponent {
 			{ blocks: this.value.blocks },
 			{
 				onChange: async (api: API) => {
-					const { blocks: raw } =
-						(await api.saver.save()) as EditorOutputData;
-
-					const blocks =
-						raw?.map((block) => {
-							block.tunes = filterEmptyData<KeyValueMap>(
-								block.tunes ?? {}
-							);
-
-							return block;
-						}) || [];
+					const blocks = await saveEditorBlocks(api);
 
 					if (outputIsEqual(blocks, this.value.blocks)) {
 						return;
@@ -236,30 +227,29 @@ export class EditorFieldComponent extends BaseFieldComponent {
 	 * listeners and observers after changing views.
 	 */
 	private attachToolbarPositionObservers(): void {
+		const handler = debounce((event: Event) => {
+			event.stopPropagation();
+
+			const target = event.target as HTMLElement;
+			const block = target.closest<HTMLElement>('.ce-block');
+
+			LayoutTune.updateToolbarPosition(block);
+		}, 5);
+
 		// When forward slash is pressed.
 		this.listen(this, 'keydown', (event: KeyboardEvent) => {
 			if (event.key != '/') {
 				return;
 			}
 
-			const target = event.target as HTMLElement;
-			const block = target.closest<HTMLElement>('.ce-block');
-
-			LayoutTune.updateToolbarPosition(block);
+			handler(event);
 		});
 
 		// On mouseover.
 		this.listen(
 			this,
-			'mouseover',
-			debounce((event: Event) => {
-				event.stopPropagation();
-
-				const target = event.target as HTMLElement;
-				const block = target.closest<HTMLElement>('.ce-block');
-
-				LayoutTune.updateToolbarPosition(block);
-			}, 10),
+			'mouseover mousemove',
+			handler.bind(this),
 			'.ce-block'
 		);
 	}

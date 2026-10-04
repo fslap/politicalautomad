@@ -300,6 +300,12 @@ class PackageManagerController {
 			Cache::clear();
 			PackageCollection::clearOutdatedCache();
 
+			foreach (PackageCollection::getOutdated() as $pkg) {
+				if ($pkg['name'] == $package) {
+					return $Response->setError(Text::get('packageUpdateVersionConstraint'));
+				}
+			}
+
 			return $Response->setSuccess(Text::get('packageUpdatedSuccess') . '<br>' . $package);
 		}
 
@@ -324,6 +330,20 @@ class PackageManagerController {
 		Cache::clear();
 		PackageCollection::clearOutdatedCache();
 
+		$outdated = array_map(fn ($pkg): string => $pkg['name'], PackageCollection::getOutdated());
+
+		if (!empty($outdated)) {
+			$list = array_reduce($outdated, function (string $acc, string $name) {
+				$acc .= "<li>$name</li>";
+
+				return $acc;
+			}, '');
+
+			$error = str_replace('{}', "<ul>$list</ul>", Text::get('packageUpdateAllVersionConstraint'));
+
+			return $Response->setError($error);
+		}
+
 		return $Response->setSuccess(Text::get('packageUpdatedAllSuccess'));
 	}
 
@@ -342,7 +362,7 @@ class PackageManagerController {
 
 		$Composer = new Composer();
 		$Messenger = new Messenger();
-		$ref = RepositoryCollection::getPackageVersion($name);
+		$ref = RepositoryCollection::getPackageBranch($name);
 
 		$exitCode = $Composer->run("remove $name", $Messenger);
 
@@ -356,8 +376,10 @@ class PackageManagerController {
 			return $Response->setError($Messenger->getError());
 		}
 
+		RepositoryCollection::updateCommitDetails($name, $Messenger);
+
 		Cache::clear();
 
-		return $Response->setSuccess(Text::get('repositoryUpdateSuccess'));
+		return $Response->setSuccess(Text::get('repositoryUpdateSuccess'))->setError($Messenger->getError());
 	}
 }

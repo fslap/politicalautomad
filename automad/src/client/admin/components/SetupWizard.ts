@@ -42,13 +42,14 @@ import {
 	fire,
 	html,
 	requestAPI,
-	Route,
+	routes,
 	SetupWizardController,
 	transition,
 } from '@/admin/core';
-import { SetupWizardStep } from '@/admin/types';
 import { renderAiSection } from '@/admin/components/Pages/Partials/System/Ai';
 import { renderMailSection } from '@/admin/components/Pages/Partials/System/Mail';
+
+type SetupWizardStep = 'ai' | 'mailConfig';
 
 /**
  * The content of each possible step.
@@ -285,7 +286,7 @@ class SetupWizardComponent extends BaseComponent {
 
 		const base = `${window.location.origin}${App.dashboardURL}/`;
 
-		App.root.setView(new URL(Route.home, base));
+		App.root.setView(new URL(routes.home, base));
 	}
 }
 

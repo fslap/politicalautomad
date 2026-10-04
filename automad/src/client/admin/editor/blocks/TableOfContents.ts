@@ -34,10 +34,13 @@
 
 import { TunesMenuConfig } from '@/vendor/editorjs';
 import { App, CSS, html } from '@/admin/core';
-import { TableOfContentsBlockData } from '@/admin/types';
 import { BaseBlock } from './BaseBlock';
 
-export const tableOfContentsTypes = ['ordered', 'unordered'] as const;
+const tableOfContentsTypes = ['ordered', 'unordered'] as const;
+
+interface TableOfContentsBlockData {
+	type: (typeof tableOfContentsTypes)[number];
+}
 
 export class TableOfContentsBlock extends BaseBlock<TableOfContentsBlockData> {
 	/**
@@ -95,7 +98,7 @@ export class TableOfContentsBlock extends BaseBlock<TableOfContentsBlockData> {
 	 *
 	 * @return the saved data
 	 */
-	save(): TableOfContentsBlockData {
+	getData(): TableOfContentsBlockData {
 		return this.data;
 	}
 
