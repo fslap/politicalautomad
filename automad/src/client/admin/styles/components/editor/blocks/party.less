@@ -195,3 +195,109 @@
 		padding: @am-card-padding;
 	}
 }
+
+// Map editor (port of the Leaflet editor of politicalpartysite)
+.am-c-ed-bl-party-form {
+	&__map-toolbar {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin-bottom: 0.5rem;
+
+		select {
+			padding: 0 0.6rem;
+			border: @am-card-border;
+			border-radius: @am-form-radius;
+			background-color: var(--am-clr-background-faded);
+			color: inherit;
+			font: inherit;
+		}
+	}
+
+	&__map-status {
+		margin-bottom: 0.5rem;
+		font-size: 0.85em;
+		color: var(--am-clr-text-muted);
+	}
+
+	&__map {
+		min-height: 250px;
+		border: @am-card-border;
+		border-radius: @am-form-radius;
+		overflow: hidden;
+		resize: vertical;
+		z-index: 0;
+	}
+
+	&__map--delete .leaflet-interactive,
+	&__map--delete .leaflet-marker-icon {
+		cursor: not-allowed !important;
+	}
+}
+
+.party-map-marker {
+	width: 22px;
+	height: 22px;
+	border: 3px solid #fff;
+	border-radius: 50% 50% 50% 0;
+	background: #bd2f3e;
+	transform: rotate(-45deg);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+// Minimal Leaflet.draw styles without the sprite based toolbar
+.leaflet-draw-tooltip {
+	position: absolute;
+	z-index: 6;
+	margin-top: -21px;
+	margin-left: 20px;
+	padding: 4px 8px;
+	border-radius: 4px;
+	background: rgba(0, 0, 0, 0.6);
+	color: #fff;
+	font: 12px/18px sans-serif;
+	white-space: nowrap;
+	visibility: hidden;
+	pointer-events: none;
+}
+
+.leaflet-draw-tooltip-single {
+	margin-top: -12px;
+}
+
+.leaflet-draw-tooltip-subtext {
+	color: #f8d5e4;
+}
+
+.leaflet-error-draw-tooltip {
+	background-color: #f2dede;
+	color: #b94a48;
+}
+
+.leaflet-draw-guide-dash {
+	position: absolute;
+	width: 5px;
+	height: 5px;
+	font-size: 1%;
+	opacity: 0.6;
+}
+
+.leaflet-edit-marker-selected {
+	box-sizing: content-box;
+	border: 4px dashed rgba(254, 87, 161, 0.6);
+	border-radius: 4px;
+	background-color: rgba(254, 87, 161, 0.1);
+}
+
+.leaflet-edit-move {
+	cursor: move;
+}
+
+.leaflet-edit-resize {
+	cursor: pointer;
+}
+
+.leaflet-mouse-marker {
+	background-color: #fff;
+	cursor: crosshair;
+}

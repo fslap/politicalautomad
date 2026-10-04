@@ -41,6 +41,7 @@ import {
 	createSelect,
 	CSS,
 	debounce,
+	EventName,
 	FieldTag,
 	getPageURL,
 	PartyBlockController,
@@ -51,6 +52,11 @@ import {
 } from '@/admin/core';
 import { BaseFieldComponent } from '@/admin/components/Fields/BaseField';
 import { BaseBlock } from './BaseBlock';
+import {
+	createPartyMapEditor,
+	type PartyMapBinding,
+	type PartyMapEditor,
+} from './PartyMapEditor';
 import type { KeyValueMap } from '@/admin/types';
 
 /**
@@ -71,7 +77,8 @@ export interface PartyField {
 		| 'color'
 		| 'strings'
 		| 'json'
-		| 'list';
+		| 'list'
+		| 'map';
 	label?: string;
 	default?: any;
 	placeholder?: string;
@@ -79,6 +86,20 @@ export interface PartyField {
 	options?: KeyValueMap;
 	fields?: PartyField[];
 	itemTitle?: string;
+	bind?: PartyMapBinding;
+	object?: string;
+	optionsFrom?: { field: string; value: string; label?: string };
+}
+
+/**
+ * A hook that updates a part of an open form when data is changed by another field.
+ */
+interface FormHook {
+	element: HTMLElement;
+	target?: KeyValueMap;
+	name?: string;
+	onFormChange?: boolean;
+	refresh: () => void;
 }
 
 /**
@@ -167,6 +188,10 @@ const defaultValue = (field: PartyField): any => {
  */
 const defaultData = (fields: PartyField[]): KeyValueMap => {
 	return fields.reduce((data: KeyValueMap, field) => {
+		if (field.type === 'map') {
+			return data;
+		}
+
 		data[field.name] = defaultValue(field);
 
 		return data;
@@ -324,7 +349,7 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 		}
 
 		fields.forEach((field) => {
-			if (prepared[field.name] === undefined) {
+			if (field.type !== 'map' && prepared[field.name] === undefined) {
 				prepared[field.name] = defaultValue(field);
 			}
 		});
@@ -460,7 +485,7 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 			const value = this.data[field.name];
 			let text = '';
 
-			if (field.name === 'classes') {
+			if (field.name === 'classes' || field.type === 'map') {
 				return;
 			}
 
@@ -596,12 +621,78 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 
 		const form = create('div', [CSS.editorBlockPartyForm], {}, body);
 
-		this.renderFields(this.definition.fields, this.data, form);
+		this.formHooks = [];
+		this.formCleanup = [];
+
+		this.renderFields(this.definition.fields, this.data, form, () =>
+			this.runFormHooks()
+		);
 
 		Bindings.connectElements(body);
 
+		const cleanup = () => {
+			this.formCleanup.forEach((callback) => callback());
+			this.formCleanup = [];
+			this.formHooks = [];
+		};
+
+		modal.listen(modal, EventName.modalClose, (event: Event) => {
+			// Ignore events of nested modals like the image picker.
+			if (event.target === modal) {
+				cleanup();
+			}
+		});
+
 		setTimeout(() => {
 			modal.open();
+		});
+	}
+
+	/**
+	 * Hooks that update parts of the open form.
+	 */
+	private formHooks: FormHook[] = [];
+
+	/**
+	 * Callbacks that are called when the form is closed.
+	 */
+	private formCleanup: Array<() => void> = [];
+
+	/**
+	 * Register a form hook.
+	 *
+	 * @param hook
+	 */
+	private addFormHook(hook: FormHook): void {
+		this.formHooks.push(hook);
+	}
+
+	/**
+	 * Refresh all fields of a data object that have been changed by another field.
+	 *
+	 * @param target
+	 * @param names
+	 */
+	private refreshValues(target: KeyValueMap, names: string[]): void {
+		this.formHooks.forEach((hook) => {
+			if (
+				hook.target === target &&
+				names.includes(hook.name) &&
+				hook.element.isConnected
+			) {
+				hook.refresh();
+			}
+		});
+	}
+
+	/**
+	 * Run all hooks that depend on any change in the form.
+	 */
+	private runFormHooks(): void {
+		this.formHooks.forEach((hook) => {
+			if (hook.onFormChange && hook.element.isConnected) {
+				hook.refresh();
+			}
 		});
 	}
 
@@ -628,6 +719,12 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 
 			if (field.type === 'select') {
 				this.renderSelect(field, target, container, onChange);
+
+				return;
+			}
+
+			if (field.type === 'map') {
+				this.renderMap(field, target, container);
 
 				return;
 			}
@@ -671,6 +768,118 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 			}, 100);
 
 			this.listen(wrapper, 'input change', update);
+
+			this.addFormHook({
+				element: wrapper,
+				target,
+				name: field.name,
+				refresh: () => {
+					const value = toFieldValue(field, target[field.name]);
+
+					if (component.query() !== value) {
+						component.mutate(value);
+					}
+				},
+			});
+		});
+	}
+
+	/**
+	 * Render the interactive map editor.
+	 *
+	 * @param field
+	 * @param target
+	 * @param container
+	 */
+	private renderMap(
+		field: PartyField,
+		target: KeyValueMap,
+		container: HTMLElement
+	): void {
+		const wrapper = create(
+			'div',
+			[
+				CSS.field,
+				CSS.editorBlockPartyField,
+				CSS.editorBlockPartyMapField,
+			],
+			{},
+			container
+		);
+
+		create(
+			'label',
+			[CSS.fieldLabel],
+			{},
+			create('div', [], {}, wrapper)
+		).textContent = field.label || field.name;
+
+		if (field.help) {
+			create('small', [CSS.textMuted], {}, wrapper).textContent =
+				field.help;
+		}
+
+		const host = create('div', [], {}, wrapper);
+
+		// With an "object" the bound values are stored inside of a JSON field.
+		const object = (): KeyValueMap => {
+			if (!field.object) {
+				return target;
+			}
+
+			const value = target[field.object];
+
+			if (!value || typeof value !== 'object' || Array.isArray(value)) {
+				target[field.object] = {};
+			}
+
+			return target[field.object];
+		};
+
+		const data = new Proxy({} as KeyValueMap, {
+			get: (_, key: string) => object()[key],
+			set: (_, key: string, value) => {
+				object()[key] = value;
+
+				return true;
+			},
+		});
+
+		let editor: PartyMapEditor = null;
+		let destroyed = false;
+
+		createPartyMapEditor(host, data, field.bind || {}, (changed) => {
+			this.refreshValues(object(), changed);
+
+			if (field.object) {
+				this.refreshValues(target, [field.object]);
+			}
+
+			this.runFormHooks();
+			this.changed();
+		})
+			.then((instance) => {
+				if (destroyed) {
+					instance.destroy();
+
+					return;
+				}
+
+				editor = instance;
+			})
+			.catch((error) => {
+				host.textContent = `Die Karte konnte nicht geladen werden: ${error}`;
+			});
+
+		this.addFormHook({
+			element: wrapper,
+			onFormChange: true,
+			refresh: () => editor?.reload(),
+		});
+
+		this.formCleanup.push(() => {
+			destroyed = true;
+			editor?.destroy();
 		});
 	}
 
@@ -704,13 +913,49 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 			labelWrapper
 		).textContent = field.label || field.name;
 
-		const options = Object.keys(field.options || {}).map((value) => ({
-			value,
-			text: field.options[value],
-		}));
+		const options = () => {
+			const fixed = Object.keys(field.options || {}).map((value) => ({
+				value,
+				text: field.options[value],
+			}));
+
+			const source = field.optionsFrom;
+
+			if (!source || !Array.isArray(this.data[source.field])) {
+				return fixed;
+			}
+
+			const derived = (this.data[source.field] as KeyValueMap[])
+				.filter((entry) => entry && entry[source.value])
+				.map((entry) => {
+					const value = `${entry[source.value]}`;
+					const label = source.label
+						? summarize(`${entry[source.label] ?? ''}`)
+						: '';
+
+					return {
+						value,
+						text: label ? `${label} (${value})` : value,
+					};
+				});
+
+			const current = `${target[field.name] ?? ''}`;
+
+			// Keep the current value even if it doesn't exist anymore.
+			if (
+				current &&
+				![...fixed, ...derived].some(
+					(option) => option.value === current
+				)
+			) {
+				derived.push({ value: current, text: `${current} (fehlt)` });
+			}
+
+			return [...fixed, ...derived];
+		};
 
 		const select = createSelect(
-			options,
+			options(),
 			`${target[field.name] ?? ''}`,
 			wrapper,
 			null,
@@ -728,6 +973,25 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 			onChange();
 			this.changed();
 		});
+
+		if (field.optionsFrom) {
+			let last = JSON.stringify(options());
+
+			this.addFormHook({
+				element: wrapper,
+				onFormChange: true,
+				refresh: () => {
+					const next = options();
+					const json = JSON.stringify(next);
+
+					if (json !== last) {
+						last = json;
+						select.options = next;
+						select.value = `${target[field.name] ?? ''}`;
+					}
+				},
+			});
+		}
 	}
 
 	/**
@@ -894,6 +1158,13 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 		});
 
 		renderItems();
+
+		this.addFormHook({
+			element: wrapper,
+			target,
+			name: field.name,
+			refresh: () => renderItems(),
+		});
 
 		if (field.help) {
 			create('small', [CSS.textMuted], {}, wrapper).textContent =

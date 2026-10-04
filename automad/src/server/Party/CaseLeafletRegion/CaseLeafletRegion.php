@@ -91,6 +91,13 @@ class CaseLeafletRegion extends AbstractDynamicTemplateBlock {
 			'fields' => array(
 				self::sectionIdField('cases-map'),
 				self::titleField('Fälle'),
+				array(
+					'name' => 'map_editor',
+					'type' => 'map',
+					'label' => 'Karten-Editor',
+					'help' => 'Marker, Linien, Flächen und Kreise direkt auf der Karte zeichnen. Marker lassen sich verschieben, die aktuelle Ansicht wird als Startansicht gespeichert.',
+					'bind' => array('markers' => 'markers', 'geojson' => 'geojson_content', 'center' => 'map_center', 'zoom' => 'map_zoom', 'tileUrl' => 'tile_url', 'height' => 'map_height')
+				),
 				array('name' => 'map_center', 'type' => 'text', 'label' => 'Kartenmitte (lat,lng)', 'default' => '52.520008,13.404954'),
 				array('name' => 'map_zoom', 'type' => 'number', 'label' => 'Zoom', 'default' => 6),
 				array('name' => 'map_height', 'type' => 'text', 'label' => 'Kartenhöhe', 'default' => '520px'),
@@ -118,7 +125,7 @@ class CaseLeafletRegion extends AbstractDynamicTemplateBlock {
 					'label' => 'Fälle',
 					'itemTitle' => 'title',
 					'fields' => array(
-						array('name' => 'marker_id', 'type' => 'text', 'label' => 'Marker-ID'),
+						array('name' => 'marker_id', 'type' => 'select', 'label' => 'Marker', 'options' => array('' => '—'), 'optionsFrom' => array('field' => 'markers', 'value' => 'id', 'label' => 'title')),
 						array('name' => 'title', 'type' => 'text', 'label' => 'Titel'),
 						array('name' => 'description', 'type' => 'textarea', 'label' => 'Beschreibung'),
 						array('name' => 'region', 'type' => 'text', 'label' => 'Region'),

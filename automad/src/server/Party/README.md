@@ -101,6 +101,30 @@ Finally add the class to `All::$components`. Styles go to
 | `strings`  | textarea, one entry per line             | string[]              |
 | `json`     | code editor                              | decoded JSON          |
 | `list`     | repeatable items, requires `fields`      | array of objects      |
+| `map`      | visual map editor (Leaflet.draw)         | — (edits other fields)|
+
+### Map editor
+
+The `map` field is a port of the Leaflet editor of politicalpartysite. It edits the
+fields that are named in `bind` (`markers`, `geojson`, `center`, `zoom`, `tileUrl`,
+`height`) — or the keys of a `json` field when `object` is set (see the Split
+component). Markers are drawn, dragged and deleted on the map and keep their
+additional data like title or region. Lines, polygons, rectangles and circles are
+stored as GeoJSON, circles as points with a `radius` property. The current view is
+stored as the initial view.
+
+```php
+array(
+	'name' => 'map_editor',
+	'type' => 'map',
+	'label' => 'Karten-Editor',
+	'bind' => array('markers' => 'markers', 'geojson' => 'geojson_content', 'center' => 'map_center', 'zoom' => 'map_zoom')
+)
+```
+
+A `select` field can get its options from a list field with `optionsFrom`, e.g. the
+marker selection of the cases:
+`'optionsFrom' => array('field' => 'markers', 'value' => 'id', 'label' => 'title')`.
 
 Missing values fall back to the field `default`. Values that were cleared in the
 editor are kept empty.

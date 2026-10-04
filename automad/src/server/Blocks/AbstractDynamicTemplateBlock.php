@@ -58,7 +58,10 @@ defined('AUTOMAD') or die('Direct access not permitted!');
  * Field definitions are arrays with the following keys:
  *
  * - name: the data key
- * - type: text, textarea, markdown, html, number, select, toggle, image, url, color, strings, json or list
+ * - type: text, textarea, markdown, html, number, select, toggle, image, url, color, strings, json, list or map
+ * - bind: (map only) the names of the fields that are edited by the map editor (markers, geojson, center, zoom, tileUrl, height)
+ * - object: (map only) an optional json field that contains the bound values
+ * - optionsFrom: (select only) build options from a list field, e.g. array('field' => 'markers', 'value' => 'id', 'label' => 'title')
  * - label: the field label in the dashboard
  * - default: the default value
  * - placeholder: an optional placeholder
@@ -135,6 +138,10 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 		$defaults = array();
 
 		foreach ($this->fields() as $field) {
+			if (self::isVirtual($field)) {
+				continue;
+			}
+
 			$defaults[$field['name']] = $field['default'] ?? self::emptyValue($field['type']);
 		}
 
@@ -198,6 +205,10 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 		$prepared = $data;
 
 		foreach ($this->fields() as $field) {
+			if (self::isVirtual($field)) {
+				continue;
+			}
+
 			$name = $field['name'];
 			$value = $data[$name] ?? null;
 
@@ -449,6 +460,17 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 			'json' => null,
 			default => ''
 		};
+	}
+
+	/**
+	 * Virtual fields like the map editor don't store a value on their own
+	 * but edit the values of other fields.
+	 *
+	 * @param array $field
+	 * @return bool
+	 */
+	private static function isVirtual(array $field): bool {
+		return $field['type'] === 'map';
 	}
 
 	/**

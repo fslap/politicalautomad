@@ -164,6 +164,28 @@ export const createMap = (
 };
 
 /**
+ * Create the GeoJSON layer options. Points with a radius property are rendered as circles
+ * (that is how the map editor stores circles), other points as small circle markers.
+ *
+ * @param L
+ * @return the options
+ */
+export const geoJsonOptions = (L: typeof Leaflet): Leaflet.GeoJSONOptions => ({
+	pointToLayer: (feature, latLng) => {
+		const radius = Number(feature?.properties?.radius);
+
+		return radius
+			? L.circle(latLng, { radius })
+			: L.circleMarker(latLng, { radius: 6 });
+	},
+	onEachFeature: (feature, layer) => {
+		if (feature.properties?.name) {
+			layer.bindPopup(popupContent(feature.properties.name, ''));
+		}
+	},
+});
+
+/**
  * Initialize a simple map.
  *
  * @param element
@@ -183,12 +205,6 @@ export const initMap = async (element: HTMLElement): Promise<void> => {
 	});
 
 	if (config.geojson && config.geojson.type) {
-		L.geoJSON(config.geojson, {
-			onEachFeature: (feature, layer) => {
-				if (feature.properties?.name) {
-					layer.bindPopup(popupContent(feature.properties.name, ''));
-				}
-			},
-		}).addTo(map);
+		L.geoJSON(config.geojson, geoJsonOptions(L)).addTo(map);
 	}
 };

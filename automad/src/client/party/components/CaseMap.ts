@@ -35,6 +35,7 @@
 import type * as Leaflet from 'leaflet';
 import {
 	createMap,
+	geoJsonOptions,
 	loadLeaflet,
 	markerIcon,
 	parseConfig,
@@ -211,15 +212,7 @@ export const initCaseMap = async (root: HTMLElement): Promise<void> => {
 		});
 
 		if (config.geojson && config.geojson.type) {
-			L.geoJSON(config.geojson, {
-				onEachFeature: (feature, layer) => {
-					if (feature.properties?.name) {
-						layer.bindPopup(
-							popupContent(feature.properties.name, '')
-						);
-					}
-				},
-			}).addTo(markerLayer);
+			L.geoJSON(config.geojson, geoJsonOptions(L)).addTo(markerLayer);
 		}
 	};
 

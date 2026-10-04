@@ -51,7 +51,7 @@ class PartyBlocksTest extends TestCase {
 	#[DataProvider('dataForTestComponents')]
 	public function testDefinitionIsValid(string $class): void {
 		$definition = (new $class())->editorDefinition();
-		$types = array('text', 'textarea', 'markdown', 'html', 'number', 'select', 'toggle', 'image', 'url', 'color', 'strings', 'json', 'list');
+		$types = array('text', 'textarea', 'markdown', 'html', 'number', 'select', 'toggle', 'image', 'url', 'color', 'strings', 'json', 'list', 'map');
 
 		$this->assertNotEmpty($definition['title']);
 		$this->assertNotEmpty($definition['icon']);

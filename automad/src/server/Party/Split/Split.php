@@ -118,10 +118,24 @@ class Split extends AbstractDynamicTemplateBlock {
 				array('name' => 'left_type', 'type' => 'select', 'label' => 'Links: Typ', 'default' => 'markdown', 'options' => array('markdown' => 'Markdown', 'image' => 'Bild', 'leaflet' => 'Karte')),
 				array('name' => 'left_content', 'type' => 'markdown', 'label' => 'Links: Inhalt (Markdown)'),
 				array('name' => 'left_image', 'type' => 'image', 'label' => 'Links: Bild'),
+				array(
+					'name' => 'left_map_editor',
+					'type' => 'map',
+					'label' => 'Links: Karten-Editor (Typ Karte)',
+					'object' => 'left_map_config',
+					'bind' => array('markers' => 'markers', 'geojson' => 'geojson', 'center' => 'center', 'zoom' => 'zoom', 'height' => 'height')
+				),
 				array('name' => 'left_map_config', 'type' => 'json', 'label' => 'Links: Karten-Konfiguration', 'default' => array('height' => '320px', 'center' => '51.0,10.0', 'zoom' => 6, 'geojson' => null)),
 				array('name' => 'right_type', 'type' => 'select', 'label' => 'Rechts: Typ', 'default' => 'markdown', 'options' => array('markdown' => 'Markdown', 'image' => 'Bild', 'leaflet' => 'Karte')),
 				array('name' => 'right_content', 'type' => 'markdown', 'label' => 'Rechts: Inhalt (Markdown)'),
 				array('name' => 'right_image', 'type' => 'image', 'label' => 'Rechts: Bild'),
+				array(
+					'name' => 'right_map_editor',
+					'type' => 'map',
+					'label' => 'Rechts: Karten-Editor (Typ Karte)',
+					'object' => 'right_map_config',
+					'bind' => array('markers' => 'markers', 'geojson' => 'geojson', 'center' => 'center', 'zoom' => 'zoom', 'height' => 'height')
+				),
 				array('name' => 'right_map_config', 'type' => 'json', 'label' => 'Rechts: Karten-Konfiguration', 'default' => array('height' => '320px', 'center' => '51.0,10.0', 'zoom' => 6, 'geojson' => null)),
 				self::classesField('inner-container')
 			)

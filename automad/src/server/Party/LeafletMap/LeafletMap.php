@@ -125,6 +125,13 @@ class LeafletMap extends AbstractDynamicTemplateBlock {
 			'fields' => array(
 				self::sectionIdField('map'),
 				self::titleField(),
+				array(
+					'name' => 'map_editor',
+					'type' => 'map',
+					'label' => 'Karten-Editor',
+					'help' => 'Marker, Linien, Flächen und Kreise direkt auf der Karte zeichnen. Marker lassen sich verschieben, die aktuelle Ansicht wird als Startansicht gespeichert.',
+					'bind' => array('markers' => 'markers', 'geojson' => 'geojson_content', 'center' => 'map_center', 'zoom' => 'map_zoom', 'tileUrl' => 'tile_url', 'height' => 'map_height')
+				),
 				array('name' => 'map_center', 'type' => 'text', 'label' => 'Kartenmitte (lat,lng)', 'default' => '52.520008,13.404954'),
 				array('name' => 'map_zoom', 'type' => 'number', 'label' => 'Zoom', 'default' => 10),
 				array('name' => 'map_height', 'type' => 'text', 'label' => 'Kartenhöhe', 'default' => '400px'),
@@ -135,6 +142,7 @@ class LeafletMap extends AbstractDynamicTemplateBlock {
 					'label' => 'Marker',
 					'itemTitle' => 'title',
 					'fields' => array(
+						array('name' => 'id', 'type' => 'text', 'label' => 'Marker-ID'),
 						array('name' => 'title', 'type' => 'text', 'label' => 'Titel'),
 						array('name' => 'description', 'type' => 'textarea', 'label' => 'Beschreibung'),
 						array('name' => 'lat', 'type' => 'number', 'label' => 'Breitengrad (lat)'),
