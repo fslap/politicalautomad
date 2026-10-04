@@ -51,6 +51,10 @@ export const enum AppController {
 	updateState = 'AppController::updateState',
 }
 
+export const enum PartyBlockController {
+	preview = 'PartyBlockController::preview',
+}
+
 export const enum CacheController {
 	clear = 'CacheController::clear',
 	purge = 'CacheController::purge',

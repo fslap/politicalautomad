@@ -1,0 +1,197 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ *                      #;:#;:#;:
+ *                       #;:#;:            #;:#;:#;
+ *            %&                         #;: #;:;:#;:#;:#;:#
+ *    %$%    %$%           #;:    #;:     #;: #;:;:#;:#;:
+ *    ____________                ;:      #;:  #;: #;:#;:#;:#;
+ *   /§§§§§§§§§§§|                                    ;:#;:#;:
+ *   |###########/  / &/      #;:#;:#;:#;:#;:        #;:#;: #;: #;
+ *   /%%%%%%%%%%/   |$$$/        #;:#;:#;:#;:#;#;:#;:;:#;:#;:
+ *  /######### /   |$$$/          #;:#;:#;:#;:#;:#;:#;:#;:#;:#;:
+ * /%%%%%%%%%%/   \CCC/           #;:#;:#;:#;:#;:#;:#;:#;:
+ * \#########|   \\|      _\    :#;:  :#;:#;:  #;:#;:#;:#;:
+ *  \________/   /[[]]\  \_/   :#\:#\:#\:#\:#;:
+ *   \====__/    \xxxx/              #\:#\:#;:#;:
+ *   |""""""\    |yyy/                #;: #;:#;:#;: |#;:\
+ *   |~~~~~~/ #   |c|                 ;:#;:\;:#;:   |#;:;:
+ *   +~~~~~/  |   \t/                  #\:#;\       |##;/
+ *    +~~~/   |#
+ *     +~/\       \*+ ~
+ *                      #
+ *
+ *
+ *
+ * https://north.sbdp.ro https://mid.sbdp.ro/ https://pacif.sbdp.ro/ https://low.sbdp.ro/
+ * (c) Florian Leon Steenbuck
+ *
+ * Copyright (c) 2026 by Florian Leon Steenbuck
+ * https://kil.ls https://fslap.de
+ *
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+.am-c-ed-bl-party {
+	border: @am-card-border;
+	border-radius: @am-form-radius;
+	background-color: var(--am-clr-background-faded);
+	overflow: hidden;
+
+	&__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+		padding: (@am-card-padding * 0.5) @am-card-padding;
+		border-bottom: @am-border;
+		user-select: none;
+	}
+
+	&__title {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-weight: 670;
+
+		.bi {
+			color: var(--am-clr-text-muted);
+		}
+	}
+
+	&__actions {
+		display: inline-flex;
+		gap: 0.25rem;
+
+		.am-active {
+			color: var(--am-clr-text-active);
+		}
+	}
+
+	&__description {
+		padding: (@am-card-padding * 0.5) @am-card-padding 0;
+		font-size: 0.85em;
+		color: var(--am-clr-text-muted);
+	}
+
+	&__summary {
+		padding: (@am-card-padding * 0.6) @am-card-padding;
+		cursor: pointer;
+
+		dl {
+			display: grid;
+			grid-template-columns: minmax(8rem, max-content) 1fr;
+			gap: 0.25rem 1rem;
+			margin: 0;
+		}
+
+		dt {
+			color: var(--am-clr-text-muted);
+		}
+
+		dd {
+			margin: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		img {
+			max-height: 3.5rem;
+			max-width: 8rem;
+			border-radius: @am-form-radius;
+			object-fit: cover;
+		}
+
+		p {
+			margin: 0;
+		}
+	}
+
+	&__preview:not(:empty) {
+		border-top: @am-border;
+		background-color: #fff;
+
+		iframe {
+			display: block;
+			width: 100%;
+			min-height: 5rem;
+			border: none;
+		}
+	}
+}
+
+.am-c-ed-bl-party-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	&__field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+
+		.am-c-field {
+			margin: 0;
+		}
+
+		small {
+			line-height: 1.4;
+		}
+	}
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding: (@am-card-padding * 0.6);
+		border: @am-card-border;
+		border-radius: @am-form-radius;
+	}
+
+	&__list-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+	}
+
+	&__list-items {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	&__list-item {
+		border: @am-card-border;
+		border-radius: @am-form-radius;
+		background-color: var(--am-clr-background-faded);
+
+		> summary {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 0.5rem;
+			padding: 0.35rem 0.75rem;
+			cursor: pointer;
+			user-select: none;
+
+			> span:first-child {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+		}
+
+		&[open] > summary {
+			border-bottom: @am-border;
+		}
+	}
+
+	&__list-body {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		padding: @am-card-padding;
+	}
+}

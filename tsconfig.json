@@ -16,5 +16,5 @@
 			"@/*": ["./automad/src/client/*"]
 		}
 	},
-	"exclude": ["node_modules", "automad/dist", "packages"]
+	"exclude": ["node_modules", "automad/dist", "packages", "lib", "vendor"]
 }

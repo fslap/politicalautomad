@@ -47,6 +47,7 @@ import { ImageSlideshowBlock } from './blocks/ImageSlideshow';
 import { MailBlock } from './blocks/Mail';
 import { NestedListBlock } from './blocks/NestedList';
 import { PagelistBlock } from './blocks/Pagelist';
+import { createPartyBlockTool } from './blocks/PartyBlock';
 import { ParagraphBlock } from './blocks/Paragraph';
 import { QuoteBlock } from './blocks/Quote';
 import { RawBlock } from './blocks/Raw';
@@ -57,6 +58,7 @@ import { TableOfContentsBlock } from './blocks/TableOfContents';
 import { VideoBlock } from './blocks/Video';
 import { TeXBlock } from './blocks/TeX';
 import { embedServices } from './embedServices';
+import { App } from '@/admin/core';
 import type { KeyValueMap } from '@/admin/types';
 
 /**
@@ -75,6 +77,17 @@ export const getBlockTools = (isComponentEditor: boolean): KeyValueMap => {
 	if (isComponentEditor) {
 		component = {};
 	}
+
+	// Party components are registered dynamically by the server (see Automad\\Party\\All)
+	// and therefore show up automatically in the toolbox.
+	const party: KeyValueMap = {};
+
+	App.partyBlocks.forEach((definition) => {
+		party[definition.type] = {
+			class: createPartyBlockTool(definition),
+			stretchable: definition.stretchable,
+		};
+	});
 
 	return {
 		paragraph: {
@@ -183,5 +196,6 @@ export const getBlockTools = (isComponentEditor: boolean): KeyValueMap => {
 			config: { services: embedServices },
 			stretchable: true,
 		},
+		...party,
 	};
 };

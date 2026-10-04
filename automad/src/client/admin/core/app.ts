@@ -59,6 +59,7 @@ import type {
 } from '@/admin/types';
 import type { ComponentEditorData } from '@/admin/components/ComponentEditor';
 import type { SystemSettings, User } from '@/admin/components/System/types';
+import type { PartyBlockDefinition } from '@/admin/editor/blocks/PartyBlock';
 
 /**
  * The static class that provides the app state and root element to be used across the application.
@@ -192,6 +193,15 @@ export class App {
 	 */
 	static get languages(): KeyValueMap {
 		return App.getState('languages');
+	}
+
+	/**
+	 * The editor definitions of all party blocks.
+	 *
+	 * @static
+	 */
+	static get partyBlocks(): PartyBlockDefinition[] {
+		return App.getState('partyBlocks') ?? [];
 	}
 
 	/**
