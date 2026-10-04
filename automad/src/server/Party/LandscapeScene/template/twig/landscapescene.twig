@@ -1,11 +1,9 @@
-<div class="wp-block-group {{ classes }}">
-  {% for layer in layers %}
-    <div class="{{ layer.position }}">
-      {% for svg in layer.svgs %}
-        <img src="{{ svg.file }}"
-             class="absolute {{ svg.position }} svg {{ svg.animation }}"
-             alt="{{ svg.animation }}">
-      {% endfor %}
-    </div>
-  {% endfor %}
+<div class="wp-block-group party-svg-scene {{ classes }}" style="height: {{ height }};">
+    {% for layer in layers %}
+        <div class="party-svg-layer {{ layer.position }}">
+            {% for svg in layer.svgs %}
+                <img src="{{ svg.file }}" class="absolute {{ svg.position }} svg {{ svg.animation }}" alt="" loading="lazy">
+            {% endfor %}
+        </div>
+    {% endfor %}
 </div>

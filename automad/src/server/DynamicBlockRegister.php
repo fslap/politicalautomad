@@ -80,7 +80,7 @@ class DynamicBlockRegister {
 		}
 
 		foreach ($this->block as $entry) {
-			if ($entry->name() === $type) {
+			if ($entry->type() === $type) {
 				return true;
 			}
 		}
@@ -89,7 +89,7 @@ class DynamicBlockRegister {
 	}
 
 	public function register(AbstractDynamicTemplateBlock $block): bool {
-		if ($this->type($block->name())) {
+		if ($this->type($block->type())) {
 			if (!$this->allowerror) {
 				return false;
 			}
@@ -143,7 +143,7 @@ class DynamicBlockRegister {
 				}
 
 				foreach ($this->block as $entry) {
-					$entryname = $entry->name();
+					$entryname = $entry->type();
 					if ($entryname === $needle) {
 						$clone = clone $entry;
 
@@ -166,7 +166,7 @@ class DynamicBlockRegister {
 						$clone = clone $entry;
 
 						$this->cloneclasses[] = get_class($entry);
-						$this->clonetypes[] = $entry->name();
+						$this->clonetypes[] = $entry->type();
 						$this->clones[] = $clone;
 
 						return $clone;
@@ -205,7 +205,7 @@ class DynamicBlockRegister {
 		}
 
 		foreach ($this->block as $entry) {
-			if ($entry->name() === $needle) {
+			if ($entry->type() === $needle) {
 				return new (get_class($entry))(...$vars);
 			}
 		}

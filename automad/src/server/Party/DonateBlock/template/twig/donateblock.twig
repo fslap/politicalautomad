@@ -1,0 +1,14 @@
+<div class="wp-block-group donate-block {{ classes }}" data-party-donate>
+  {% if section_id %}<a id="{{ section_id }}"></a>{% endif %}
+  {% if title %}<h2 class="wp-block-heading">{{ title }}</h2>{% endif %}
+  {% if message %}<p class="wp-block-paragraph donate-block__message">{{ message }}</p>{% endif %}
+
+  <div class="donate-block__amounts" role="group">
+    {% for amount in amounts %}
+      <button type="button" class="donate-block__amount" data-amount="{{ amount.value }}">{{ amount.currency }}{{ amount.value }}</button>
+    {% endfor %}
+  </div>
+
+  <a href="{{ donate_url }}" class="wp-element-button donate-block__submit" data-base-url="{{ donate_url }}">{{ button_text }}</a>
+  {% if note %}<p class="donate-block__note">{{ note }}</p>{% endif %}
+</div>

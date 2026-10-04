@@ -1,0 +1,14 @@
+<div class="wp-block-group team-block {{ classes }}">
+  {% if section_id %}<a id="{{ section_id }}"></a>{% endif %}
+  {% if title %}<h2 class="wp-block-heading">{{ title }}</h2>{% endif %}
+  <div class="team-block__grid">
+    {% for member in members %}
+    <div class="team-block__member">
+      {% if member.image %}<img src="{{ member.image }}" alt="{{ member.name }}" class="team-block__photo" loading="lazy">{% endif %}
+      <h3>{{ member.name }}</h3>
+      {% if member.role %}<p class="team-block__role">{{ member.role }}</p>{% endif %}
+      {% if member.bio %}<p class="team-block__bio">{{ member.bio }}</p>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>

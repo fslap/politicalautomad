@@ -44,6 +44,7 @@ use Automad\Core\Automad;
 use Automad\Core\Config;
 use Automad\Core\Str;
 use Automad\Core\Text;
+use Automad\Party\BlockBootstrap;
 use Automad\System\DiskUsage;
 use Automad\System\Fields;
 use Automad\System\FileSystem;
@@ -72,6 +73,7 @@ class AppController {
 				'dashboard' => AM_BASE_INDEX . AM_PAGE_DASHBOARD,
 				'envKeys' => Config::$envKeys,
 				'languages' => self::getLanguages(),
+				'partyBlocks' => BlockBootstrap::definitions(),
 				'reservedFields' => Fields::$reserved,
 				'fileTypes' => array(
 					'image' => FileSystem::FILE_TYPES_IMAGE,

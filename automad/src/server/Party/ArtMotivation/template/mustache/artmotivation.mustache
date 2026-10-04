@@ -1,7 +1,7 @@
 <div class="wp-block-group art art-desktop-only {{classes}}">
     {{#title}}<h1 class="wp-block-heading section-heading">{{title}}</h1>{{/title}}
     <br><br>
-    <a id="{{section_id}}"></a>
+    {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
 
     {{#artworks}}
         <img src="{{image}}" class="{{classes}}" alt="{{description}}">

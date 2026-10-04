@@ -1,0 +1,14 @@
+<div class="wp-block-group team-block {{classes}}">
+  {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+  {{#title}}<h2 class="wp-block-heading">{{title}}</h2>{{/title}}
+  <div class="team-block__grid">
+    {{#members}}
+    <div class="team-block__member">
+      {{#image}}<img src="{{image}}" alt="{{name}}" class="team-block__photo" loading="lazy">{{/image}}
+      <h3>{{name}}</h3>
+      {{#role}}<p class="team-block__role">{{role}}</p>{{/role}}
+      {{#bio}}<p class="team-block__bio">{{bio}}</p>{{/bio}}
+    </div>
+    {{/members}}
+  </div>
+</div>

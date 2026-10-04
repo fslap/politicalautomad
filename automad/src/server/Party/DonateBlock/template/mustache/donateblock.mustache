@@ -1,0 +1,14 @@
+<div class="wp-block-group donate-block {{classes}}" data-party-donate>
+  {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+  {{#title}}<h2 class="wp-block-heading">{{title}}</h2>{{/title}}
+  {{#message}}<p class="wp-block-paragraph donate-block__message">{{message}}</p>{{/message}}
+
+  <div class="donate-block__amounts" role="group">
+    {{#amounts}}
+      <button type="button" class="donate-block__amount" data-amount="{{value}}">{{currency}}{{value}}</button>
+    {{/amounts}}
+  </div>
+
+  <a href="{{donate_url}}" class="wp-element-button donate-block__submit" data-base-url="{{donate_url}}">{{button_text}}</a>
+  {{#note}}<p class="donate-block__note">{{note}}</p>{{/note}}
+</div>

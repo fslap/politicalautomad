@@ -1,0 +1,20 @@
+<div class="wp-block-group event-block {{ classes }}">
+  {% if section_id %}<a id="{{ section_id }}"></a>{% endif %}
+  {% if title %}<h2 class="wp-block-heading">{{ title }}</h2>{% endif %}
+  <div class="event-block__list">
+    {% for event in events %}
+    <article class="event-block__card">
+      <div class="event-block__date">
+        <span class="event-block__day">{{ event.date }}</span>
+        {% if event.time %}<span class="event-block__time">{{ event.time }}</span>{% endif %}
+      </div>
+      <div class="event-block__content">
+        <h3>{{ event.title }}</h3>
+        {% if event.location %}<p class="event-block__location">{{ event.location }}</p>{% endif %}
+        {% if event.description %}<p class="event-block__description">{{ event.description }}</p>{% endif %}
+        {% if event.link %}<a href="{{ event.link }}" class="wp-element-button event-block__link">{{ event.link_text }}</a>{% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</div>

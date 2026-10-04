@@ -1,71 +1,65 @@
 <div class="wp-block-group {{ classes }}">
-    <a id="{{ section_id }}"></a>
-    
-    <h1 class="wp-block-heading">{{ title }}</h1>
-    
+    {% if section_id %}<a id="{{ section_id }}"></a>{% endif %}
+
+    {% if title %}<h1 class="wp-block-heading section-heading">{{ title }}</h1>{% endif %}
+
     {% if description %}
         <p class="wp-block-paragraph">{{ description }}</p>
     {% endif %}
-    
-    {% if has_inner_container %}
-        <div class="inner-container">
+
+    {% if has_inner_container %}<div class="inner-container">{% endif %}
+
+    {% if status.success is defined %}
+        <p class="party-form__message party-form__message--success" role="status">{{ status.message }}</p>
+    {% elseif status.error is defined %}
+        <p class="party-form__message party-form__message--error" role="alert">{{ status.message }}</p>
     {% endif %}
-    
-    <form method="{{ form_method }}" action="{{ form_action }}" class="wp-block-form">
+
+    {% if status.success is not defined %}
+    <form method="{{ form_method }}" action="{{ form_action ?: '#' ~ section_id }}" class="wp-block-form" data-party-form>
         <input type="hidden" name="form_section_id" value="{{ section_id }}">
-        <input type="hidden" name="turnstile_key" value="{{ turnstile_key }}">
-        
+        <input type="text" name="nickname" value="" class="party-form__hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
         {% for field in fields %}
             <div class="wp-block-group form-field">
-                <label for="{{ field.name }}" class="wp-block-label">
-                    {{ field.label }}
-                    {% if field.required %}<span class="required">*</span>{% endif %}
-                </label>
-                
-                {% if field.type == 'textarea' %}
-                    <textarea name="{{ field.name }}" 
-                              id="{{ field.name }}" 
-                              class="wp-block-input"
-                              {{ field.required ? 'required' : '' }}></textarea>
-                
-                {% elseif field.type == 'select' %}
-                    <select name="{{ field.name }}" 
-                            id="{{ field.name }}" 
-                            class="wp-block-select"
-                            {{ field.required ? 'required' : '' }}>
-                        <option value="">Bitte wählen...</option>
-                        {% for option in field.options %}
-                            <option value="{{ option }}">{{ option }}</option>
-                        {% endfor %}
-                    </select>
-                
+                {% if field.is_checkbox %}
+                    <label class="wp-block-label party-form__checkbox">
+                        <input type="checkbox" name="{{ field.name }}" id="{{ field.id }}" value="ja" {{ field.required_attr }}>
+                        <span>{{ field.label }}{% if field.required %} <span class="required">*</span>{% endif %}</span>
+                    </label>
                 {% else %}
-                    <input type="{{ field.type }}" 
-                           name="{{ field.name }}" 
-                           id="{{ field.name }}" 
-                           class="wp-block-input"
-                           {{ field.required ? 'required' : '' }}>
+                    <label for="{{ field.id }}" class="wp-block-label">
+                        {{ field.label }}
+                        {% if field.required %}<span class="required">*</span>{% endif %}
+                    </label>
+                    {% if field.is_textarea %}
+                        <textarea name="{{ field.name }}" id="{{ field.id }}" class="wp-block-input wp-block-textarea" {{ field.required_attr }}></textarea>
+                    {% elseif field.is_select %}
+                        <select name="{{ field.name }}" id="{{ field.id }}" class="wp-block-select" {{ field.required_attr }}>
+                            <option value="">Bitte wählen …</option>
+                            {% for option in field.options %}<option value="{{ option }}">{{ option }}</option>{% endfor %}
+                        </select>
+                    {% else %}
+                        <input type="{{ field.type }}" name="{{ field.name }}" id="{{ field.id }}" class="wp-block-input" {{ field.required_attr }}>
+                    {% endif %}
                 {% endif %}
             </div>
         {% endfor %}
-        
+
+        {% if turnstile_site_key %}
         <div class="wp-block-group form-field">
             <label class="wp-block-label">Sicherheitsverifizierung:</label>
-            <div class="cf-turnstile" 
-                 data-sitekey="{{ turnstile_site_key }}" 
-                 data-theme="{{ turnstile_theme }}"></div>
+            <div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}" data-theme="{{ turnstile_theme }}"></div>
         </div>
-        
+        {% endif %}
+
         <div class="wp-block-buttons">
             <div class="wp-block-button">
-                <input type="submit" value="Absenden" class="wp-element-button">
+                <input type="submit" value="{{ submit_label }}" class="wp-element-button">
             </div>
         </div>
     </form>
-    
-    {% if has_inner_container %}
-        </div>
     {% endif %}
-</div>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    {% if has_inner_container %}</div>{% endif %}
+</div>

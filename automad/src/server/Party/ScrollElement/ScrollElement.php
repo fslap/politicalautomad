@@ -32,6 +32,7 @@
  *
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
+
 namespace Automad\Party\ScrollElement;
 
 use Automad\Blocks\AbstractDynamicTemplateBlock;
@@ -40,12 +41,11 @@ use Automad\Party\Traits\ComponentConfig;
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
- * Party component Scroll Element (politicalpartysite → Automad Party block).
+ * Party component ScrollElement (politicalpartysite → Automad party block).
  *
  * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2026 by Florian Leon Steenbuck - https://kil.ls
  * @license See LICENSE_PARTY_PURPOSE.md for license information
- *
  */
 class ScrollElement extends AbstractDynamicTemplateBlock {
 	use ComponentConfig;
@@ -54,16 +54,26 @@ class ScrollElement extends AbstractDynamicTemplateBlock {
 		parent::__construct(__DIR__, 'scrollelement');
 	}
 
-	public function context(array $config): array
-	{
+	public function context(array $config): array {
+		return array(
+			'title' => $config['title'],
+			'ref_section_id' => ltrim((string) $config['ref_section_id'], '#'),
+			'ref_label' => $config['ref_label'] ?: ltrim((string) $config['ref_section_id'], '#'),
+			'classes' => $this->getClasses($config)
+		);
+	}
 
-        return [
-            'title' => $config['title'] ?? '',
-            'ref_section_id' => $config['ref_section_id'] ?? '',
-            'ref_path' => $config['ref_path'] ?? '',
-            'ref_key' => $config['ref_key'] ?? '',
-            'classes' => $this->getClasses($config)
-        ];
+	protected function definition(): array {
+		return array(
+			'title' => 'Scroll-Element',
+			'icon' => 'link-45deg',
+			'description' => 'Sprungmarke / Link zu einer Scroll-Referenz-Section.',
+			'fields' => array(
+				self::titleField('Scroll'),
+				array('name' => 'ref_section_id', 'type' => 'text', 'label' => 'Ziel-Section-ID', 'default' => 'topics'),
+				array('name' => 'ref_label', 'type' => 'text', 'label' => 'Linktext', 'placeholder' => 'Standard: Ziel-Section-ID'),
+				self::classesField('')
+			)
+		);
 	}
 }
-

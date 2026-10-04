@@ -32,6 +32,7 @@
  *
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
+
 namespace Automad\Party\Image;
 
 use Automad\Blocks\AbstractDynamicTemplateBlock;
@@ -40,12 +41,11 @@ use Automad\Party\Traits\ComponentConfig;
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
- * Party component Image (politicalpartysite → Automad Party block).
+ * Party component Image (politicalpartysite → Automad party block).
  *
  * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2026 by Florian Leon Steenbuck - https://kil.ls
  * @license See LICENSE_PARTY_PURPOSE.md for license information
- *
  */
 class Image extends AbstractDynamicTemplateBlock {
 	use ComponentConfig;
@@ -54,18 +54,31 @@ class Image extends AbstractDynamicTemplateBlock {
 		parent::__construct(__DIR__, 'image');
 	}
 
-	public function context(array $config): array
-	{
+	public function context(array $config): array {
+		return array(
+			'section_id' => $config['section_id'],
+			'title' => $config['title'],
+			'src' => $config['src'],
+			'alt' => $config['alt'] ?: $config['title'],
+			'caption' => $config['caption'],
+			'classes' => $this->getClasses($config),
+			'has_inner_container' => $this->hasInnerContainer($config)
+		);
+	}
 
-        return [
-            'section_id' => $config['section_id'] ?? '',
-            'title' => $config['title'] ?? '',
-            'src' => $config['src'] ?? '',
-            'alt' => $config['alt'] ?? '',
-            'caption' => $config['caption'] ?? '',
-            'classes' => $this->getClasses($config),
-            'has_inner_container' => $this->hasInnerContainer($config)
-        ];
+	protected function definition(): array {
+		return array(
+			'title' => 'Bild-Section',
+			'icon' => 'card-image',
+			'description' => 'Section mit Titel, Bild und Bildunterschrift.',
+			'fields' => array(
+				self::sectionIdField(),
+				self::titleField(),
+				array('name' => 'src', 'type' => 'image', 'label' => 'Bild'),
+				array('name' => 'alt', 'type' => 'text', 'label' => 'Alternativtext'),
+				array('name' => 'caption', 'type' => 'text', 'label' => 'Bildunterschrift'),
+				self::classesField('inner-container')
+			)
+		);
 	}
 }
-

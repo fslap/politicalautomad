@@ -12,7 +12,7 @@
  *   /%%%%%%%%%%/   |$$$/        #;:#;:#;:#;:#;#;:#;:;:#;:#;:
  *  /######### /   |$$$/          #;:#;:#;:#;:#;:#;:#;:#;:#;:#;:
  * /%%%%%%%%%%/   \CCC/           #;:#;:#;:#;:#;:#;:#;:#;:
- * \#########|   \\\|      _\    :#;:  :#;:#;:  #;:#;:#;:#;:
+ * \#########|   \\|      _\    :#;:  :#;:#;:  #;:#;:#;:#;:
  *  \________/   /[[]]\  \_/   :#\:#\:#\:#\:#;:
  *   \====__/    \xxxx/              #\:#\:#;:#;:
  *   |""""""\    |yyy/                #;: #;:#;:#;: |#;:\
@@ -32,32 +32,52 @@
  *
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
-namespace Automad\Party\Traits;
 
-use Automad\Models\ComponentCollection;
+namespace Automad\Party\WpParagraph;
+
+use Automad\Blocks\AbstractDynamicTemplateBlock;
+use Automad\Party\Traits\ComponentConfig;
 
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
- * Default replace/toString for party template blocks.
+ * Party component WpParagraph (politicalpartysite → Automad party block).
  *
  * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2026 by Florian Leon Steenbuck - https://kil.ls
  * @license See LICENSE_PARTY_PURPOSE.md for license information
- *
  */
-trait PartyBlockDefaults {
-	public function replace(
-		array $block,
-		?ComponentCollection $ComponentCollection,
-		string $searchRegex,
-		string $replace,
-		bool $replaceInPublishedComponent
-	): array {
-		return $block;
+class WpParagraph extends AbstractDynamicTemplateBlock {
+	use ComponentConfig;
+
+	public function __construct() {
+		parent::__construct(__DIR__, 'wpparagraph');
 	}
 
-	public function toString(array $block, ?ComponentCollection $ComponentCollection): string {
-		return (string) json_encode($block['data'] ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+	public function context(array $config): array {
+		$html = trim((string) $config['html']);
+		$classes = $this->getClasses($config);
+
+		// Wrap plain text that is not already wrapped in a block element.
+		if ($html !== '' && !preg_match('/^<(p|div|ul|ol|h[1-6]|blockquote|figure|table)\b/i', $html)) {
+			$html = '<p class="' . htmlspecialchars($classes, ENT_QUOTES) . '">' . $html . '</p>';
+		}
+
+		return array(
+			'html' => $html,
+			'classes' => $classes
+		);
+	}
+
+	protected function definition(): array {
+		return array(
+			'title' => 'WP Absatz (HTML)',
+			'icon' => 'paragraph',
+			'description' => 'Freier HTML-Absatz im WordPress-Block-Stil.',
+			'fields' => array(
+				array('name' => 'html', 'type' => 'html', 'label' => 'HTML', 'default' => '<p class="wp-block-paragraph">Text …</p>'),
+				self::classesField('wp-block-paragraph')
+			)
+		);
 	}
 }

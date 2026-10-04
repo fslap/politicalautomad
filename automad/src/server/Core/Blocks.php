@@ -57,31 +57,15 @@ defined('AUTOMAD') or die('Direct access not permitted!');
 class Blocks {
 	const BASE_CLASS = 'am-block';
 
+	private static ?DynamicBlockRegister $dynamicRegister = null;
+
 	/**
 	 * A static state property that is true when rendering is in process.
 	 */
 	private static bool $isRendering = false;
 
-	private static ?DynamicBlockRegister $dynamicRegister = null;
-
-	public static function setDynamicRegister(DynamicBlockRegister $register): void {
-		self::$dynamicRegister = $register;
-	}
-
 	public static function getDynamicRegister(): ?DynamicBlockRegister {
 		return self::$dynamicRegister;
-	}
-
-	protected static function resolveObjectCallback(string $blockType, string $method): callable|string {
-		if (self::$dynamicRegister !== null && self::$dynamicRegister->type($blockType)) {
-			$block = self::$dynamicRegister->superobject($blockType);
-
-			if ($block !== null && $block !== false) {
-				return [$block, $method];
-			}
-		}
-
-		return '\\Automad\\Blocks\\' . ucfirst($blockType) . '::' . $method;
 	}
 
 	/**
@@ -91,12 +75,21 @@ class Blocks {
 	 * @return string the processed HTML
 	 */
 	public static function injectAssets(string $str): string {
-		if (!preg_match('/\sclass="[^"]*' . Blocks::BASE_CLASS . '[^"]*"/', $str)) {
-			return $str;
+		$assets = '';
+
+		if (preg_match('/\sclass="[^"]*' . Blocks::BASE_CLASS . '[^"]*"/', $str)) {
+			$assets .= Asset::css('dist/build/blocks/index.css', false) .
+					   Asset::js('dist/build/blocks/index.js', false);
 		}
 
-		$assets = Asset::css('dist/build/blocks/index.css', false) .
-				  Asset::js('dist/build/blocks/index.js', false);
+		if (preg_match('/\sdata-am-party="/', $str) && is_readable(AM_BASE_DIR . '/automad/dist/build/party/index.css')) {
+			$assets .= Asset::css('dist/build/party/index.css', false) .
+					   Asset::js('dist/build/party/index.js', false);
+		}
+
+		if (!$assets) {
+			return $str;
+		}
 
 		return Head::prepend($str, $assets);
 	}
@@ -202,6 +195,10 @@ class Blocks {
 		return array_map(fn (array $block): array => $replaceInBlock($block), $blocks);
 	}
 
+	public static function setDynamicRegister(DynamicBlockRegister $register): void {
+		self::$dynamicRegister = $register;
+	}
+
 	/**
 	 * Return the string representation of an array of blocks.
 	 *
@@ -240,6 +237,18 @@ class Blocks {
 		}
 
 		return preg_replace('/\s+/', ' ', join(' ', $content)) ?? '';
+	}
+
+	protected static function resolveObjectCallback(string $blockType, string $method): callable|string {
+		if (self::$dynamicRegister !== null && self::$dynamicRegister->type($blockType)) {
+			$block = self::$dynamicRegister->superobject($blockType);
+
+			if ($block !== null && $block !== false) {
+				return array($block, $method);
+			}
+		}
+
+		return '\\Automad\\Blocks\\' . ucfirst($blockType) . '::' . $method;
 	}
 
 	/**

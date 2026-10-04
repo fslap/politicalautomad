@@ -1,13 +1,9 @@
-{% if not mobile %}
-<div class="wp-block-group {{ classes }}">
+<div class="wp-block-group party-svg-scene {{ classes }}{% if hide_mobile %} party-hide-mobile{% endif %}" style="height: {{ height }};">
     {% for layer in layers %}
-        <div class="{{ layer.position }}">
+        <div class="party-svg-layer {{ layer.position }}">
             {% for svg in layer.svgs %}
-                <img src="{{ svg.file }}" 
-                     class="absolute {{ svg.position }} svg {{ svg.animation }}" 
-                     alt="Water animation layer">
+                <img src="{{ svg.file }}" class="absolute {{ svg.position }} svg {{ svg.animation }}" alt="" loading="lazy">
             {% endfor %}
         </div>
     {% endfor %}
 </div>
-{% endif %}

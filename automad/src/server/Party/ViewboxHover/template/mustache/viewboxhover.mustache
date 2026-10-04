@@ -1,7 +1,7 @@
 <div class="wp-block-group {{classes}}">
-    <a id="{{section_id}}"></a>
+    {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
 
-    <h1 class="wp-block-heading">{{title}}</h1>
+    {{#title}}<h1 class="wp-block-heading section-heading">{{title}}</h1>{{/title}}
 
     {{#description}}
         <p class="wp-block-paragraph">{{description}}</p>
@@ -9,14 +9,29 @@
 
     {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
 
-    <div class="viewbox-stack-container">
+    <div class="viewbox-stack-container viewbox-info-{{info_position}}">
         {{#images}}
-            <div class="viewbox-item">
-                <img src="{{file}}" class="stack-image" alt="{{title}}">
-                <h3>{{title}}</h3>
-                {{#description}}<p>{{description}}</p>{{/description}}
-            </div>
+            <input type="radio" name="viewbox-{{section_id}}" id="{{input_id}}" class="viewbox-radio" {{#checked}}checked{{/checked}}>
         {{/images}}
+
+        <div class="image-stack">
+            {{#images}}
+                <div class="stack-item stack-item-{{index}}" style="{{style}}">
+                    <label for="{{input_id}}">
+                        <img src="{{file}}" class="stack-image" alt="{{title}}">
+                    </label>
+                </div>
+            {{/images}}
+        </div>
+
+        <div class="info-block">
+            {{#images}}
+                <div class="info-item-{{index}}">
+                    <h3>{{title}}</h3>
+                    {{#lines}}<p>{{.}}</p>{{/lines}}
+                </div>
+            {{/images}}
+        </div>
     </div>
 
     {{#has_inner_container}}</div>{{/has_inner_container}}

@@ -32,101 +32,123 @@
  *
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
+
 namespace Automad\Party\VerticalSlider;
 
 use Automad\Blocks\AbstractDynamicTemplateBlock;
+use Automad\Core\Blocks;
+use Automad\Party\All;
 use Automad\Party\Traits\ComponentConfig;
 
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
- * Party component Vertical Slider (politicalpartysite → Automad Party block).
+ * Party component VerticalSlider (politicalpartysite → Automad party block).
  *
  * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2026 by Florian Leon Steenbuck - https://kil.ls
  * @license See LICENSE_PARTY_PURPOSE.md for license information
- *
  */
 class VerticalSlider extends AbstractDynamicTemplateBlock {
 	use ComponentConfig;
 
-
-	private array $registry;
+	/**
+	 * Legacy politicalpartysite section types.
+	 */
+	const LEGACY_TYPES = array(
+		'MARKDOWN_SECTION' => 'Markdown',
+		'QUOTE_SECTION' => 'Quote',
+		'PARTY_HEADER' => 'PartyHeader',
+		'DOCUMENT_SECTION' => 'Documents',
+		'LEAFLET_MAP' => 'LeafletMap',
+		'SPLIT_SECTION' => 'Split',
+		'SECURITY_CONCEPT' => 'SecurityConcept',
+		'MUSIC_PLAYER' => 'MusicPlayer',
+		'VIEWBOX_HOVER' => 'ViewboxHover',
+		'WATER_ANIMATION' => 'WaterAnimation',
+		'LANDSCAPE_SCENE' => 'LandscapeScene',
+		'SCROLL_REFERENCE' => 'ScrollReference',
+		'SCROLL_ELEMENT' => 'ScrollElement',
+		'FORM_SECTION' => 'Form',
+		'REGION_SCROLL' => 'RegionScroll',
+		'ART_MOTIVATION' => 'ArtMotivation'
+	);
 
 	public function __construct() {
 		parent::__construct(__DIR__, 'verticalslider');
-		$this->registry = require __DIR__ . '/config/sections.php';
-	}
-
-	private function normalizeType(string $type): string {
-		$t = strtoupper($type);
-		if ($t === 'MARKDOWN_SECTION') return 'markdown';
-		if ($t === 'QUOTE_SECTION') return 'quote';
-		if ($t === 'PARTY_HEADER') return 'party-header';
-		if ($t === 'DOCUMENT_SECTION') return 'documents';
-		if ($t === 'LEAFLET_MAP') return 'leaflet';
-		if ($t === 'SPLIT_SECTION') return 'split';
-		if ($t === 'SECURITY_CONCEPT') return 'security-concept';
-		if ($t === 'MUSIC_PLAYER') return 'music-player';
-		if ($t === 'VIEWBOX_HOVER') return 'viewbox-hover';
-		if ($t === 'WATER_ANIMATION') return 'water-animation';
-		if ($t === 'LANDSCAPE_SCENE') return 'landscape-scene';
-		if ($t === 'SCROLL_REFERENCE') return 'scroll-reference';
-		if ($t === 'SCROLL_ELEMENT') return 'scroll-element';
-		if (strpos($t, 'WP_') === 0) {
-			return strtolower(str_replace('_', '-', $t));
-		}
-		return strtolower(str_replace('_', '-', $t));
-	}
-
-	private function findSectionConfig(string $type): ?array {
-		foreach ($this->registry as $entry) {
-			if (($entry['type'] ?? '') === $type) {
-				return $entry;
-			}
-		}
-		return null;
 	}
 
 	public function context(array $config): array {
-		$items = [];
-		foreach (($config['items'] ?? []) as $item) {
-			if (!is_array($item)) continue;
-			$raw_type = $item['type'] ?? ($item['section_type'] ?? '');
-			if ($raw_type === '') continue;
-			$type = $this->normalizeType((string)$raw_type);
+		$register = Blocks::getDynamicRegister();
+		$slides = array();
 
-			$entry = $this->findSectionConfig($type);
-			if (!$entry) continue;
+		foreach ($config['items'] as $item) {
+			if (!is_array($item) || $register === null) {
+				continue;
+			}
 
-			$componentName = $entry['component'] ?? '';
-			if ($componentName === '' || !isset(All::$components[$componentName])) continue;
+			$type = (string) ($item['component'] ?? '');
+			$data = is_array($item['data'] ?? null) ? $item['data'] : array();
 
-			$itemConfig = $item;
-			unset($itemConfig['type'], $itemConfig['section_type']);
+			// Support politicalpartysite items like {"type": "MARKDOWN_SECTION", "title": "…"}.
+			if (!empty($item['type'] ?? $item['section_type'] ?? '')) {
+				$legacy = strtoupper(str_replace('-', '_', (string) ($item['type'] ?? $item['section_type'])));
+				$name = self::LEGACY_TYPES[$legacy] ?? str_replace(' ', '', ucwords(strtolower(str_replace('_', ' ', $legacy))));
+				$type = AbstractDynamicTemplateBlock::TYPE_PREFIX . $name;
+				$data = $item;
+				unset($data['type'], $data['section_type']);
+			}
 
-			$class = All::$components[$componentName];
-			$component = new $class();
-			$data = $component->context($itemConfig);
+			if ($type === $this->type() || !$register->type($type)) {
+				continue;
+			}
 
-			$flag = 'is_' . str_replace('-', '_', $type);
-			$items[] = array_merge($data, [
-				'type' => $type,
-				'template_twig' => $entry['template_twig'] ?? ($entry['template'] ?? ''),
-				'template_mustache' => $entry['template_mustache'] ?? '',
-				'engine' => $entry['engine'] ?? 'auto',
-				$flag => true
-			]);
+			$block = $register->object($type);
+
+			if ($block instanceof AbstractDynamicTemplateBlock) {
+				$slides[] = array('html' => $block->renderInner($data), 'slug' => $block->slug());
+			}
 		}
 
-		return [
-			'section_id' => $config['section_id'] ?? '',
-			'title' => $config['title'] ?? '',
-			'items' => $items,
+		return array(
+			'section_id' => $config['section_id'],
+			'title' => $config['title'],
+			'height' => preg_replace('/[^a-zA-Z0-9.%()+\-\s]/', '', (string) $config['height']),
+			'items' => $slides,
 			'classes' => $this->getClasses($config),
 			'has_inner_container' => $this->hasInnerContainer($config)
-		];
+		);
 	}
 
-}
+	protected function definition(): array {
+		$options = array();
 
+		foreach (All::$components as $name => $class) {
+			if ($name !== 'VerticalSlider') {
+				$options[AbstractDynamicTemplateBlock::TYPE_PREFIX . $name] = $name;
+			}
+		}
+
+		return array(
+			'title' => 'Vertikaler Slider',
+			'icon' => 'layout-three-columns',
+			'description' => 'Vertikal einrastende Folge von Party-Components.',
+			'fields' => array(
+				self::sectionIdField(),
+				self::titleField(),
+				array('name' => 'height', 'type' => 'text', 'label' => 'Höhe des Sliders', 'default' => '80vh'),
+				array(
+					'name' => 'items',
+					'type' => 'list',
+					'label' => 'Slides',
+					'itemTitle' => 'component',
+					'fields' => array(
+						array('name' => 'component', 'type' => 'select', 'label' => 'Component', 'default' => 'partyMarkdown', 'options' => $options),
+						array('name' => 'data', 'type' => 'json', 'label' => 'Daten (JSON)', 'default' => array('title' => 'Slide', 'markdown_content' => 'Text …'), 'help' => 'Felder der gewählten Component, z.B. {"title": "…"}')
+					)
+				),
+				self::classesField('')
+			)
+		);
+	}
+}

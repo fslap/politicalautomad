@@ -1,0 +1,26 @@
+<div class="case-leaflet-region {{classes}}" id="{{section_id}}_case" data-party-case-map="{{map_json}}">
+  {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+  {{#title}}<h2 class="wp-block-heading">{{title}}</h2>{{/title}}
+
+  {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
+
+  <div class="case-leaflet-region__layout">
+    <div class="case-leaflet-region__mapcol">
+      <div class="case-leaflet-region__map" id="{{section_id}}_map" style="height: {{map_height}};"></div>
+    </div>
+    <div class="case-leaflet-region__listcol">
+      <div class="case-leaflet-region__controls">
+        <input class="case-leaflet-region__search" type="search" placeholder="Suche" aria-label="Suche">
+        <select class="case-leaflet-region__filter" aria-label="Gruppe">
+          <option value="">Alle Gruppen</option>
+          {{#regions}}
+            <option value="{{name}}">{{name}}</option>
+          {{/regions}}
+        </select>
+      </div>
+      <div class="case-leaflet-region__list"></div>
+    </div>
+  </div>
+
+  {{#has_inner_container}}</div>{{/has_inner_container}}
+</div>

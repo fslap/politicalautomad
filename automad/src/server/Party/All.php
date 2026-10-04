@@ -32,6 +32,7 @@
  *
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
+
 namespace Automad\Party;
 
 defined('AUTOMAD') or die('Direct access not permitted!');
@@ -42,13 +43,13 @@ defined('AUTOMAD') or die('Direct access not permitted!');
  * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2026 by Florian Leon Steenbuck - https://kil.ls
  * @license See LICENSE_PARTY_PURPOSE.md for license information
- *
  */
 final class All {
 	/** @var array<string, class-string> */
-	public static array $components = [
+	public static array $components = array(
 		'ArtMotivation' => ArtMotivation\ArtMotivation::class,
 		'CaseLeafletRegion' => CaseLeafletRegion\CaseLeafletRegion::class,
+		'ContactCloser' => ContactCloser\ContactCloser::class,
 		'Documents' => Documents\Documents::class,
 		'DonateBlock' => DonateBlock\DonateBlock::class,
 		'EventBlock' => EventBlock\EventBlock::class,
@@ -58,6 +59,7 @@ final class All {
 		'LandscapeScene' => LandscapeScene\LandscapeScene::class,
 		'LeafletMap' => LeafletMap\LeafletMap::class,
 		'Markdown' => Markdown\Markdown::class,
+		'MusicAnchor' => MusicAnchor\MusicAnchor::class,
 		'MusicPlayer' => MusicPlayer\MusicPlayer::class,
 		'PartyHeader' => PartyHeader\PartyHeader::class,
 		'Quote' => Quote\Quote::class,
@@ -80,7 +82,7 @@ final class All {
 		'WpQuote' => WpQuote\WpQuote::class,
 		'WpSeparator' => WpSeparator\WpSeparator::class,
 		'WpSpacer' => WpSpacer\WpSpacer::class,
-	];
+	);
 
 	public static function getAll(): array {
 		return self::$components;
@@ -90,7 +92,7 @@ final class All {
 		if (!isset(self::$components[$name])) {
 			return null;
 		}
+
 		return new (self::$components[$name])();
 	}
 }
-

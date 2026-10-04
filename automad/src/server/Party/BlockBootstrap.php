@@ -32,8 +32,10 @@
  *
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
+
 namespace Automad\Party;
 
+use Automad\Blocks\AbstractDynamicTemplateBlock;
 use Automad\Core\Blocks;
 use Automad\DynamicBlockRegister;
 
@@ -45,15 +47,8 @@ defined('AUTOMAD') or die('Direct access not permitted!');
  * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2026 by Florian Leon Steenbuck - https://kil.ls
  * @license See LICENSE_PARTY_PURPOSE.md for license information
- *
  */
 final class BlockBootstrap {
-	public static function register(DynamicBlockRegister $register): void {
-		foreach (All::$components as $class) {
-			$register->register(new $class());
-		}
-	}
-
 	public static function createRegister(): DynamicBlockRegister {
 		$register = new DynamicBlockRegister();
 		self::register($register);
@@ -61,10 +56,34 @@ final class BlockBootstrap {
 		return $register;
 	}
 
+	/**
+	 * Return the editor definitions of all registered party blocks.
+	 *
+	 * @return array<int, array>
+	 */
+	public static function definitions(): array {
+		$definitions = array();
+
+		foreach (All::$components as $class) {
+			$block = new $class();
+
+			if ($block instanceof AbstractDynamicTemplateBlock) {
+				$definitions[] = $block->editorDefinition();
+			}
+		}
+
+		return $definitions;
+	}
+
 	public static function init(): DynamicBlockRegister {
 		$register = self::createRegister();
 		Blocks::setDynamicRegister($register);
 
 		return $register;
+	}
+	public static function register(DynamicBlockRegister $register): void {
+		foreach (All::$components as $class) {
+			$register->register(new $class());
+		}
 	}
 }

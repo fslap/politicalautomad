@@ -1,5 +1,5 @@
 <div class="wp-block-group {{ classes }}">
-    <a id="{{ section_id }}"></a>
+    {% if section_id %}<a id="{{ section_id }}"></a>{% endif %}
     
     <h1 class="wp-block-heading">{{ title }}</h1>
     

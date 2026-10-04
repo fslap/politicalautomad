@@ -1,19 +1,23 @@
 <div class="skyline-wrap {{classes}}" style="height: {{height}}px" data-seed="{{seed}}">
   <svg class="skyline-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
     <defs>
-      <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
+      <linearGradient id="skyGrad{{seed}}" x1="0" x2="0" y1="0" y2="1">
         <stop offset="0%" stop-color="#0b1020"></stop>
         <stop offset="60%" stop-color="#171c33"></stop>
         <stop offset="100%" stop-color="#05060c"></stop>
       </linearGradient>
+      <pattern id="skyWin{{seed}}" width="1.6" height="4" patternUnits="userSpaceOnUse">
+        <rect x="0.45" y="1" width="0.6" height="1.4" fill="#ffd27a"></rect>
+      </pattern>
     </defs>
 
-    <rect x="0" y="0" width="100" height="100" fill="url(#skyGrad)"></rect>
+    <rect x="0" y="0" width="100" height="100" fill="url(#skyGrad{{seed}})"></rect>
 
     {{#buildings}}
       <rect class="sky-b sky-d{{depth}} {{#twinkle}}sky-tw{{/twinkle}}"
             x="{{x}}" y="{{y}}"
             width="{{w}}" height="{{h}}"></rect>
+      {{#twinkle}}<rect class="sky-win" x="{{x}}" y="{{y}}" width="{{w}}" height="{{h}}" fill="url(#skyWin{{seed}})"></rect>{{/twinkle}}
     {{/buildings}}
   </svg>
 </div>

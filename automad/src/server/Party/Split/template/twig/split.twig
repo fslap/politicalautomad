@@ -1,0 +1,38 @@
+<div class="wp-block-group {{ classes }}">
+    {% if section_id %}<a id="{{ section_id }}"></a>{% endif %}
+
+    {% if title %}<h1 class="wp-block-heading section-heading">{{ title }}</h1>{% endif %}
+
+    {% if desktop_image %}
+        <img src="{{ desktop_image }}" class="section-image{% if mobile_image %} desktop-image-1000{% endif %}" alt="{{ title }}">
+    {% endif %}
+    {% if mobile_image %}
+        <img src="{{ mobile_image }}" class="section-image mobile-image-1000" alt="{{ title }}">
+    {% endif %}
+
+    {% if has_inner_container %}<div class="inner-container">{% endif %}
+
+    <div class="split-container{% if split_hover_border %} split-hover-border{% endif %}">
+        <div class="split-left">
+            {% if left_is_leaflet %}
+                <div class="leaflet-map" style="height: {{ left_map_height }};" data-party-map="{{ left_map_json }}"></div>
+            {% elseif left_is_image and left_image %}
+                <img src="{{ left_image }}" class="split-image" alt="{{ title }}">
+            {% elseif left_is_markdown %}
+                <div class="markdown-content">{{ left_html_content|raw }}</div>
+            {% endif %}
+        </div>
+
+        <div class="split-right">
+            {% if right_is_leaflet %}
+                <div class="leaflet-map" style="height: {{ right_map_height }};" data-party-map="{{ right_map_json }}"></div>
+            {% elseif right_is_image and right_image %}
+                <img src="{{ right_image }}" class="split-image" alt="{{ title }}">
+            {% elseif right_is_markdown %}
+                <div class="markdown-content">{{ right_html_content|raw }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if has_inner_container %}</div>{% endif %}
+</div>

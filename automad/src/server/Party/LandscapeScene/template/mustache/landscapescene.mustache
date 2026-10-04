@@ -1,8 +1,8 @@
-<div class="wp-block-group {{classes}}">
+<div class="wp-block-group party-svg-scene {{classes}}" style="height: {{height}};">
     {{#layers}}
-        <div class="{{position}}">
+        <div class="party-svg-layer {{position}}">
             {{#svgs}}
-                <img src="{{file}}" class="absolute {{position}} svg {{animation}}" alt="{{animation}}">
+                <img src="{{file}}" class="absolute {{position}} svg {{animation}}" alt="" loading="lazy">
             {{/svgs}}
         </div>
     {{/layers}}

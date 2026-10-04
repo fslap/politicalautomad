@@ -1,0 +1,29 @@
+<div class="wp-block-group widthcontainer {{classes}}">
+    <h1 class="wp-block-heading">{{title}}</h1>
+    <br><br>
+    {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+
+    {{#has_inner_container}}
+        <div class="inner-container document-innercontainer-slider">
+    {{/has_inner_container}}
+
+    <div class="document-scroller {{slider_class}}">
+        <div class="document-content">
+            {{#documents}}
+                <div class="document-item">
+                    <a href="{{file}}" target="_blank">
+                        <img class="responsive-doc-image" src="{{preview}}" alt="{{title}}">
+                        <div class="document-overlay">
+                            <h3>{{title}}</h3>
+                            {{#description}}<p>{{description}}</p>{{/description}}
+                        </div>
+                    </a>
+                </div>
+            {{/documents}}
+        </div>
+    </div>
+
+    {{#has_inner_container}}
+        </div>
+    {{/has_inner_container}}
+</div>

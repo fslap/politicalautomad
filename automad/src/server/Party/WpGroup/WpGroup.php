@@ -32,6 +32,7 @@
  *
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
+
 namespace Automad\Party\WpGroup;
 
 use Automad\Blocks\AbstractDynamicTemplateBlock;
@@ -40,12 +41,11 @@ use Automad\Party\Traits\ComponentConfig;
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
- * Party component Wp Group (politicalpartysite → Automad Party block).
+ * Party component WpGroup (politicalpartysite → Automad party block).
  *
  * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2026 by Florian Leon Steenbuck - https://kil.ls
  * @license See LICENSE_PARTY_PURPOSE.md for license information
- *
  */
 class WpGroup extends AbstractDynamicTemplateBlock {
 	use ComponentConfig;
@@ -54,13 +54,22 @@ class WpGroup extends AbstractDynamicTemplateBlock {
 		parent::__construct(__DIR__, 'wpgroup');
 	}
 
-	public function context(array $config): array
-	{
+	public function context(array $config): array {
+		return array(
+			'html' => $config['html'],
+			'classes' => $this->getClasses($config)
+		);
+	}
 
-        return [
-            'html' => $config['html'] ?? '',
-            'classes' => $this->getClasses($config)
-        ];
+	protected function definition(): array {
+		return array(
+			'title' => 'WP Gruppe',
+			'icon' => 'bounding-box',
+			'description' => 'Container mit freiem HTML (wp-block-group).',
+			'fields' => array(
+				array('name' => 'html', 'type' => 'html', 'label' => 'Inhalt (HTML)', 'default' => '<p>Gruppe …</p>'),
+				self::classesField('wp-block-group')
+			)
+		);
 	}
 }
-

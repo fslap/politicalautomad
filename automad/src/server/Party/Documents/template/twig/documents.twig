@@ -1,0 +1,34 @@
+<div class="wp-block-group widthcontainer {{ classes }}">
+    <h1 class="wp-block-heading">{{ title }}</h1>
+    <br><br>
+    {% if section_id %}<a id="{{ section_id }}"></a>{% endif %}
+    
+    {% if has_inner_container %}
+        <div class="inner-container document-innercontainer-slider">
+    {% endif %}
+    
+    <div class="document-scroller {{ slider_class }}">
+        <div class="document-content">
+            {% for doc in documents %}
+                <div class="document-item">
+                    <a href="{{ doc.file }}" target="_blank">
+                        <img class="responsive-doc-image" 
+                             src="{{ doc.preview }}" 
+                             alt="{{ doc.title }}">
+                        
+                        <div class="document-overlay">
+                            <h3>{{ doc.title }}</h3>
+                            {% if doc.description %}
+                                <p>{{ doc.description }}</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    {% if has_inner_container %}
+        </div>
+    {% endif %}
+</div>

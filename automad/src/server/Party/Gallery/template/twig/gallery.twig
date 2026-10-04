@@ -1,19 +1,12 @@
-<div class="wp-block-gallery">
-    {% if title %}
-        <h2 class="wp-block-heading">{{ title }}</h2>
-    {% endif %}
-    
-    <div class="wp-block-gallery__inner-container">
+<div class="wp-block-group party-gallery {{ classes }}">
+    {% if section_id %}<a id="{{ section_id }}"></a>{% endif %}
+    {% if title %}<h1 class="wp-block-heading section-heading">{{ title }}</h1>{% endif %}
+
+    <div class="party-gallery__grid" style="--party-gallery-columns: {{ columns }};">
         {% for image in images %}
-            <figure class="wp-block-image">
-                <img src="{{ image.src }}" 
-                     alt="{{ image.alt|default('') }}"
-                     {% if image.caption %}
-                         title="{{ image.caption }}"
-                     {% endif %}>
-                {% if image.caption %}
-                    <figcaption>{{ image.caption }}</figcaption>
-                {% endif %}
+            <figure class="wp-block-image party-gallery__item">
+                <img src="{{ image.src }}" alt="{{ image.alt }}" loading="lazy">
+                {% if image.caption %}<figcaption>{{ image.caption }}</figcaption>{% endif %}
             </figure>
         {% endfor %}
     </div>

@@ -1,0 +1,20 @@
+<div class="wp-block-group event-block {{classes}}">
+  {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+  {{#title}}<h2 class="wp-block-heading">{{title}}</h2>{{/title}}
+  <div class="event-block__list">
+    {{#events}}
+    <article class="event-block__card">
+      <div class="event-block__date">
+        <span class="event-block__day">{{date}}</span>
+        {{#time}}<span class="event-block__time">{{time}}</span>{{/time}}
+      </div>
+      <div class="event-block__content">
+        <h3>{{title}}</h3>
+        {{#location}}<p class="event-block__location">{{location}}</p>{{/location}}
+        {{#description}}<p class="event-block__description">{{description}}</p>{{/description}}
+        {{#link}}<a href="{{link}}" class="wp-element-button event-block__link">{{link_text}}</a>{{/link}}
+      </div>
+    </article>
+    {{/events}}
+  </div>
+</div>

@@ -32,6 +32,7 @@
  *
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
+
 namespace Automad\Party\WpSeparator;
 
 use Automad\Blocks\AbstractDynamicTemplateBlock;
@@ -40,12 +41,11 @@ use Automad\Party\Traits\ComponentConfig;
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
- * Party component Wp Separator (politicalpartysite → Automad Party block).
+ * Party component WpSeparator (politicalpartysite → Automad party block).
  *
  * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2026 by Florian Leon Steenbuck - https://kil.ls
  * @license See LICENSE_PARTY_PURPOSE.md for license information
- *
  */
 class WpSeparator extends AbstractDynamicTemplateBlock {
 	use ComponentConfig;
@@ -54,12 +54,20 @@ class WpSeparator extends AbstractDynamicTemplateBlock {
 		parent::__construct(__DIR__, 'wpseparator');
 	}
 
-	public function context(array $config): array
-	{
+	public function context(array $config): array {
+		return array(
+			'classes' => $this->getClasses($config)
+		);
+	}
 
-        return [
-            'classes' => $this->getClasses($config)
-        ];
+	protected function definition(): array {
+		return array(
+			'title' => 'WP Trenner',
+			'icon' => 'hr',
+			'description' => 'Horizontale Trennlinie (wp-block-separator).',
+			'fields' => array(
+				self::classesField('wp-block-separator')
+			)
+		);
 	}
 }
-
