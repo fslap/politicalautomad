@@ -56,7 +56,7 @@ echo "Assembling dist ..."
 distDir="$workDir/dist-package"
 mkdir -p "$distDir"
 
-tar -c \
+tar -c --exclude-vcs \
 	--exclude=automad/src/client \
 	--exclude=automad/tests \
 	automad cache config lib packages pages shared vendor \
