@@ -9,7 +9,8 @@
  * Usage:
  *
  *   php bin/dist.php
- *       Creates an installable zip archive in ./build
+ *       Creates an installable zip archive and the web installer install.php in ./build.
+ *       Upload both files to the web space and open https://your-domain/install.php
  *
  *   php bin/dist.php --target=/path/to/webspace
  *       Installs or updates the site directly in the given directory.
@@ -447,6 +448,11 @@ if (!$target) {
 
 	section('Done');
 	out("Created $file (" . round(filesize($file) / 1024 / 1024, 1) . ' MB)');
+
+	// The web installer extracts the archive on servers without shell access.
+	copy(__DIR__ . '/install.php', "$outDir/install.php");
+	out("Created $outDir/install.php");
+	out('Upload both files to the web space and open https://your-domain/install.php');
 	exit(0);
 }
 
