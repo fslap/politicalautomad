@@ -32,3 +32,4 @@ dist
 /terminals/
 /lib/composer.json
 /lib/composer.lock
+/build
