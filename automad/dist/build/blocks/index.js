@@ -1,0 +1,8 @@
+/* This file is part of Automad. Copyright and license info at the end. */
+var a=[{tag:"am-gallery",importer:async()=>await import("../blocks/Gallery-bdf83d5d.js")},{tag:"am-image-slideshow",importer:async()=>await import("../blocks/ImageSlideshow-ac44f6d2.js")},{tag:"am-img-loader",importer:async()=>await import("../blocks/ImgLoader-79ee28bc.js")},{tag:"am-inline-tex",importer:async()=>await import("../blocks/InlineTex-38b6eda3.js")},{tag:"am-mail",importer:async()=>await import("../blocks/Mail-84ef2a03.js")},{tag:"am-table-of-contents",importer:async()=>await import("../blocks/TableOfContents-91b97968.js")},{tag:"am-tex",importer:async()=>await import("../blocks/Tex-73564099.js")}];for(let{tag:e,importer:i}of a)customElements.define(e,class extends HTMLElement{constructor(){super()}async connectedCallback(){let t=(await i()).default;new t(this)}});
+/*!
+ * Automad (https://automad.org)
+ * 
+ * Copyright (c) 2026 Marc Anton Dahmen (https://marcdahmen.de)
+ * See LICENSE.md for license information.
+ */

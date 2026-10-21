@@ -15,6 +15,8 @@
 /sitemap.xml
 node_modules
 dist
+# Prebuilt assets are committed so that the site can be deployed without Node (see bin/dist.php).
+!/automad/dist/
 .history
 *-legacy.*
 
