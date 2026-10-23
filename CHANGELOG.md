@@ -1,8 +1,114 @@
 # Changelog
 
-## [v2.0.0-beta.59](https://github.com/marcantondahmen/automad/commit/55ca50aaf591a7d70e10f27134e1475d5eb70be8)
+## [v2.0.0-beta.68](https://github.com/marcantondahmen/automad/commit/91ecee3645552904870b840956ca7cdf99c9acdf)
 
-Sun, 20 Sep 2026 09:53:46 +0200
+Sun, 18 Oct 2026 11:55:20 +0200
+
+### New Features
+
+- add option to publish a draft from the preview dialog ([ca4e88116](https://github.com/marcantondahmen/automad/commit/ca4e881168ab31e8f6483f180f23a4eb08012ede))
+
+### Bugfixes
+
+- add option to mcp tools to clear page dates and themes ([7c79f9a11](https://github.com/marcantondahmen/automad/commit/7c79f9a11b090c407e0762b1a1aebbbc76a4c2aa))
+- fix escape key not working in previews when user has clicked elements inside iframe ([91ecee364](https://github.com/marcantondahmen/automad/commit/91ecee3645552904870b840956ca7cdf99c9acdf))
+- remove decoding of html special chars in header, list, and paragraph blocks ([d6f81b15c](https://github.com/marcantondahmen/automad/commit/d6f81b15c502481edcfae42a988e05ca859af51b))
+
+## [v2.0.0-beta.67](https://github.com/marcantondahmen/automad/commit/63fb36c8cdac6c71ef69b550ad45ec2d7a8e68db)
+
+Sat, 17 Oct 2026 20:21:45 +0200
+
+### Bugfixes
+
+- fix automad prism grammar issue with php code snippets ([3671e12f8](https://github.com/marcantondahmen/automad/commit/3671e12f89c079c67d031486058f609d6f0ac099))
+- fix missing json language in code block agent schema ([6bf3bd93b](https://github.com/marcantondahmen/automad/commit/6bf3bd93b963588f4d9dd267930b98954a17829e))
+- improve preview ui ([dae25cc6f](https://github.com/marcantondahmen/automad/commit/dae25cc6f5987a78ff2037f7ed550f5d045503f3))
+
+## [v2.0.0-beta.66](https://github.com/marcantondahmen/automad/commit/83c24fd94a588f6ed5b8c6cbe382a0eb1248d1a1)
+
+Sat, 17 Oct 2026 11:50:35 +0200
+
+### Bugfixes
+
+- fix public mcp access ([1deb17282](https://github.com/marcantondahmen/automad/commit/1deb17282ec9b9cceb0c25a23775cbcae5b3cca0))
+
+## [v2.0.0-beta.65](https://github.com/marcantondahmen/automad/commit/e455f527bb4efcf1c015c7f190e5d275c0963f7a)
+
+Thu, 15 Oct 2026 20:58:00 +0200
+
+### Bugfixes
+
+- fix failing ai provider checks during system updates ([a6d39b68b](https://github.com/marcantondahmen/automad/commit/a6d39b68b4126714a968200c29e00a57a712e6d9))
+
+## [v2.0.0-beta.64](https://github.com/marcantondahmen/automad/commit/12a9fe935594bd42a73c75f6f8c5f8698102e612)
+
+Thu, 15 Oct 2026 20:25:45 +0200
+
+### New Features
+
+- accept full page urls as ids when using mcp tools ([82b6343c4](https://github.com/marcantondahmen/automad/commit/82b6343c4649f1f29ecebd5f4c0c3c41f8d19129))
+- automatically prune rate limiter entries ([3afdd3d07](https://github.com/marcantondahmen/automad/commit/3afdd3d0799245fe3ae6491b2ea535151dcc7170))
+- implement open redirect normalization ([08679505c](https://github.com/marcantondahmen/automad/commit/08679505c4327c7be4adb26b8dd82f289229cd61))
+- improve docker setups ([385df3a82](https://github.com/marcantondahmen/automad/commit/385df3a829b472713affd676ca78dc6031a99ee0))
+- limit sending of account recovery emails to one per minute per user ([361618c7f](https://github.com/marcantondahmen/automad/commit/361618c7f1288bfd53bd72d727115b526ec75cef))
+
+### Bugfixes
+
+- fix password reset enumeration and timing differences ([9435fbb10](https://github.com/marcantondahmen/automad/commit/9435fbb1007ab6aa5e51515db9ff37eebcb3d0ae))
+- hide error trace from visitors ([dc854689f](https://github.com/marcantondahmen/automad/commit/dc854689f90b4ab4a675f64ae8191b40adcf826a))
+- migrate password hashing ([e71e3a6a1](https://github.com/marcantondahmen/automad/commit/e71e3a6a1009f1f990783599808d9264e1f86927))
+- several small security improvements ([c565550eb](https://github.com/marcantondahmen/automad/commit/c565550eb3cacc04cf857465f34385c7937c667c))
+
+## [v2.0.0-beta.63](https://github.com/marcantondahmen/automad/commit/00a2330edfc10819744825798280f868a64972fa)
+
+Tue, 13 Oct 2026 21:47:17 +0200
+
+### New Features
+
+- add console command to run migrations manually ([3f361b06a](https://github.com/marcantondahmen/automad/commit/3f361b06a6b70ff090460909b562765f86b21e43))
+- add optional encryption for php config files that contain secrets as additional layer of protection ([9ce9af3f6](https://github.com/marcantondahmen/automad/commit/9ce9af3f6f4496b25a455ba83631f0b11a2a9f4d))
+
+### Bugfixes
+
+- check final file path against allowed extensions list ([e1eefa7c1](https://github.com/marcantondahmen/automad/commit/e1eefa7c152417b4e611bee4351306847eb78e98))
+- detect image type before saving on import ([ac91c26a8](https://github.com/marcantondahmen/automad/commit/ac91c26a8d977a5c56c91b60ae40f933fcc4e09f))
+- fix sanitization of server name constant ([e747c8655](https://github.com/marcantondahmen/automad/commit/e747c865599a01f686b978de529ead5dbb24a129))
+- make tmp dir not readable for other users ([4984d4d4d](https://github.com/marcantondahmen/automad/commit/4984d4d4d5a6a903c48436ff959b453e5b64f27f))
+- only allow http and https protocols in fetch calls ([e275f763d](https://github.com/marcantondahmen/automad/commit/e275f763d0b09886ce682d4ab64e42803384c74f))
+
+## [v2.0.0-beta.62](https://github.com/marcantondahmen/automad/commit/45addf8e3af8393b1d735635597d6786cfd2f0d1)
+
+Mon, 12 Oct 2026 20:23:33 +0200
+
+### Bugfixes
+
+- add version to response cache hash ([db60d91ab](https://github.com/marcantondahmen/automad/commit/db60d91ab064c60e61bd0ecb3c36379a70105127))
+
+## [v2.0.0-beta.61](https://github.com/marcantondahmen/automad/commit/be0fddb458b13077fd97a1fbd8794d621a59fc1a)
+
+Mon, 12 Oct 2026 19:58:08 +0200
+
+### Bugfixes
+
+- pin composer platform to php 8.2 ([fda88aeb2](https://github.com/marcantondahmen/automad/commit/fda88aeb2fd7281a3faf30f9d904218bb1331929))
+
+## [v2.0.0-beta.60](https://github.com/marcantondahmen/automad/commit/12d9864e6fddabc6b76760eaeb77c41eb16ade0f)
+
+Mon, 12 Oct 2026 19:33:19 +0200
+
+### New Features
+
+- add draft preview modals ([4b21d9306](https://github.com/marcantondahmen/automad/commit/4b21d930627f80ba18e20094a9dfefd5a2c51dfd))
+- add mcp server ([0fd50889b](https://github.com/marcantondahmen/automad/commit/0fd50889b04de117ec3d381607d96ccd5e93b599))
+
+### Bugfixes
+
+- fix exposed config files content ([9ba4741dc](https://github.com/marcantondahmen/automad/commit/9ba4741dced90feffa970d285b17a00c47abb588))
+- sanitize server names in meta data and cache directory names ([edda319c1](https://github.com/marcantondahmen/automad/commit/edda319c15e01b3bdf49183033b27226cad1d091))
+
+## [v2.0.0-beta.59](https://github.com/marcantondahmen/automad/commit/dcada3319daa4e00647c2e3022ed9ff89209c533)
+
+Sun, 20 Sep 2026 10:00:20 +0200
 
 ### Bugfixes
 

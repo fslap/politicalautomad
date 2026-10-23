@@ -36,13 +36,13 @@
 namespace Automad\Models;
 
 use Automad\Admin\Email\InvitationEmail;
-use Automad\Auth\Session;
+use Automad\Auth\Session\Session;
 use Automad\Auth\User;
 use Automad\Core\Cache;
 use Automad\Core\Messenger;
 use Automad\Core\Text;
-use Automad\System\FileSystem;
 use Automad\System\Mail;
+use Automad\System\SerializedFile;
 
 defined('AUTOMAD') or die('Direct access not permitted!');
 
@@ -64,16 +64,6 @@ class UserCollection {
 	 * @var User[]
 	 */
 	private array $users;
-
-	/**
-	 * The class name of the user type.
-	 */
-	private string $userType = 'Automad\Auth\User';
-
-	/**
-	 * The replacement for the user type class in a serialized string.
-	 */
-	private string $userTypeSerialized = 'O:*:"~"';
 
 	/**
 	 * The constructor.
@@ -248,17 +238,9 @@ class UserCollection {
 	 * @return string the PHP code
 	 */
 	public function generatePHP(): string {
-		ksort($this->users);
+		$this->sortUsers();
 
-		// The actual class name is replaced with a placeholder in order
-		// to be able to refactor the type class in the future easily.
-		$serialized = str_replace(
-			'O:' . strlen($this->userType) . ':"' . $this->userType . '"',
-			$this->userTypeSerialized,
-			serialize($this->users)
-		);
-
-		return "<?php\ndefined('AUTOMAD') or die();\nreturn '" . $serialized . "';";
+		return $this->getFile()->encode($this->users);
 	}
 
 	/**
@@ -304,14 +286,12 @@ class UserCollection {
 	 * @return bool true on success
 	 */
 	public function save(Messenger $Messenger): bool {
-		if (!FileSystem::write(UserCollection::FILE_ACCOUNTS, $this->generatePHP())) {
+		$this->sortUsers();
+
+		if (!$this->getFile()->write($this->users)) {
 			$Messenger->setError(Text::get('permissionsDeniedError'));
 
 			return false;
-		}
-
-		if (function_exists('opcache_invalidate')) {
-			opcache_invalidate(UserCollection::FILE_ACCOUNTS, true);
 		}
 
 		Cache::clear();
@@ -355,6 +335,17 @@ class UserCollection {
 	}
 
 	/**
+	 * Get the serialized accounts file. Note that the accounts file is never encrypted
+	 * in order to not lock out users in case the encryption key gets lost.
+	 *
+	 * @see SerializedFile
+	 * @return SerializedFile
+	 */
+	private function getFile(): SerializedFile {
+		return new SerializedFile(UserCollection::FILE_ACCOUNTS, User::class);
+	}
+
+	/**
 	 * Return a user id by name or email address.
 	 *
 	 * @param string $nameOrEmail
@@ -371,26 +362,22 @@ class UserCollection {
 	}
 
 	/**
-	 * Get the accounts array by including the accounts PHP file.
+	 * Get the accounts array from the accounts file.
 	 *
 	 * @see User
 	 * @return array The registered accounts
 	 */
 	private function load(): array {
-		if (!is_readable(UserCollection::FILE_ACCOUNTS)) {
-			return array();
-		}
+		$users = $this->getFile()->read();
 
-		$contents = include UserCollection::FILE_ACCOUNTS;
+		return is_array($users) ? $users : array();
+	}
 
-		/** @var string */
-		$serialized = str_replace(
-			$this->userTypeSerialized,
-			'O:' . strlen($this->userType) . ':"' . $this->userType . '"',
-			$contents
-		);
-
-		return unserialize($serialized);
+	/**
+	 * Sort the users array by key.
+	 */
+	private function sortUsers(): void {
+		ksort($this->users);
 	}
 
 	/**

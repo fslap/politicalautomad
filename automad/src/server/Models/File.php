@@ -42,6 +42,7 @@ use Automad\Core\Messenger;
 use Automad\Core\Request;
 use Automad\Core\Str;
 use Automad\Core\Text;
+use Automad\Stores\DataStore;
 use Automad\System\DiskUsage;
 use Automad\System\Fetch;
 use Automad\System\FileSystem;
@@ -134,13 +135,13 @@ class File {
 	 * @param string $importUrl
 	 * @param string $pageUrl
 	 * @param Messenger $Messenger
-	 * @return bool true on success
+	 * @return string the final file name of the imported file or an empty string in case of an error
 	 */
-	public static function import(string $importUrl, string $pageUrl, Messenger $Messenger): bool {
+	public static function import(string $importUrl, string $pageUrl, Messenger $Messenger): string {
 		if (!$importUrl) {
 			$Messenger->setError(Text::get('missingUrlError'));
 
-			return false;
+			return '';
 		}
 
 		// Resolve local URLs.
@@ -155,43 +156,74 @@ class File {
 		if (empty($data)) {
 			$Messenger->setError(Text::get('importFailedError'));
 
-			return false;
+			return '';
 		}
-
-		$fileName = Str::slug(preg_replace('/\?.*/', '', basename($importUrl)) ?? '');
 
 		if ($pageUrl) {
 			$Automad = Automad::fromCache();
 			$Page = $Automad->getPage($pageUrl);
 
 			if (!$Page) {
-				return false;
+				$Messenger->setError(Text::get('pageNotFoundError'));
+
+				return '';
 			}
 
-			$path = AM_BASE_DIR . AM_DIR_PAGES . $Page->path . $fileName;
+			$dir = AM_BASE_DIR . AM_DIR_PAGES . $Page->path;
 		} else {
-			$path = AM_BASE_DIR . AM_DIR_SHARED . '/' . $fileName;
+			$dir = AM_BASE_DIR . AM_DIR_SHARED . '/';
 		}
 
-		FileSystem::write($path, $data);
-		DiskUsage::refresh();
-		Cache::clear();
+		$fileName = self::save($dir, preg_replace('/\?.*/', '', basename($importUrl)) ?? '', $data, $Messenger);
 
-		if (!FileSystem::isAllowedFileType($path)) {
-			$newPath = $path . FileSystem::getImageExtensionFromMimeType($path);
-
-			if (FileSystem::isAllowedFileType($newPath)) {
-				if (!FileSystem::renameMedia($path, $newPath, $Messenger)) {
-					return false;
-				}
-			} else {
-				unlink($path);
-				$Messenger->setError(Text::get('unsupportedFileTypeError'));
-
-				return false;
-			}
+		if ($fileName) {
+			DiskUsage::refresh();
+			Cache::clear();
 		}
 
-		return true;
+		return $fileName;
+	}
+
+	/**
+	 * Save data as a file in a given directory. The file name is slugged and validated before anything
+	 * is written to the directory. In case the name has no allowed file extension, the extension is
+	 * derived from the image MIME type of the data, if possible.
+	 *
+	 * @param string $dir
+	 * @param string $name
+	 * @param string $data
+	 * @param Messenger $Messenger
+	 * @return string the final file name of the saved file or an empty string in case of an error
+	 */
+	public static function save(string $dir, string $name, string $data, Messenger $Messenger): string {
+		$fileName = Str::slug($name);
+
+		if (!FileSystem::isAllowedFileType($fileName)) {
+			$fileName .= FileSystem::getImageExtensionFromData($data);
+		}
+
+		if (!FileSystem::isAllowedFileType($fileName) || self::isReservedFileName($fileName)) {
+			$Messenger->setError(Text::get('unsupportedFileTypeError') . ' "' . $fileName . '"');
+
+			return '';
+		}
+
+		if (!FileSystem::write($dir . $fileName, $data)) {
+			$Messenger->setError(Text::get('couldNotSaveError') . ' "' . $fileName . '"');
+
+			return '';
+		}
+
+		return $fileName;
+	}
+
+	/**
+	 * Check whether a file name is reserved for page control files or hidden files.
+	 *
+	 * @param string $fileName
+	 * @return bool
+	 */
+	private static function isReservedFileName(string $fileName): bool {
+		return $fileName === '' || $fileName === DataStore::FILENAME || str_starts_with($fileName, '.');
 	}
 }

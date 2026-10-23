@@ -1,4 +1,4 @@
-/automad/.wizard-completed
+/automad/.setup-completed
 /automad/tests/main/config
 /lib/vendor
 /packages
@@ -35,3 +35,6 @@ dist
 /lib/composer.json
 /lib/composer.lock
 /build
+.claude
+
+!/.claude

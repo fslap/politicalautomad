@@ -57,7 +57,6 @@ import { TableBlock } from './blocks/Table';
 import { TableOfContentsBlock } from './blocks/TableOfContents';
 import { VideoBlock } from './blocks/Video';
 import { TeXBlock } from './blocks/TeX';
-import { embedServices } from './embedServices';
 import { App } from '@/admin/core';
 import type { KeyValueMap } from '@/admin/types';
 
@@ -193,7 +192,6 @@ export const getBlockTools = (isComponentEditor: boolean): KeyValueMap => {
 		embed: {
 			class: EmbedBlock,
 			inlineToolbar: true,
-			config: { services: embedServices },
 			stretchable: true,
 		},
 		...party,

@@ -57,7 +57,9 @@ import type { SelectComponentOption } from './Select';
 const openSettings = (): void => {
 	const base = `${window.location.origin}${App.dashboardURL}/`;
 
-	App.root.setView(new URL(`${routes.system}?section=${Section.ai}`, base));
+	App.root.setView(
+		new URL(`${routes.system}?section=${Section.aiAssistance}`, base)
+	);
 };
 
 /**
@@ -93,17 +95,22 @@ export class EditorAiAssistanceComponent extends BaseComponent {
 	 * The callback function used when an element is created in the DOM.
 	 */
 	connectedCallback(): void {
+		if (!App.system.aiAssistance.enabled) {
+			return;
+		}
+
 		this.classList.add(
 			CSS.editorAiAssistance,
 			CSS.editorAiAssistanceHidden,
 			CSS.displaySmallNone
 		);
 
-		const providers: SelectComponentOption[] = App.system.ai.providers
-			.filter((p: AiProvider) => p.isConfigured)
-			.map((p: AiProvider) => {
-				return { value: p.id, text: p.name };
-			});
+		const providers: SelectComponentOption[] =
+			App.system.aiAssistance.providers
+				.filter((p: AiProvider) => p.isConfigured)
+				.map((p: AiProvider) => {
+					return { value: p.id, text: p.name };
+				});
 
 		const details = create(
 			'details',
@@ -191,7 +198,7 @@ export class EditorAiAssistanceComponent extends BaseComponent {
 
 		const select = createSelect(
 			providers,
-			App.system.ai.activeProviderId || `${providers[0].value}`,
+			App.system.aiAssistance.activeProviderId || `${providers[0].value}`,
 			footer,
 			null,
 			null,
@@ -352,7 +359,7 @@ export class EditorAiAssistanceComponent extends BaseComponent {
 	 * @param state
 	 */
 	private toggleUi(state: boolean): void {
-		AiRuntime.get().toggleSelectionHighlighting(!state);
+		AiRuntime.get()?.toggleSelectionHighlighting(!state);
 
 		this.classList.toggle(CSS.editorAiAssistanceHidden, state);
 	}
@@ -361,7 +368,7 @@ export class EditorAiAssistanceComponent extends BaseComponent {
 	 * Remove all window event listeners when disconnecting.
 	 */
 	disconnectedCallback(): void {
-		AiRuntime.get().destroy();
+		AiRuntime.get()?.destroy();
 
 		super.disconnectedCallback();
 	}

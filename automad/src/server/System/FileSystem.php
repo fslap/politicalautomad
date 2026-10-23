@@ -54,6 +54,7 @@ defined('AUTOMAD') or die('Direct access not permitted!');
  * @license See LICENSE.md for license information
  */
 class FileSystem {
+	const FILE_TYPES_DENIED = array('phar', 'php', 'php3', 'php4', 'php5', 'php7', 'php8', 'phps', 'pht', 'phtml');
 	const FILE_TYPES_IMAGE = array('jpg', 'jpeg', 'gif', 'png', 'webp');
 	const FILE_TYPES_VIDEO = array('mp4', 'webm');
 
@@ -137,6 +138,26 @@ class FileSystem {
 	}
 
 	/**
+	 * Generate the PHP code that returns the given string when being included.
+	 * The string is safely escaped using var_export().
+	 * Optionally the string is encrypted in case encryption is enabled.
+	 * Otherwise it is stored as plain text.
+	 *
+	 * @see writePhpString()
+	 * @see Encryption
+	 * @param string $data
+	 * @param bool $encrypt
+	 * @return string the PHP code
+	 */
+	public static function encodePhpString(string $data, bool $encrypt = false): string {
+		if ($encrypt) {
+			$data = Encryption::encrypt($data) ?? $data;
+		}
+
+		return "<?php\ndefined('AUTOMAD') or die();\nreturn " . var_export($data, true) . ";\n";
+	}
+
+	/**
 	 * Get the full file system path for the given path.
 	 *
 	 * @param string $path
@@ -184,7 +205,27 @@ class FileSystem {
 	}
 
 	/**
-	 * 	Get file extension for images based on mime types.
+	 * Get file extension for images based on the MIME type of the given image data.
+	 *
+	 * @param string $data
+	 * @return string The extension or an empty string
+	 */
+	public static function getImageExtensionFromData(string $data): string {
+		if (!$data) {
+			return '';
+		}
+
+		$getimagesize = getimagesizefromstring($data);
+
+		if (!$getimagesize) {
+			return '';
+		}
+
+		return self::getImageExtensionByMimeType($getimagesize['mime']);
+	}
+
+	/**
+	 * Get file extension for images based on mime types.
 	 *
 	 * @param string $file
 	 * @return string The extension or an empty string
@@ -197,32 +238,7 @@ class FileSystem {
 				return '';
 			}
 
-			$type = $getimagesize['mime'];
-
-			switch ($type) {
-				case 'image/jpeg':
-					$extension = '.jpg';
-
-					break;
-				case 'image/gif':
-					$extension = '.gif';
-
-					break;
-				case 'image/png':
-					$extension = '.png';
-
-					break;
-				case 'image/webp':
-					$extension = '.webp';
-
-					break;
-				default:
-					$extension = '';
-
-					break;
-			}
-
-			return $extension;
+			return self::getImageExtensionByMimeType($getimagesize['mime']);
 		} catch (\Exception $e) {
 			return '';
 		}
@@ -246,25 +262,6 @@ class FileSystem {
 	}
 
 	/**
-	 * Return the path of the temp dir if it is writable by the webserver.
-	 * In any case, '/tmp' is the preferred directory, because of automatic cleanup at reboot,
-	 * while other locations like '/var/tmp' do not get purged by the system.
-	 * But since '/tmp' is only available on macos and linux,
-	 * sys_get_temp_dir() is used as fallback.
-	 *
-	 * @return string The path to the temp dir
-	 */
-	public static function getSystemTmpDir(): string {
-		$tmp = '/tmp';
-
-		if (is_writable($tmp)) {
-			return $tmp;
-		}
-
-		return rtrim(sys_get_temp_dir(), '/');
-	}
-
-	/**
 	 * Generate a dedicated cache directory for a single installation on a server based on its base directory
 	 * that can be used to cache files that should not be exposed to the public.
 	 *
@@ -276,7 +273,21 @@ class FileSystem {
 		try {
 			self::makeDir($dir);
 		} catch (\Throwable $th) {
-			throw new Exception('The system temp directory is not writable &mdash; please define <code>AM_TMP_DIR</code>.');
+			throw new Exception('The system temp directory is not writable &mdash; please define <code>AM_DIR_TMP</code>.');
+		}
+
+		// The temp directory contains non-public data and must only be accessible by the PHP user.
+		// Since only the owner can change permissions, a directory that was created by another user
+		// can't be made private and is refused. Windows doesn't support Unix permissions.
+		if (PHP_OS_FAMILY !== 'Windows') {
+			if ((intval(fileperms($dir)) & 0777) !== 0700) {
+				@chmod($dir, 0700);
+				clearstatcache();
+			}
+
+			if ((intval(fileperms($dir)) & 0777) !== 0700 || !is_writable($dir)) {
+				throw new Exception('The system temp directory can\'t be made private &mdash; please define <code>AM_DIR_TMP</code>.');
+			}
 		}
 
 		return $dir;
@@ -323,6 +334,8 @@ class FileSystem {
 	 * Tests if a string is a file name with an allowed file extension.
 	 *
 	 * Basically a possibly existing file extension is checked against the array of allowed file extensions.
+	 * Executable PHP extensions are always denied, even when they are added to the allowed file types.
+	 * Note that file names have to be checked after slugging, since slugging can truncate the extension.
 	 *
 	 * "/url/file.jpg" will return true, "/url/file" or "/url/file.something" will return false.
 	 *
@@ -338,6 +351,10 @@ class FileSystem {
 
 		// Possible extension
 		$extension = strtolower(pathinfo($str, PATHINFO_EXTENSION));
+
+		if (in_array($extension, self::FILE_TYPES_DENIED)) {
+			return false;
+		}
 
 		if (in_array($extension, FileUtils::allowedFileTypes())) {
 			return true;
@@ -458,6 +475,45 @@ class FileSystem {
 	}
 
 	/**
+	 * Read a string that was saved as PHP file using writePhpString().
+	 * Encrypted strings are decrypted, null is returned in case decryption fails.
+	 * The content of legacy files that only contain the raw string without any PHP code
+	 * is returned as is without including the file, since that would print its content.
+	 * Note that this method must never write to the file system, since it is also used to read
+	 * config files during Config::init(), before any permission and debug constants are defined.
+	 * Legacy files are migrated explicitly by a migration step instead.
+	 *
+	 * @see writePhpString()
+	 * @see Encryption
+	 * @see \Automad\System\Setup\Migrations\ConfigPhpStrings
+	 * @param string $file
+	 * @return string|null
+	 */
+	public static function readPhpString(string $file): string|null {
+		if (!is_readable($file)) {
+			return null;
+		}
+
+		$content = trim(strval(file_get_contents($file)));
+
+		if (!str_starts_with($content, '<?php')) {
+			return $content;
+		}
+
+		$data = include $file;
+
+		if (!is_string($data)) {
+			return null;
+		}
+
+		if (Encryption::isEncrypted($data)) {
+			return Encryption::decrypt($data);
+		}
+
+		return $data;
+	}
+
+	/**
 	 * Renames a file and its caption (if existing).
 	 *
 	 * @param string $oldFile
@@ -532,8 +588,8 @@ class FileSystem {
 
 			if (!@rename($item, $dest)) {
 				if (function_exists('exec')) {
-					$item = '"' . $item . '"';
-					$dest = '"' . $dest . '"';
+					$item = escapeshellarg($item);
+					$dest = escapeshellarg($dest);
 
 					if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 						$cmd = "move $item $dest";
@@ -606,5 +662,66 @@ class FileSystem {
 	 */
 	public static function writeJson(string $file, array $data): bool {
 		return self::write($file, strval(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)));
+	}
+
+	/**
+	 * Save a string as PHP file that returns the string when being included.
+	 * The file has to be a PHP file for security reasons. When trying to access the file directly
+	 * via the browser, it gets executed instead of revealing any of its content.
+	 * Secrets should be saved with $encrypt set to true in order to be encrypted
+	 * in case encryption is enabled.
+	 *
+	 * @see readPhpString()
+	 * @see Encryption
+	 * @param string $file
+	 * @param string $data
+	 * @param bool $encrypt
+	 * @return bool
+	 */
+	public static function writePhpString(string $file, string $data, bool $encrypt = false): bool {
+		if (!self::write($file, self::encodePhpString($data, $encrypt))) {
+			return false;
+		}
+
+		if (function_exists('opcache_invalidate')) {
+			opcache_invalidate($file, true);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Map an image MIME type to a file extension.
+	 *
+	 * @param string $mimeType
+	 * @return string The extension or an empty string
+	 */
+	private static function getImageExtensionByMimeType(string $mimeType): string {
+		return match ($mimeType) {
+			'image/jpeg' => '.jpg',
+			'image/gif' => '.gif',
+			'image/png' => '.png',
+			'image/webp' => '.webp',
+			default => ''
+		};
+	}
+
+	/**
+	 * Return the path of the temp dir if it is writable by the webserver.
+	 * In any case, '/tmp' is the preferred directory, because of automatic cleanup at reboot,
+	 * while other locations like '/var/tmp' do not get purged by the system.
+	 * But since '/tmp' is only available on macos and linux,
+	 * sys_get_temp_dir() is used as fallback.
+	 *
+	 * @return string The path to the temp dir
+	 */
+	private static function getSystemTmpDir(): string {
+		$tmp = '/tmp';
+
+		if (@is_writable($tmp)) {
+			return $tmp;
+		}
+
+		return rtrim(sys_get_temp_dir(), '/');
 	}
 }

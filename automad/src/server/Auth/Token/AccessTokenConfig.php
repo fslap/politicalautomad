@@ -1,0 +1,124 @@
+<?php
+/*
+ *                    ....
+ *                  .:   '':.
+ *                  ::::     ':..
+ *                  ::.         ''..
+ *       .:'.. ..':.:::'    . :.   '':.
+ *      :.   ''     ''     '. ::::.. ..:
+ *      ::::.        ..':.. .''':::::  .
+ *      :::::::..    '..::::  :. ::::  :
+ *      ::'':::::::.    ':::.'':.::::  :
+ *      :..   ''::::::....':     ''::  :
+ *      :::::.    ':::::   :     .. '' .
+ *   .''::::::::... ':::.''   ..''  :.''''.
+ *   :..:::'':::::  :::::...:''        :..:
+ *   ::::::. '::::  ::::::::  ..::        .
+ *   ::::::::.::::  ::::::::  :'':.::   .''
+ *   ::: '::::::::.' '':::::  :.' '':  :
+ *   :::   :::::::::..' ::::  ::...'   .
+ *   :::  .::::::::::   ::::  ::::  .:'
+ *    '::'  '':::::::   ::::  : ::  :
+ *              '::::   ::::  :''  .:
+ *               ::::   ::::    ..''
+ *               :::: ..:::: .:''
+ *                 ''''  '''''
+ *
+ *
+ * AUTOMAD
+ *
+ * Copyright (c) 2026 by Marc Anton Dahmen
+ * https://marcdahmen.de
+ *
+ * See LICENSE.md for license information.
+ */
+
+namespace Automad\Auth\Token;
+
+use Automad\System\SerializedFile;
+
+defined('AUTOMAD') or die('Direct access not permitted!');
+
+/**
+ * The access token config. Stores the access tokens issued for this installation,
+ * e.g. for connecting to Automad's MCP server, similar to a collection of personal access tokens.
+ *
+ * @author Marc Anton Dahmen
+ * @copyright Copyright (c) 2026 by Marc Anton Dahmen - https://marcdahmen.de
+ * @license See LICENSE.md for license information
+ */
+class AccessTokenConfig {
+	/**
+	 * The issued access tokens.
+	 */
+	public array $tokens = array();
+
+	/**
+	 * Add a new token.
+	 *
+	 * @param array $token
+	 */
+	public function addToken(array $token): void {
+		$this->tokens[] = $token;
+	}
+
+	/**
+	 * Find a token by its hash.
+	 *
+	 * @param string $hash
+	 * @return array|null
+	 */
+	public function findTokenByHash(string $hash): array|null {
+		foreach ($this->tokens as $token) {
+			if (hash_equals($token['tokenHash'], $hash)) {
+				return $token;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Load the config or create an empty one.
+	 *
+	 * @return AccessTokenConfig
+	 */
+	public static function load(): AccessTokenConfig {
+		$AccessTokenConfig = self::getFile()->read();
+
+		return $AccessTokenConfig instanceof self ? $AccessTokenConfig : new AccessTokenConfig();
+	}
+
+	/**
+	 * Remove a token.
+	 *
+	 * @param string $id
+	 */
+	public function removeToken(string $id): void {
+		$this->tokens = array_values(array_filter(
+			$this->tokens,
+			function ($token) use ($id) {
+				return $token['id'] !== $id;
+			}
+		));
+	}
+
+	/**
+	 * Save the config.
+	 *
+	 * @return bool
+	 */
+	public function save(): bool {
+		return self::getFile()->write($this);
+	}
+
+	/**
+	 * Get the encrypted serialized config file.
+	 *
+	 * @see SerializedFile
+	 * @return SerializedFile
+	 */
+	private static function getFile(): SerializedFile {
+		return new SerializedFile(AM_BASE_DIR . '/config/tokens.auth.php', self::class, true);
+	}
+}
