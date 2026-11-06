@@ -36,6 +36,8 @@
 	font-size: 1rem;
 	line-height: 1.65;
 	color: var(--party-ink);
+	// The content of a block never widens the layout of the theme (grid columns).
+	contain: inline-size;
 
 	// Type scale
 	h1 {
@@ -203,6 +205,10 @@
 			border-collapse: collapse;
 			width: 100%;
 			font-size: 0.92rem;
+			// Wide tables scroll instead of widening the page.
+			display: block;
+			overflow-x: auto;
+			max-width: 100%;
 		}
 
 		th,
@@ -228,6 +234,11 @@
 		padding: 0.2em 0 0.2em 1em;
 		margin: 0;
 		max-width: 60ch;
+	}
+
+	// Case maps
+	.case-leaflet-region {
+		padding: clamp(1.75rem, 4vw, 3.5rem) clamp(1.25rem, 5vw, 4rem);
 	}
 
 	// Concept sections (image | text)
@@ -339,7 +350,9 @@
 		padding: clamp(1.1rem, 2.5vw, 2rem);
 	}
 
-	[class*='bg'] .split-container.split-container--flex > .split-pane--markdown,
+	[class*='bg']
+		.split-container.split-container--flex
+		> .split-pane--markdown,
 	[class*='bg'] .split-container.split-container--flex > .split-pane--html {
 		background: rgba(255, 255, 255, 0.08);
 		border-color: rgba(255, 255, 255, 0.18);

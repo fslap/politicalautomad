@@ -36,8 +36,8 @@
 namespace Automad\Party\LandscapeScene;
 
 use Automad\Blocks\AbstractDynamicTemplateBlock;
-use Automad\Party\WaterAnimation\WaterAnimation;
 use Automad\Party\Traits\ComponentConfig;
+use Automad\Party\WaterAnimation\WaterAnimation;
 
 defined('AUTOMAD') or die('Direct access not permitted!');
 

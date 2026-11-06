@@ -2548,13 +2548,14 @@
 									"position": {
 										"type": "string",
 										"enum": [
+											"svgoffsetl55",
 											"svgoffsetleft",
+											"svgoffsetl5",
 											"svgoffsetmid",
 											"svgoffsetright",
-											"svgoffsettop",
-											"svgoffsetbottom"
+											"svgoffsetr55"
 										],
-										"description": "Ebenen-Position"
+										"description": "Versatz der Ebene"
 									},
 									"svgs": {
 										"type": "array",
@@ -2567,11 +2568,15 @@
 												},
 												"position": {
 													"type": "string",
-													"description": "Position (pos1 … pos16)"
+													"description": "Stapelreihenfolge (pos1 … pos15, höher liegt oben)"
+												},
+												"shift": {
+													"type": "number",
+													"description": "Versatz nach unten (% der Zeichenfläche, negativ = nach oben)"
 												},
 												"animation": {
 													"type": "string",
-													"description": "Beschreibung / Animation"
+													"description": "Beschreibung oder Animation (water1 … water8)"
 												}
 											},
 											"additionalProperties": false
@@ -2583,9 +2588,122 @@
 							},
 							"description": "Ebenen"
 						},
+						"zoom": {
+							"type": "string",
+							"enum": [
+								"100",
+								"102",
+								"104",
+								"106",
+								"108",
+								"110",
+								"112",
+								"114",
+								"116",
+								"118",
+								"120",
+								"122",
+								"124",
+								"126",
+								"128",
+								"130",
+								"132",
+								"134",
+								"136",
+								"138",
+								"140",
+								"142",
+								"144",
+								"146",
+								"148",
+								"150",
+								"152",
+								"154",
+								"156",
+								"158",
+								"160",
+								"162",
+								"164",
+								"166",
+								"168",
+								"170",
+								"172",
+								"174",
+								"176",
+								"178",
+								"180",
+								"182",
+								"184",
+								"186",
+								"188",
+								"190",
+								"192",
+								"194",
+								"196",
+								"198",
+								"200"
+							],
+							"description": "Breite der Zeichenfläche (größer = Grafiken reichen bis zum Rand)"
+						},
+						"crop": {
+							"type": "string",
+							"enum": [
+								"0",
+								"2",
+								"4",
+								"6",
+								"8",
+								"10",
+								"12",
+								"14",
+								"16",
+								"18",
+								"20",
+								"22",
+								"24",
+								"26",
+								"28",
+								"30",
+								"32",
+								"34",
+								"36",
+								"38",
+								"40",
+								"42",
+								"44",
+								"46",
+								"48",
+								"50",
+								"52",
+								"54",
+								"56",
+								"58",
+								"60",
+								"62",
+								"64",
+								"66",
+								"68",
+								"70",
+								"72",
+								"74",
+								"76",
+								"78",
+								"80",
+								"82",
+								"84",
+								"86",
+								"88",
+								"90"
+							],
+							"description": "Oben abschneiden (leerer Bereich der Zeichenfläche)"
+						},
+						"ratio": {
+							"type": "string",
+							"description": "Seitenverhältnis der Zeichenfläche. Format der SVG-Dateien (viewBox), alle Grafiken einer Szene haben dieselbe Zeichenfläche"
+						},
 						"height": {
 							"type": "string",
-							"description": "Höhe"
+							"description": "Feste Höhe (optional). Leer lassen, dann skaliert die Szene mit der Breite"
 						},
 						"classes": {
 							"type": "string",
@@ -4104,13 +4222,14 @@
 									"position": {
 										"type": "string",
 										"enum": [
+											"svgoffsetl55",
 											"svgoffsetleft",
+											"svgoffsetl5",
 											"svgoffsetmid",
 											"svgoffsetright",
-											"svgoffsettop",
-											"svgoffsetbottom"
+											"svgoffsetr55"
 										],
-										"description": "Ebenen-Position"
+										"description": "Versatz der Ebene"
 									},
 									"svgs": {
 										"type": "array",
@@ -4123,7 +4242,11 @@
 												},
 												"position": {
 													"type": "string",
-													"description": "Position (pos1 … pos16)"
+													"description": "Stapelreihenfolge (pos1 … pos15, höher liegt oben)"
+												},
+												"shift": {
+													"type": "number",
+													"description": "Versatz nach unten (% der Zeichenfläche, negativ = nach oben)"
 												},
 												"animation": {
 													"type": "string",
@@ -4139,9 +4262,122 @@
 							},
 							"description": "Ebenen"
 						},
+						"zoom": {
+							"type": "string",
+							"enum": [
+								"100",
+								"102",
+								"104",
+								"106",
+								"108",
+								"110",
+								"112",
+								"114",
+								"116",
+								"118",
+								"120",
+								"122",
+								"124",
+								"126",
+								"128",
+								"130",
+								"132",
+								"134",
+								"136",
+								"138",
+								"140",
+								"142",
+								"144",
+								"146",
+								"148",
+								"150",
+								"152",
+								"154",
+								"156",
+								"158",
+								"160",
+								"162",
+								"164",
+								"166",
+								"168",
+								"170",
+								"172",
+								"174",
+								"176",
+								"178",
+								"180",
+								"182",
+								"184",
+								"186",
+								"188",
+								"190",
+								"192",
+								"194",
+								"196",
+								"198",
+								"200"
+							],
+							"description": "Breite der Zeichenfläche (größer = Grafiken reichen bis zum Rand)"
+						},
+						"crop": {
+							"type": "string",
+							"enum": [
+								"0",
+								"2",
+								"4",
+								"6",
+								"8",
+								"10",
+								"12",
+								"14",
+								"16",
+								"18",
+								"20",
+								"22",
+								"24",
+								"26",
+								"28",
+								"30",
+								"32",
+								"34",
+								"36",
+								"38",
+								"40",
+								"42",
+								"44",
+								"46",
+								"48",
+								"50",
+								"52",
+								"54",
+								"56",
+								"58",
+								"60",
+								"62",
+								"64",
+								"66",
+								"68",
+								"70",
+								"72",
+								"74",
+								"76",
+								"78",
+								"80",
+								"82",
+								"84",
+								"86",
+								"88",
+								"90"
+							],
+							"description": "Oben abschneiden (leerer Bereich der Zeichenfläche)"
+						},
+						"ratio": {
+							"type": "string",
+							"description": "Seitenverhältnis der Zeichenfläche. Format der SVG-Dateien (viewBox), alle Grafiken einer Szene haben dieselbe Zeichenfläche"
+						},
 						"height": {
 							"type": "string",
-							"description": "Höhe"
+							"description": "Feste Höhe (optional). Leer lassen, dann skaliert die Szene mit der Breite"
 						},
 						"hide_mobile": {
 							"type": "boolean",

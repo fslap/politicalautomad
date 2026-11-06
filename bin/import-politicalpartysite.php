@@ -760,6 +760,168 @@ foreach (parseSections(readArtox($source)) as $index => $section) {
 	array_push($report, ...$sectionReport);
 }
 
+/**
+ * Create a block.
+ *
+ * @param string $component
+ * @param array $data
+ * @return array
+ */
+function block(string $component, array $data): array {
+	return array(
+		'id' => substr(str_replace(array('+', '/', '='), array('-', '_', ''), base64_encode(random_bytes(24))), 0, 32),
+		'type' => 'party' . $component,
+		'data' => $data,
+		'tunes' => array('layout' => array('stretched' => true))
+	);
+}
+
+/**
+ * Insert a block after the first block that matches the callback (or at the end).
+ *
+ * @param array $blocks
+ * @param array $block
+ * @param callable $after
+ * @return array
+ */
+function insertAfter(array $blocks, array $block, callable $after): array {
+	foreach ($blocks as $index => $existing) {
+		if ($after($existing)) {
+			array_splice($blocks, $index + 1, 0, array($block));
+
+			return $blocks;
+		}
+	}
+
+	$blocks[] = $block;
+
+	return $blocks;
+}
+
+/**
+ * Names of the locations of the military map (center of the circles, see index.artox).
+ */
+const MILITARY_LOCATIONS = array(
+	array(53.94, 12.64, 'Vorpommern (bei Demmin)', 'Nord'),
+	array(53.05, 11.17, 'Wendland (Lüchow-Dannenberg)', 'Nord'),
+	array(52.12, 10.62, 'Braunschweiger Land (bei Wolfenbüttel)', 'Mitte'),
+	array(50.88, 8.39, 'Siegerland / Dillenburg', 'Mitte'),
+	array(48.95, 11.25, 'Altmühltal (bei Eichstätt)', 'Süd')
+);
+
+/**
+ * Build a case map (CaseLeafletRegion) from the circles of the military map: one marker
+ * per location in the center of its circle, grouped into regions.
+ *
+ * @param array $split the data of the military split section
+ * @return array|null
+ */
+function militaryCaseMap(array $split): ?array {
+	$map = null;
+
+	foreach ($split['panes'] ?? array() as $pane) {
+		if ($pane['type'] === 'leaflet') {
+			$map = $pane['map_config'];
+		}
+	}
+
+	$features = $map['geojson']['features'] ?? array();
+
+	if (!$features) {
+		return null;
+	}
+
+	$markers = array();
+	$items = array();
+	$groups = array();
+
+	foreach ($features as $index => &$feature) {
+		$ring = $feature['geometry']['coordinates'][0] ?? array();
+
+		if (count($ring) < 4) {
+			continue;
+		}
+
+		$points = array_slice($ring, 0, -1);
+		$lng = array_sum(array_column($points, 0)) / count($points);
+		$lat = array_sum(array_column($points, 1)) / count($points);
+		$radius = max(array_map(fn ($point) => abs($point[1] - $lat), $points)) * 111;
+
+		$name = 'Standort ' . ($index + 1);
+		$region = 'Weitere';
+
+		foreach (MILITARY_LOCATIONS as [$knownLat, $knownLng, $knownName, $knownRegion]) {
+			if (abs($knownLat - $lat) < 0.3 && abs($knownLng - $lng) < 0.3) {
+				$name = $knownName;
+				$region = $knownRegion;
+			}
+		}
+
+		$id = 'standort-' . ($index + 1);
+		$description = sprintf('Vorgeschlagener Standort für Heer- und Feldtruppen, Einzugsbereich rund %d km.', round($radius / 5) * 5);
+
+		$feature['properties'] = array('name' => $name, 'region' => $region);
+		$markers[] = array('id' => $id, 'title' => $name, 'description' => $description, 'lat' => round($lat, 5), 'lng' => round($lng, 5), 'region' => $region, 'zoom' => 8);
+		$items[] = array('marker_id' => $id, 'title' => $name, 'description' => $description, 'region' => $region, 'links' => array());
+		$groups[$region][] = $id;
+	}
+
+	unset($feature);
+
+	$order = array_flip(array('Nord', 'Mitte', 'Süd', 'Weitere'));
+	uksort($groups, fn ($a, $b) => ($order[$a] ?? 9) <=> ($order[$b] ?? 9));
+
+	return array(
+		'section_id' => 'military_cases',
+		'title' => $split['title'] ?? 'Standorte Heer-/Feldtruppen',
+		'map_center' => $map['center'] ?? '51.692,9.89',
+		'map_zoom' => (int) ($map['zoom'] ?? 6),
+		'map_height' => '560px',
+		'tile_url' => $map['tile_url'] ?? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+		'region_priority' => true,
+		'default_region' => '',
+		'markers' => $markers,
+		'items' => $items,
+		'groups' => array_map(fn ($name, $ids) => array('name' => $name, 'marker_ids' => $ids), array_keys($groups), $groups),
+		'geojson_content' => array('type' => 'FeatureCollection', 'features' => $features),
+		'status_icon_base' => '',
+		'classes' => 'domcontainer relative widthcontainer'
+	);
+}
+
+// The military map of politicalpartysite (nightly) as case map below the water animation.
+foreach ($blocks as $block) {
+	if ($block['type'] === 'partySplit' && ($block['data']['section_id'] ?? '') === 'military_map') {
+		$caseMap = militaryCaseMap($block['data']);
+
+		if ($caseMap) {
+			$blocks = insertAfter($blocks, block('CaseLeafletRegion', $caseMap), fn ($existing) => $existing['type'] === 'partyWaterAnimation');
+			$report[] = '+   CaseLeafletRegion military_cases       ' . count($caseMap['markers']) . ' Standorte in ' . count($caseMap['groups']) . ' Regionen (unter der Wasser-Animation)';
+		}
+
+		break;
+	}
+}
+
+// An example of a YouTube video with time code comments.
+$blocks = insertAfter($blocks, block('VideoCommentary', array(
+	'section_id' => 'video',
+	'title' => 'Video: FSLAP',
+	'video' => 'https://www.youtube.com/watch?v=YC23GCc79_U',
+	'intro' => 'Beispiel für ein YouTube-Video mit Kommentaren zu Zeitmarken. Die Kommentare und das Video lassen sich im Dashboard ändern.',
+	'comments' => array(
+		array('time' => '0:00', 'title' => 'Start', 'category' => '', 'text' => 'Beispiel-Kommentar: Hier beginnt das Video.'),
+		array('time' => '0:30', 'title' => 'Erste Strophe', 'category' => '', 'text' => 'Beispiel-Kommentar: Ein Klick auf die Zeitmarke springt im Video an diese Stelle.'),
+		array('time' => '1:00', 'title' => 'Refrain', 'category' => '', 'text' => 'Beispiel-Kommentar: Während das Video läuft, wird der passende Kommentar hervorgehoben.')
+	),
+	'comments_text' => '',
+	'video_position' => 'left',
+	'follow' => true,
+	'pause_on_leave' => true,
+	'classes' => 'domcontainer relative widthcontainer'
+)), fn ($existing) => ($existing['data']['section_id'] ?? '') === 'principles');
+$report[] = '+   VideoCommentary  video                  Beispiel-YouTube-Video (nach "Unsere Grundwerte")';
+
 $now = date('c');
 $page = array(
 	'draft' => array(),

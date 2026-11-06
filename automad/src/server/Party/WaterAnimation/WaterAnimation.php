@@ -48,6 +48,7 @@ defined('AUTOMAD') or die('Direct access not permitted!');
  * @license See LICENSE_PARTY_PURPOSE.md for license information
  */
 class WaterAnimation extends AbstractDynamicTemplateBlock {
+	use ComponentConfig;
 	/**
 	 * Horizontal offsets of layers (like the original stylesheet).
 	 */
@@ -60,8 +61,6 @@ class WaterAnimation extends AbstractDynamicTemplateBlock {
 		'svgoffsetr55' => 'Rechts +10 %'
 	);
 
-	use ComponentConfig;
-
 	public function __construct() {
 		parent::__construct(__DIR__, 'wateranimation');
 	}
@@ -71,39 +70,6 @@ class WaterAnimation extends AbstractDynamicTemplateBlock {
 			'hide_mobile' => (bool) $config['hide_mobile'],
 			'classes' => $this->getClasses($config)
 		));
-	}
-
-	/**
-	 * The context of a SVG scene. All graphics share one drawing area (like the original
-	 * artboards of 1584 × 1152), they are stacked by their pos class (z-index) and the
-	 * layers are shifted slightly. The scene shows the bottom part of the drawing area,
-	 * the transparent top part is cut off.
-	 *
-	 * @param array $config
-	 * @param int $defaultCrop
-	 * @param int $defaultZoom
-	 * @return array
-	 */
-	public static function sceneContext(array $config, int $defaultCrop, int $defaultZoom = 100): array {
-		$ratio = array(1584.0, 1152.0);
-
-		if (preg_match('#^\s*(\d+(?:\.\d+)?)\s*[/x:]\s*(\d+(?:\.\d+)?)\s*$#', (string) ($config['ratio'] ?? ''), $match) && (float) $match[1] > 0 && (float) $match[2] > 0) {
-			$ratio = array((float) $match[1], (float) $match[2]);
-		}
-
-		$crop = ($config['crop'] ?? '') === '' ? $defaultCrop : (int) $config['crop'];
-		$crop = max(0, min(90, $crop));
-		$height = trim((string) preg_replace('/[^a-zA-Z0-9.%()+\-\s]/', '', (string) ($config['height'] ?? '')));
-		$zoom = ($config['zoom'] ?? '') === '' ? $defaultZoom : (int) $config['zoom'];
-		$zoom = max(50, min(300, $zoom));
-		$visible = $ratio[1] * $zoom / 100 * (1 - $crop / 100);
-		$left = round((100 - $zoom) / 2, 2);
-
-		return array(
-			'layers' => self::normalizeLayers((array) ($config['layers'] ?? array())),
-			'scene_style' => $height !== '' ? "height: $height;" : 'aspect-ratio: ' . round($ratio[0], 2) . ' / ' . round($visible, 2) . ';',
-			'canvas_style' => 'aspect-ratio: ' . round($ratio[0], 2) . ' / ' . round($ratio[1], 2) . "; width: $zoom%; left: $left%;"
-		);
 	}
 
 	/**
@@ -148,6 +114,39 @@ class WaterAnimation extends AbstractDynamicTemplateBlock {
 		}
 
 		return $out;
+	}
+
+	/**
+	 * The context of a SVG scene. All graphics share one drawing area (like the original
+	 * artboards of 1584 × 1152), they are stacked by their pos class (z-index) and the
+	 * layers are shifted slightly. The scene shows the bottom part of the drawing area,
+	 * the transparent top part is cut off.
+	 *
+	 * @param array $config
+	 * @param int $defaultCrop
+	 * @param int $defaultZoom
+	 * @return array
+	 */
+	public static function sceneContext(array $config, int $defaultCrop, int $defaultZoom = 100): array {
+		$ratio = array(1584.0, 1152.0);
+
+		if (preg_match('#^\s*(\d+(?:\.\d+)?)\s*[/x:]\s*(\d+(?:\.\d+)?)\s*$#', (string) ($config['ratio'] ?? ''), $match) && (float) $match[1] > 0 && (float) $match[2] > 0) {
+			$ratio = array((float) $match[1], (float) $match[2]);
+		}
+
+		$crop = ($config['crop'] ?? '') === '' ? $defaultCrop : (int) $config['crop'];
+		$crop = max(0, min(90, $crop));
+		$height = trim((string) preg_replace('/[^a-zA-Z0-9.%()+\-\s]/', '', (string) ($config['height'] ?? '')));
+		$zoom = ($config['zoom'] ?? '') === '' ? $defaultZoom : (int) $config['zoom'];
+		$zoom = max(50, min(300, $zoom));
+		$visible = $ratio[1] * $zoom / 100 * (1 - $crop / 100);
+		$left = round((100 - $zoom) / 2, 2);
+
+		return array(
+			'layers' => self::normalizeLayers((array) ($config['layers'] ?? array())),
+			'scene_style' => $height !== '' ? "height: $height;" : 'aspect-ratio: ' . round($ratio[0], 2) . ' / ' . round($visible, 2) . ';',
+			'canvas_style' => 'aspect-ratio: ' . round($ratio[0], 2) . ' / ' . round($ratio[1], 2) . "; width: $zoom%; left: $left%;"
+		);
 	}
 
 	/**

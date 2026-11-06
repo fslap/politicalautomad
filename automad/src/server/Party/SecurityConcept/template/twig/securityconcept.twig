@@ -5,7 +5,7 @@
         {% if image %}
             <figure class="party-concept__media">
                 <picture>
-                    {% if mobile_image %}<source media="(max-width: 800px)" srcset="{{ mobile_image }}">{% endif %}
+                    {% if mobile_image %}<source media="(max-width: 800px)" srcset="{{ mobile_image }} 1x">{% endif %}
                     <img src="{{ image }}" alt="{{ title }}" decoding="async">
                 </picture>
             </figure>
