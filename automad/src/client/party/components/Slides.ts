@@ -31,27 +31,82 @@ const blockOf = (element: Element): HTMLElement =>
  * @return the target or null
  */
 const sibling = (element: HTMLElement, direction: 1 | -1): HTMLElement => {
-	const all = Array.from(
-		document.querySelectorAll<HTMLElement>('.am-party')
-	).filter((block) => block.getBoundingClientRect().height > 0);
-	const own = element.closest<HTMLElement>('.am-party');
-	const index = all.indexOf(own);
+	const own =
+		element.closest<HTMLElement>('.am-party, am-stretched, .am-block') ??
+		element;
+	const container =
+		own.closest<HTMLElement>('main, article, .std-content') ??
+		document.body;
+	const ownRect = own.getBoundingClientRect();
 
-	return index < 0 ? null : (all[index + direction] ?? null);
+	// All blocks of the page (party blocks and other Automad blocks).
+	const candidates = Array.from(
+		container.querySelectorAll<HTMLElement>(
+			'.am-party, .am-block, am-stretched > *, :scope > *'
+		)
+	).filter((block) => {
+		const rect = block.getBoundingClientRect();
+
+		return (
+			rect.height > 0 &&
+			!block.contains(own) &&
+			!own.contains(block) &&
+			!block.closest('.party-slide__overview')
+		);
+	});
+
+	let target: HTMLElement = null;
+	let best = direction === 1 ? Infinity : -Infinity;
+
+	candidates.forEach((block) => {
+		const top = block.getBoundingClientRect().top;
+
+		if (direction === 1 && top > ownRect.bottom - 8 && top < best) {
+			best = top;
+			target = block;
+		}
+
+		if (direction === -1 && top < ownRect.top - 8 && top > best) {
+			best = top;
+			target = block;
+		}
+	});
+
+	return target;
 };
+
+const smooth = (): ScrollBehavior =>
+	window.matchMedia('(prefers-reduced-motion: reduce)').matches
+		? 'auto'
+		: 'smooth';
 
 const scrollTo = (target: HTMLElement): void => {
 	if (!target) {
 		return;
 	}
 
-	const reduce = window.matchMedia(
-		'(prefers-reduced-motion: reduce)'
-	).matches;
+	target.scrollIntoView({ behavior: smooth(), block: 'start' });
+};
 
-	target.scrollIntoView({
-		behavior: reduce ? 'auto' : 'smooth',
-		block: 'start',
+/**
+ * Scroll to the next or previous block. Without a block (e.g. at the end of the
+ * page) the page scrolls by one screen, so the arrows always scroll.
+ *
+ * @param element
+ * @param direction
+ */
+const go = (element: HTMLElement, direction: 1 | -1): void => {
+	const target = sibling(element, direction);
+
+	if (target) {
+		scrollTo(target);
+
+		return;
+	}
+
+	(document.scrollingElement ?? document.documentElement).scrollBy({
+		top: direction * window.innerHeight * 0.9,
+		behavior: smooth(),
 	});
 };
 
@@ -110,11 +165,11 @@ const openMenu = (slide: HTMLElement, button: HTMLElement): void => {
  */
 export const initSlide = (slide: HTMLElement): void => {
 	slide.querySelector('[data-slide-prev]')?.addEventListener('click', () => {
-		scrollTo(sibling(slide, -1));
+		go(slide, -1);
 	});
 
 	slide.querySelector('[data-slide-next]')?.addEventListener('click', () => {
-		scrollTo(sibling(slide, 1));
+		go(slide, 1);
 	});
 
 	const menu = slide.querySelector<HTMLElement>('[data-slide-menu]');
@@ -139,7 +194,7 @@ export const initMore = (link: HTMLElement): void => {
 		}
 
 		event.preventDefault();
-		scrollTo(sibling(link, link.dataset.direction === 'up' ? -1 : 1));
+		go(link, link.dataset.direction === 'up' ? -1 : 1);
 	});
 };
 
