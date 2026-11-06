@@ -2809,7 +2809,7 @@
 		},
 		"partyMusicPlayer": {
 			"type": "object",
-			"description": "Party component \"Musik-Player\": Eingebetteter Player (iframe) mit Umschaltung zwischen Plattformen.",
+			"description": "Party component \"Musik-Player\": Eingebetteter Player (iframe) mit Umschaltung zwischen Plattformen und Tracklisten.",
 			"properties": {
 				"id": {
 					"$ref": "#/$defs/blockId"
@@ -2846,7 +2846,7 @@
 						},
 						"default_source": {
 							"type": "string",
-							"description": "Standard-Quelle (Embed-URL)"
+							"description": "Standard-Quelle (Embed-URL, leer = erste Plattform)"
 						},
 						"player_width": {
 							"type": "string",
@@ -2871,7 +2871,7 @@
 									},
 									"url": {
 										"type": "string",
-										"description": "Embed-URL"
+										"description": "Embed-URL (optional, sonst erster Track)"
 									},
 									"class": {
 										"type": "string",
@@ -2880,9 +2880,29 @@
 											"spotify",
 											"tidal",
 											"youtube",
+											"apple",
+											"deezer",
 											"soundcloud"
 										],
 										"description": "Stil"
+									},
+									"tracks": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"title": {
+													"type": "string",
+													"description": "Titel"
+												},
+												"url": {
+													"type": "string",
+													"description": "Embed-URL"
+												}
+											},
+											"additionalProperties": false
+										},
+										"description": "Trackliste"
 									}
 								},
 								"additionalProperties": false

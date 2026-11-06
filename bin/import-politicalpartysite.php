@@ -1,287 +1,759 @@
 <?php
 /*
- * Convert the content of politicalpartysite (index.artox, or config/sections.php and
- * config/data/*.php as fallback) into Automad page data with party blocks.
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+/*
+ * Convert the artox content of politicalpartysite into Automad page data with party blocks.
+ *
+ * The source is either an artox file (index.artox, site_data.txt) or the index.php of the
+ * original site with the inline artox string ($siteData = '...';). Multi-line values (markdown,
+ * GeoJSON of maps) are read completely.
  *
  * The result is a data folder override with the same structure as the Automad installation:
  *
  *   <out>/pages/data      the home page with all sections as party blocks
  *   <out>/pages/index     the (empty) order of sub pages
  *   <out>/shared/data     the global data with the site name
- *   <out/MEDIA.txt        the files that are referenced by the content
+ *   <out>/MEDIA.txt       the files that are referenced by the content
  *
  * Secrets of the original configuration (SMTP credentials, Turnstile secret) are never copied.
  *
  * Usage:
  *
- *   php bin/import-politicalpartysite.php /path/to/politicalpartysite /path/to/output [/path/to/current/shared/data]
+ *   php bin/import-politicalpartysite.php <index.php|index.artox|dir> <output> [--music=<dir>] [--shared=<shared/data>]
+ *
+ *   --music   directory with the track lists of the music players (economy.json, matching.json),
+ *             e.g. fslap.de/cascade/inc of the original site
+ *   --shared  current shared/data of the installation (the site name is merged into it)
  */
 
 if (PHP_SAPI !== 'cli') {
 	exit('This script must be run from the command line.');
 }
 
-if ($argc < 3) {
-	fwrite(STDERR, "Usage: php bin/import-politicalpartysite.php <politicalpartysite> <output> [shared/data]\n");
+$args = array();
+$options = array();
+
+foreach (array_slice($argv, 1) as $arg) {
+	if (preg_match('/^--(music|shared)=(.*)$/', $arg, $match)) {
+		$options[$match[1]] = $match[2];
+	} else {
+		$args[] = $arg;
+	}
+}
+
+if (count($args) < 2) {
+	fwrite(STDERR, "Usage: php bin/import-politicalpartysite.php <index.php|index.artox|dir> <output> [--music=<dir>] [--shared=<shared/data>]\n");
 	exit(1);
 }
 
-[$script, $sourceDir, $outDir] = $argv;
-$sharedSource = $argv[3] ?? dirname(__DIR__) . '/shared/data';
-$sourceDir = rtrim($sourceDir, '/');
+[$source, $outDir] = $args;
 $outDir = rtrim($outDir, '/');
+$musicDir = rtrim($options['music'] ?? '', '/');
+$sharedSource = $options['shared'] ?? dirname(__DIR__) . '/shared/data';
 
-if (!is_file("$sourceDir/index.artox") && !is_file("$sourceDir/config/sections.php")) {
-	fwrite(STDERR, "Neither $sourceDir/index.artox nor $sourceDir/config/sections.php found.\n");
+if (is_dir($source)) {
+	foreach (array('index.artox', 'site_data.txt', 'index.php') as $file) {
+		if (is_file("$source/$file")) {
+			$source = "$source/$file";
+
+			break;
+		}
+	}
+}
+
+if (!is_file($source)) {
+	fwrite(STDERR, "No artox source found: $source\n");
 	exit(1);
 }
 
 /**
  * Keys of the original configuration that are never copied.
  */
-const SECRET_KEYS = array('smtp_host', 'smtp_port', 'smtp_username', 'smtp_password', 'turnstile_secret', 'mail_verify_cert', 'from_email', 'form_handler', 'form_template');
+const SECRET_KEYS = array('smtp_host', 'smtp_port', 'smtp_username', 'smtp_password', 'smtp_secure', 'turnstile_secret', 'mail_verify_cert', 'from_email', 'form_handler', 'form_template');
 
 /**
- * Keys that only describe the original section and are not needed.
+ * Artox section types and the matching party components.
  */
-const DROP_KEYS = array('section_type', 'layer_count', 'animation_type', 'scene_type', 'overflow');
+const COMPONENTS = array(
+	'PARTY_HEADER' => 'PartyHeader',
+	'REGION_SCROLL' => 'RegionScroll',
+	'CONTACT_CLOSER' => 'ContactCloser',
+	'WATER_ANIMATION' => 'WaterAnimation',
+	'SECURITY_CONCEPT' => 'SecurityConcept',
+	'DOCUMENT_SECTION' => 'Documents',
+	'ART_MOTIVATION' => 'ArtMotivation',
+	'FORM_SECTION' => 'Form',
+	'SPLIT_SECTION' => 'Split',
+	'MARKDOWN_SECTION' => 'Markdown',
+	'QUOTE_SECTION' => 'Quote',
+	'LANDSCAPE_SCENE' => 'LandscapeScene',
+	'MUSIC_ANCHOR' => 'MusicAnchor',
+	'MUSIC_PLAYER' => 'MusicPlayer',
+	'PLAIN_HTML' => 'ContactCloser'
+);
 
-$media = array();
+// ---------------------------------------------------------------------------
+// Parser
 
 /**
- * Generate a block id.
+ * Read the artox text of a source file. The index.php of the original site contains it
+ * as single quoted PHP string.
  *
+ * @param string $file
  * @return string
  */
-function blockId(): string {
-	return substr(str_replace(array('+', '/', '='), array('-', '_', ''), base64_encode(random_bytes(24))), 0, 32);
+function readArtox(string $file): string {
+	$code = str_replace("\r\n", "\n", (string) file_get_contents($file));
+
+	if (!preg_match('/\$siteData\s*=\s*\'/', $code, $match, PREG_OFFSET_CAPTURE)) {
+		return $code;
+	}
+
+	// Read the single quoted PHP string up to the first unescaped quote. The string is too
+	// large for a regular expression (backtrack limit).
+	$start = $match[0][1] + strlen($match[0][0]);
+	$length = strlen($code);
+	$text = '';
+
+	for ($i = $start; $i < $length; $i++) {
+		$char = $code[$i];
+
+		if ($char === '\\' && $i + 1 < $length && ($code[$i + 1] === '\\' || $code[$i + 1] === "'")) {
+			$text .= $code[++$i];
+
+			continue;
+		}
+
+		if ($char === "'") {
+			break;
+		}
+
+		$text .= $char;
+	}
+
+	return $text;
 }
 
 /**
- * Remember a referenced file.
+ * Split the artox text into sections. Commented lines (//) are ignored.
  *
- * @param mixed $value
- * @param array $media
+ * @param string $text
+ * @return array<int, array{type: string, classes: string, meta: string[], content: string[]}>
  */
-function collectMedia(mixed $value, array &$media): void {
-	if (is_array($value)) {
-		foreach ($value as $item) {
-			collectMedia($item, $media);
+function parseSections(string $text): array {
+	$sections = array();
+	$current = null;
+	$part = 'none';
+
+	foreach (explode("\n", $text) as $line) {
+		if (str_starts_with(ltrim($line), '//')) {
+			continue;
 		}
 
-		return;
-	}
+		if ($current === null) {
+			if (preg_match('/^([A-Z][A-Z0-9_]*)(?:\[(.*)\])?\s*$/', trim($line), $match)) {
+				$current = array('type' => $match[1], 'classes' => trim($match[2] ?? ''), 'meta' => array(), 'content' => array());
+				$part = 'meta';
+			}
 
-	if (!is_string($value)) {
-		return;
-	}
-
-	foreach (explode(',', $value) as $part) {
-		$part = trim((string) preg_replace('/\?.*$/', '', trim($part)));
-
-		if (preg_match('/^[\w.\-]+\.(jpe?g|png|gif|webp|svg|pdf|mp3|mp4)$/i', $part)) {
-			$media[$part] = true;
+			continue;
 		}
+
+		if (trim($line) === '~END_META~') {
+			$part = 'content';
+
+			continue;
+		}
+
+		if (trim($line) === '~END_CONTENT~') {
+			$sections[] = $current;
+			$current = null;
+			$part = 'none';
+
+			continue;
+		}
+
+		$current[$part][] = $line;
 	}
+
+	return $sections;
 }
 
 /**
- * Split a "desktop,mobile" image value into two fields.
+ * Parse key=value lines. A line that doesn't start with a known key pattern continues
+ * the value of the previous key (markdown, GeoJSON).
+ *
+ * @param string[] $lines
+ * @param string $keyPattern
+ * @return array<int, array{0: string, 1: string}>
+ */
+function parsePairs(array $lines, string $keyPattern = '[a-z][a-z0-9_]*'): array {
+	$pairs = array();
+
+	foreach ($lines as $line) {
+		if (preg_match('/^(' . $keyPattern . ')=(.*)$/', $line, $match)) {
+			$value = $match[2];
+
+			// A key that was written twice (e.g. "right_content=right_content=").
+			while (str_starts_with($value, $match[1] . '=')) {
+				$value = substr($value, strlen($match[1]) + 1);
+			}
+
+			$pairs[] = array($match[1], $value);
+
+			continue;
+		}
+
+		if ($pairs) {
+			$pairs[count($pairs) - 1][1] .= "\n" . $line;
+		}
+	}
+
+	return array_map(fn ($pair) => array($pair[0], trim($pair[1])), $pairs);
+}
+
+/**
+ * Convert key=value pairs into an associative array (the last value of a key wins).
+ *
+ * @param array $pairs
+ * @return array<string, string>
+ */
+function pairsToMap(array $pairs): array {
+	$map = array();
+
+	foreach ($pairs as [$key, $value]) {
+		$map[$key] = $value;
+	}
+
+	return $map;
+}
+
+/**
+ * Split content lines into records that are separated by blank lines.
+ * Lines starting with # are commented out.
+ *
+ * @param string[] $lines
+ * @return array<int, array<string, string>>
+ */
+function parseRecords(array $lines): array {
+	$records = array();
+	$record = array();
+
+	foreach (array_merge($lines, array('')) as $line) {
+		if (trim($line) === '') {
+			if ($record) {
+				$records[] = $record;
+			}
+
+			$record = array();
+
+			continue;
+		}
+
+		if (str_starts_with(ltrim($line), '#')) {
+			continue;
+		}
+
+		if (preg_match('/^([a-z][a-z0-9_]*)=(.*)$/', $line, $match)) {
+			$record[$match[1]] = trim($match[2]);
+		}
+	}
+
+	return $records;
+}
+
+/**
+ * Split a comma separated value into its parts.
+ *
+ * @param string $value
+ * @param int $count
+ * @return string[]
+ */
+function csv(string $value, int $count): array {
+	$parts = array_map('trim', explode(',', $value, $count));
+
+	return array_pad($parts, $count, '');
+}
+
+/**
+ * Remove query strings like "?v1" from file names.
+ *
+ * @param string $file
+ * @return string
+ */
+function cleanFile(string $file): string {
+	return trim((string) preg_replace('/\?.*$/', '', $file));
+}
+
+// ---------------------------------------------------------------------------
+// Conversion
+
+/**
+ * Split a "desktop,mobile" image value into the image and its mobile variant.
  *
  * @param array $data
  * @param string $key
+ * @param string $value
  * @return array
  */
-function splitImageField(array $data, string $key): array {
-	if (!isset($data[$key]) || !is_string($data[$key])) {
-		return $data;
-	}
+function imagePair(array $data, string $key, string $value): array {
+	[$desktop, $mobile] = csv($value, 2);
+	$data[$key] = cleanFile($desktop);
 
-	$images = array_values(array_filter(array_map('trim', explode(',', $data[$key]))));
-	$data[$key] = $images[0] ?? '';
-
-	if (isset($images[1]) && $images[1] !== $images[0]) {
-		$data["{$key}_mobile"] = $images[1];
+	if ($mobile !== '' && $mobile !== $desktop) {
+		$data["{$key}_mobile"] = cleanFile($mobile);
 	}
 
 	return $data;
 }
 
 /**
- * Convert a map configuration of a split pane.
+ * Convert svg layers (water animation, landscape scene).
  *
- * @param array $map
+ * @param string[] $lines
+ * @param bool $animation whether the third value is an animation class (otherwise a description)
  * @return array
  */
-function convertMapConfig(array $map): array {
-	$height = (string) ($map['height'] ?? '320px');
+function convertLayers(array $lines, bool $animation): array {
+	$layers = array();
 
-	return array(
-		'center' => (string) ($map['center'] ?? (isset($map['center_lat'], $map['center_lng']) ? $map['center_lat'] . ',' . $map['center_lng'] : '51.0,10.0')),
-		'zoom' => (int) ($map['zoom'] ?? 6),
-		'height' => preg_match('/^\d+(px|vh|rem|em|%)$/', $height) ? $height : '520px',
-		'markers' => is_array($map['markers'] ?? null) ? $map['markers'] : array(),
-		'geojson' => is_array($map['geojson'] ?? null) ? $map['geojson'] : null
+	foreach (parsePairs($lines, 'layer|svg') as [$key, $value]) {
+		if ($key === 'layer') {
+			[, $position] = csv($value, 2);
+			$layers[] = array('position' => $position ?: 'svgoffsetleft', 'svgs' => array());
+
+			continue;
+		}
+
+		if (!$layers) {
+			$layers[] = array('position' => 'svgoffsetleft', 'svgs' => array());
+		}
+
+		[$file, $position, $third] = csv($value, 3);
+		$layers[count($layers) - 1]['svgs'][] = array(
+			'file' => cleanFile($file),
+			'position' => $position ?: 'pos1',
+			'animation' => $animation ? $third : ''
+		);
+	}
+
+	return $layers;
+}
+
+/**
+ * Convert the map keys of a split pane ("right_map_center" etc.).
+ *
+ * @param array $values
+ * @param string $prefix
+ * @param string $content GeoJSON
+ * @param array $report
+ * @return array
+ */
+function convertMap(array $values, string $prefix, string $content, array &$report): array {
+	$height = (string) ($values["{$prefix}map_height"] ?? '520px');
+	$geojson = null;
+
+	if (trim($content) !== '') {
+		$geojson = json_decode($content, true);
+
+		if (!is_array($geojson)) {
+			$report[] = '    ! GeoJSON konnte nicht gelesen werden: ' . json_last_error_msg();
+			$geojson = null;
+		}
+	}
+
+	$map = array(
+		'center' => (string) ($values["{$prefix}map_center"] ?? '51.0,10.0'),
+		'zoom' => (int) ($values["{$prefix}map_zoom"] ?? 6),
+		'height' => preg_match('/^\d+(\.\d+)?(px|vh|rem|em|%)$/', $height) ? $height : '520px',
+		'markers' => array(),
+		'geojson' => $geojson
 	);
+
+	if (!empty($values["{$prefix}map_max_zoom"])) {
+		$map['max_zoom'] = (int) $values["{$prefix}map_max_zoom"];
+	}
+
+	if (!empty($values["{$prefix}tile_url"])) {
+		$map['tile_url'] = $values["{$prefix}tile_url"];
+	}
+
+	return $map;
 }
 
 /**
- * Convert the configuration of a section into the data of a party block.
+ * Read the track lists of the music players.
  *
- * @param string $component
- * @param array $config
+ * @param string $musicDir
+ * @param string $source e.g. "cascade/music/youtube/economy"
+ * @return array<int, array{title: string, url: string}>
+ */
+function tracks(string $musicDir, string $source): array {
+	if ($musicDir === '' || !preg_match('#music/([a-z0-9_-]+)/([a-z0-9_-]+)/?$#i', $source, $match)) {
+		return array();
+	}
+
+	[, $platform, $list] = $match;
+	$file = "$musicDir/$list.json";
+
+	if (!is_readable($file)) {
+		return array();
+	}
+
+	$data = json_decode((string) file_get_contents($file), true);
+	$tracks = array();
+
+	foreach ((array) ($data[$platform] ?? array()) as $key => $track) {
+		if (is_array($track) && !empty($track['url'])) {
+			$tracks[] = array('title' => (string) ($track['title'] ?? $key), 'url' => (string) $track['url']);
+		}
+	}
+
+	return $tracks;
+}
+
+/**
+ * Convert a section into the data of a party block.
+ *
+ * @param array $section
+ * @param string $musicDir
+ * @param array $report
  * @return array
  */
-function convertSection(string $component, array $config): array {
-	foreach (array_merge(SECRET_KEYS, DROP_KEYS) as $key) {
-		unset($config[$key]);
+function convertSection(array $section, string $musicDir, array &$report): array {
+	$type = $section['type'];
+	$meta = pairsToMap(parsePairs($section['meta']));
+	$content = $section['content'];
+
+	foreach (SECRET_KEYS as $key) {
+		unset($meta[$key]);
 	}
 
-	switch ($component) {
-		case 'Markdown':
-		case 'Quote':
-		case 'Split':
-			$config = splitImageField($config, 'section_image');
+	$data = array('classes' => $section['classes']);
 
-			break;
-		case 'SecurityConcept':
-			$config = splitImageField($config, 'main_image');
-
-			break;
-		case 'Form':
-			// The original form posted to an external handler, Automad sends the mails itself.
-			$config['mail_to'] = '';
-			$config['form_action'] = '';
-
-			break;
-		case 'ArtMotivation':
-			unset($config['section_image'], $config['gallery_type'], $config['float_style']);
-			$config['generate_mobile'] = false;
-
-			break;
-	}
-
-	if ($component === 'Split') {
-		$panes = array();
-
-		foreach (array('left', 'right') as $side) {
-			$type = (string) ($config["{$side}_type"] ?? 'markdown');
-			$content = (string) ($config["{$side}_content"] ?? '');
-
-			$panes[] = array(
-				'title' => '',
-				'type' => $type,
-				'width' => 'auto',
-				'content' => $type === 'markdown' ? $content : '',
-				'image' => $type === 'image' ? $content : '',
-				'map_config' => convertMapConfig(is_array($config["{$side}_map_config"] ?? null) ? $config["{$side}_map_config"] : array()),
-				'classes' => ''
-			);
-
-			unset($config["{$side}_type"], $config["{$side}_content"], $config["{$side}_map_config"]);
+	foreach (array('section_id', 'title') as $key) {
+		if (isset($meta[$key])) {
+			$data[$key] = $meta[$key];
 		}
-
-		$config['panes'] = $panes;
 	}
 
-	return $config;
+	switch ($type) {
+		case 'PARTY_HEADER':
+			foreach (array('party_name', 'warning_text', 'main_link', 'main_link_text', 'intro_text') as $key) {
+				$data[$key] = $meta[$key] ?? '';
+			}
+
+			break;
+
+		case 'REGION_SCROLL':
+			foreach (array('navigation_target', 'navigation_text', 'scroll_width') as $key) {
+				if (isset($meta[$key])) {
+					$data[$key] = $meta[$key];
+				}
+			}
+
+			$data['regions'] = array_map(fn ($record) => array(
+				'region_id' => $record['region_id'] ?? '',
+				'region_name' => $record['region_name'] ?? '',
+				'region_description' => $record['region_description'] ?? ''
+			), parseRecords($content));
+
+			break;
+
+		case 'CONTACT_CLOSER':
+			break;
+
+		case 'PLAIN_HTML':
+			$data['raw_content'] = trim(join("\n", $content));
+
+			break;
+
+		case 'WATER_ANIMATION':
+			$data['layers'] = convertLayers($content, true);
+
+			break;
+
+		case 'LANDSCAPE_SCENE':
+			$data['layers'] = convertLayers($content, false);
+
+			break;
+
+		case 'SECURITY_CONCEPT':
+			foreach (array('subtitle', 'subtitle_emphasis', 'feature_prefix') as $key) {
+				$data[$key] = $meta[$key] ?? '';
+			}
+
+			if (isset($meta['main_image'])) {
+				$data = imagePair($data, 'main_image', $meta['main_image']);
+			}
+
+			$data['features'] = array_values(array_map(
+				fn ($pair) => $pair[1],
+				array_filter(parsePairs($content), fn ($pair) => $pair[0] === 'feature')
+			));
+
+			break;
+
+		case 'DOCUMENT_SECTION':
+			$data['documents'] = array_map(fn ($record) => array(
+				'title' => $record['document_title'] ?? '',
+				'file' => cleanFile($record['document_file'] ?? ''),
+				'preview' => cleanFile($record['document_preview'] ?? ''),
+				'description' => $record['document_description'] ?? ''
+			), parseRecords($content));
+
+			break;
+
+		case 'ART_MOTIVATION':
+			$data['artworks'] = array();
+
+			foreach (parsePairs($content) as [$key, $value]) {
+				if ($key !== 'artwork') {
+					continue;
+				}
+
+				// image,classes,description,mobile image (the mobile image is not needed, the canvas is relative)
+				[$image, $classes, $description] = csv($value, 4);
+				$data['artworks'][] = array(
+					'image' => cleanFile($image),
+					'description' => $description,
+					'size' => '',
+					'vertical' => false,
+					'offset' => '0',
+					'classes' => $classes
+				);
+			}
+
+			$data['generate_mobile'] = false;
+
+			break;
+
+		case 'FORM_SECTION':
+			$data['form_method'] = $meta['form_method'] ?? 'post';
+			// The original form posted to an external handler, Automad sends the mails itself.
+			$data['form_action'] = '';
+			$data['mail_to'] = $meta['to_email'] ?? '';
+			$data['turnstile_site_key'] = $meta['turnstile_site_key'] ?? '';
+			$data['fields'] = array();
+
+			foreach (parsePairs($content) as [$key, $value]) {
+				if ($key !== 'field') {
+					continue;
+				}
+
+				[$name, $fieldType, $label, $required, $options] = csv($value, 5);
+				$data['fields'][] = array(
+					'label' => $label,
+					'name' => $name,
+					'type' => $fieldType ?: 'text',
+					'required' => $required === 'required',
+					'options' => $options !== '' ? array_map('trim', explode('|', $options)) : array()
+				);
+			}
+
+			break;
+
+		case 'SPLIT_SECTION':
+			$values = pairsToMap(parsePairs($content, '(?:left|right)_[a-z0-9_]+'));
+			$data['panes'] = array();
+
+			foreach (array('left', 'right') as $side) {
+				$paneType = $values["{$side}_type"] ?? '';
+				$paneContent = $values["{$side}_content"] ?? '';
+
+				if ($paneType === '' && $paneContent === '') {
+					continue;
+				}
+
+				$pane = array(
+					'title' => '',
+					'type' => in_array($paneType, array('markdown', 'image', 'leaflet', 'video', 'html'), true) ? $paneType : 'markdown',
+					'width' => 'auto',
+					'content' => '',
+					'image' => '',
+					'image_alt' => '',
+					'video' => '',
+					'html' => '',
+					'classes' => ''
+				);
+
+				switch ($pane['type']) {
+					case 'leaflet':
+						$pane['map_config'] = convertMap($values, "{$side}_", $paneContent, $report);
+
+						break;
+					case 'image':
+						$pane['image'] = cleanFile($paneContent);
+
+						break;
+					case 'video':
+						$pane['video'] = $paneContent;
+
+						break;
+					case 'html':
+						$pane['html'] = $paneContent;
+
+						break;
+					default:
+						$pane['content'] = $paneContent;
+				}
+
+				$data['panes'][] = $pane;
+			}
+
+			break;
+
+		case 'MARKDOWN_SECTION':
+			$data['markdown_content'] = trim(join("\n", $content));
+
+			if (isset($meta['section_image'])) {
+				$data = imagePair($data, 'section_image', $meta['section_image']);
+			}
+
+			break;
+
+		case 'QUOTE_SECTION':
+			$values = pairsToMap(parsePairs($content));
+			$data['quote_text'] = $values['quote_text'] ?? ($meta['quote_text'] ?? '');
+			$data['quote_author'] = $values['quote_author'] ?? ($meta['quote_author'] ?? '');
+
+			if (isset($meta['section_image'])) {
+				$data = imagePair($data, 'section_image', $meta['section_image']);
+			}
+
+			break;
+
+		case 'MUSIC_ANCHOR':
+			$data['anchor_id'] = $meta['anchor_id'] ?? 'music';
+
+			break;
+
+		case 'MUSIC_PLAYER':
+			foreach (array('player_width', 'player_height', 'iframe_border_radius') as $key) {
+				if (isset($meta[$key])) {
+					$data[$key] = $meta[$key];
+				}
+			}
+
+			$defaultSource = $meta['default_source'] ?? '';
+			$data['default_source'] = '';
+			$data['platforms'] = array();
+
+			foreach (parsePairs($content) as [$key, $value]) {
+				if ($key !== 'music_platform') {
+					continue;
+				}
+
+				[$platformSource, $class, $text] = csv($value, 3);
+				$tracks = tracks($musicDir, $platformSource);
+
+				if (!$tracks) {
+					$report[] = "    ! Keine Trackliste für $platformSource (--music angeben)";
+				}
+
+				$data['platforms'][] = array(
+					'text' => $text ?: ucfirst($class),
+					'url' => '',
+					'class' => $class ?: 'wp-element-button',
+					'tracks' => $tracks
+				);
+
+				if ($platformSource === $defaultSource && $tracks) {
+					$data['default_source'] = $tracks[0]['url'];
+				}
+			}
+
+			break;
+	}
+
+	return $data;
 }
 
 /**
- * Read all sections. index.artox is the complete source of the original site: the generated
- * config/sections.php reuses file names (e.g. ticket.php) for different sections. The parser of
- * the original artox-to-timber-converter.php is used in memory in order to read the content exactly
- * like the original site did.
+ * Remember referenced files.
  *
- * @param string $sourceDir
- * @return array<int, array{component: string, config: array, source: string}>
+ * @param mixed $value
+ * @param array $media
  */
-function readSections(string $sourceDir): array {
-	$artox = "$sourceDir/index.artox";
-	$converterFile = "$sourceDir/artox-to-timber-converter.php";
-
-	if (is_file($artox) && is_file($converterFile)) {
-		// Only load the class, the converter runs its own CLI code when it is included directly.
-		if (!class_exists('ArtoxToTimberConverter', false)) {
-			$code = (string) file_get_contents($converterFile);
-			$cli = strpos($code, "if (php_sapi_name() === 'cli')");
-			$classFile = tempnam(sys_get_temp_dir(), 'artox') . '.php';
-
-			file_put_contents($classFile, $cli !== false ? substr($code, 0, $cli) : $code);
-			require_once $classFile;
-			unlink($classFile);
+function collectMedia(mixed $value, array &$media): void {
+	if (is_array($value)) {
+		foreach ($value as $key => $item) {
+			if ($key !== 'geojson') {
+				collectMedia($item, $media);
+			}
 		}
 
-		$converter = new ArtoxToTimberConverter();
-		$call = function (string $method, mixed ...$args) use ($converter): mixed {
-			$reflection = new ReflectionMethod($converter, $method);
-
-			return $reflection->invoke($converter, ...$args);
-		};
-
-		$call('parseArtoxFormat', (string) file_get_contents($artox));
-
-		$property = new ReflectionProperty($converter, 'sections');
-		$sections = array();
-
-		foreach ($property->getValue($converter) as $index => $section) {
-			$sections[] = array(
-				'component' => (string) $call('getComponentClass', $section['type']),
-				'config' => (array) $call('convertSectionToConfig', $section),
-				'source' => "index.artox #$index " . $section['type']
-			);
-		}
-
-		return $sections;
+		return;
 	}
 
-	$sections = array();
-
-	foreach (require "$sourceDir/config/sections.php" as $index => $section) {
-		$file = "$sourceDir/config/data/" . ($section['config'] ?? '');
-
-		if (is_file($file)) {
-			$sections[] = array(
-				'component' => (string) ($section['component'] ?? ''),
-				'config' => require $file,
-				'source' => 'config/data/' . basename($file)
-			);
-		}
+	if (is_string($value) && preg_match('/^[\w.\-]+\.(jpe?g|png|gif|webp|svg|pdf|mp3|mp4)$/i', $value)) {
+		$media[$value] = true;
 	}
 
-	return $sections;
+	// Images inside of markdown.
+	if (is_string($value) && preg_match_all('/!\[[^\]]*\]\(([^)\s]+)\)/', $value, $matches)) {
+		foreach ($matches[1] as $path) {
+			$media[$path] = true;
+		}
+	}
 }
+
+// ---------------------------------------------------------------------------
+// Run
 
 $blocks = array();
 $report = array();
+$media = array();
 
-foreach (readSections($sourceDir) as $index => $section) {
-	$component = $section['component'];
-	$config = $section['config'];
+foreach (parseSections(readArtox($source)) as $index => $section) {
+	$component = COMPONENTS[$section['type']] ?? '';
 
 	if ($component === '' || !is_file(dirname(__DIR__) . "/automad/src/server/Party/$component/$component.php")) {
-		$report[] = "skipped #$index ($component): no party component";
+		$report[] = sprintf('#%02d %-18s übersprungen (keine Party-Komponente)', $index, $section['type']);
 
 		continue;
 	}
 
-	$toEmail = (string) ($config['to_email'] ?? '');
-	$data = convertSection($component, $config);
-
-	if ($component === 'Form' && $toEmail !== '') {
-		$data['mail_to'] = $toEmail;
-	}
-
+	$sectionReport = array();
+	$data = convertSection($section, $musicDir, $sectionReport);
 	collectMedia($data, $media);
 
 	$blocks[] = array(
-		'id' => blockId(),
+		'id' => substr(str_replace(array('+', '/', '='), array('-', '_', ''), base64_encode(random_bytes(24))), 0, 32),
 		'type' => 'party' . $component,
 		'data' => $data,
 		'tunes' => array('layout' => array('stretched' => true))
 	);
 
-	$report[] = sprintf('#%02d %-16s %s', $index, $component, $section['source']);
+	$details = array();
+
+	foreach (array('regions', 'documents', 'artworks', 'fields', 'features', 'panes', 'layers', 'platforms') as $key) {
+		if (isset($data[$key])) {
+			$details[] = count($data[$key]) . " $key";
+		}
+	}
+
+	foreach ($data['panes'] ?? array() as $pane) {
+		$details[] = $pane['type'] === 'leaflet'
+			? 'Karte ' . count($pane['map_config']['geojson']['features'] ?? array()) . ' Formen'
+			: $pane['type'] . ' ' . mb_strlen($pane['content'] ?: $pane['image']) . ' Zeichen';
+	}
+
+	if (isset($data['markdown_content'])) {
+		$details[] = mb_strlen($data['markdown_content']) . ' Zeichen';
+	}
+
+	foreach ($data['platforms'] ?? array() as $platform) {
+		$details[] = $platform['text'] . ' ' . count($platform['tracks']) . ' Tracks';
+	}
+
+	$report[] = sprintf('#%02d %-16s %-22s %s', $index, $component, $data['section_id'] ?? '', join(', ', $details));
+	array_push($report, ...$sectionReport);
 }
 
 $now = date('c');
@@ -322,9 +794,9 @@ ksort($media);
 file_put_contents(
 	"$outDir/MEDIA.txt",
 	"Diese Dateien werden von den Inhalten referenziert und gehören in den Ordner pages/ (Dateien der Startseite).\n"
-	. "Im Dashboard: Startseite > Files > hochladen.\n\n"
+	. "Im Dashboard: Startseite > Files > hochladen. Pfade mit / am Anfang beziehen sich auf die Wurzel der Seite.\n\n"
 	. join("\n", array_keys($media)) . "\n"
 );
 
 echo join(PHP_EOL, $report), PHP_EOL;
-echo count($blocks) . ' sections converted, ' . count($media) . ' referenced files (see MEDIA.txt).' . PHP_EOL;
+echo count($blocks) . ' Sections übernommen, ' . count($media) . ' referenzierte Dateien (siehe MEDIA.txt).' . PHP_EOL;

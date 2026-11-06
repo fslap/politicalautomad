@@ -36,6 +36,7 @@ import './styles/index.less';
 import { initCaseMap } from './components/CaseMap';
 import { initDonate } from './components/Donate';
 import { initMap } from './components/Map';
+import { initMusicPlayer } from './components/MusicPlayer';
 import { initStainedGlass } from './components/StainedGlass';
 import { initTurnstile } from './components/Turnstile';
 import { initVideoCommentary } from './components/VideoCommentary';
@@ -52,6 +53,7 @@ const behaviours: Array<
 	['.cf-turnstile', initTurnstile],
 	['[data-party-video-commentary]', initVideoCommentary],
 	['[data-party-stained-glass]', initStainedGlass],
+	['[data-party-music-player]', initMusicPlayer],
 ];
 
 const init = (): void => {

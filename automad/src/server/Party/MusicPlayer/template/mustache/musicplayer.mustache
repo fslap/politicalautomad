@@ -1,12 +1,21 @@
-<div class="wp-block-group widthcontainer {{classes}}">
-    <h1 class="wp-block-heading">{{title}}</h1>
-    <br><br>
+<div class="wp-block-group widthcontainer music-player {{classes}}" data-party-music-player>
+    {{#title}}<h1 class="wp-block-heading">{{title}}</h1>{{/title}}
+
+    <div class="music-player__platforms">
+        {{#platforms}}
+            <a href="{{url}}" target="{{section_id}}" class="{{class}}{{#active}} is-active{{/active}}" data-music-platform="{{index}}">{{text}}</a>
+        {{/platforms}}
+    </div>
 
     {{#platforms}}
-        <a href="{{url}}" target="{{section_id}}" class="{{class}}">{{text}}</a>&nbsp;
+        {{#has_tracks}}
+            <ol class="music-player__tracks" data-music-tracks="{{index}}"{{^active}} hidden{{/active}}>
+                {{#tracks}}
+                    <li><a href="{{url}}" target="{{section_id}}">{{title}}</a></li>
+                {{/tracks}}
+            </ol>
+        {{/has_tracks}}
     {{/platforms}}
-
-    <br><br>
 
     <iframe name="{{section_id}}"
             id="{{section_id}}"

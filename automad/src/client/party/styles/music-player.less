@@ -1,0 +1,47 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+.am-party {
+	.music-player__platforms {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin: 1.5rem 0 1rem;
+
+		a.is-active {
+			outline: 2px solid currentColor;
+			outline-offset: 2px;
+		}
+	}
+
+	.music-player__tracks {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1.25rem;
+		margin: 0 0 1rem;
+		padding-left: 1.5rem;
+
+		&[hidden] {
+			display: none;
+		}
+
+		a {
+			color: inherit;
+			text-decoration: underline;
+			text-underline-offset: 3px;
+		}
+
+		a.is-active {
+			font-weight: bold;
+		}
+	}
+
+	.music-player .music-iframe {
+		display: block;
+		max-width: 100%;
+	}
+}
