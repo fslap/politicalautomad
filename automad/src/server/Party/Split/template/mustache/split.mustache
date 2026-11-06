@@ -31,7 +31,7 @@
                 {{#is_video}}
                     {{#video_embed}}
                         <div class="split-pane__video">
-                            <iframe src="{{video_embed}}" title="{{title}}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+                            <iframe data-consent-src="{{video_embed}}" title="{{title}}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
                         </div>
                     {{/video_embed}}
                 {{/is_video}}

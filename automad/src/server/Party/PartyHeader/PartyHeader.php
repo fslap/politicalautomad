@@ -58,7 +58,7 @@ class PartyHeader extends AbstractDynamicTemplateBlock {
 		$parts = preg_split('/\s+/', trim((string) $config['party_name'])) ?: array();
 
 		return array(
-			'warning_text' => $config['warning_text'],
+			'warning_text' => trim((string) $config['warning_text']),
 			'party_name_parts' => array_values(array_filter($parts, fn ($part) => $part !== '')),
 			'main_link' => $config['main_link'],
 			'main_link_text' => $config['main_link_text'],

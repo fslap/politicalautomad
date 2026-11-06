@@ -26,7 +26,7 @@
                     <div class="split-pane__html">{{ pane.html|raw }}</div>
                 {% elseif pane.is_video and pane.video_embed %}
                     <div class="split-pane__video">
-                        <iframe src="{{ pane.video_embed }}" title="{{ pane.title }}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+                        <iframe data-consent-src="{{ pane.video_embed }}" title="{{ pane.title }}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
                     </div>
                 {% endif %}
             </div>

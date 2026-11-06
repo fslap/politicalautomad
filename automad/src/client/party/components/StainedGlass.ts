@@ -5,6 +5,7 @@
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
 
+import { requestConsent } from './Consent';
 import { parseConfig } from './Map';
 import {
 	connectPlayer,
@@ -77,6 +78,9 @@ export const initStainedGlass = async (root: HTMLElement): Promise<void> => {
 		player?.playVideo();
 		soundButton.setAttribute('hidden', '');
 	});
+
+	// Nothing is loaded from YouTube before the visitor has agreed (GDPR lander).
+	await requestConsent(iframe);
 
 	try {
 		player = await connectPlayer(iframe, {

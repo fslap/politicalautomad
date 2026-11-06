@@ -34,6 +34,7 @@
 
 import './styles/index.less';
 import { initCaseMap } from './components/CaseMap';
+import { initConsentFrame } from './components/Consent';
 import { initDonate } from './components/Donate';
 import { initMap } from './components/Map';
 import { initMusicPlayer } from './components/MusicPlayer';
@@ -47,6 +48,8 @@ import { initVideoCommentary } from './components/VideoCommentary';
 const behaviours: Array<
 	[string, (element: HTMLElement) => void | Promise<void>]
 > = [
+	// First: no external embed is loaded before the visitor has agreed.
+	['iframe[data-consent-src]', initConsentFrame],
 	['[data-party-map]', initMap],
 	['[data-party-case-map]', initCaseMap],
 	['[data-party-donate]', initDonate],

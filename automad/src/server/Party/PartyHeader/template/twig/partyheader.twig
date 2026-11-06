@@ -1,8 +1,8 @@
-<div class="wp-block-group {{ classes }}" style="text-align: center;">
-    {% if warning_text %}
-        <p class="wp-block-paragraph">{{ warning_text }}</p>
-    {% endif %}
-</div>
+{% if warning_text %}
+    <div class="party-header__bar {{ classes }}" role="note">
+        <p>{{ warning_text }}</p>
+    </div>
+{% endif %}
 
 <div class="party-header__title">
     {% for part in party_name_parts %}
@@ -10,12 +10,7 @@
     {% endfor %}
 </div>
 
-<br><br>
-
 <div class="wp-block-group party-header__cta">
-    <a href="{{ main_link }}" target="_blank" class="wp-element-button">
-        {{ main_link_text }}
-    </a>
-    <br><br>
-    <p class="wp-block-paragraph">{{ intro_text }}</p>
+    {% if main_link %}<a href="{{ main_link }}" target="_blank" rel="noopener" class="wp-element-button">{{ main_link_text ?: main_link }}</a>{% endif %}
+    {% if intro_text %}<p class="wp-block-paragraph">{{ intro_text }}</p>{% endif %}
 </div>

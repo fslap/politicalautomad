@@ -5,6 +5,7 @@
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
 
+import { requestConsent } from './Consent';
 import { parseConfig } from './Map';
 import {
 	connectPlayer,
@@ -104,7 +105,7 @@ export const initVideoCommentary = async (root: HTMLElement): Promise<void> => {
 		if (player) {
 			player.seekTo(seconds, true);
 			player.playVideo();
-		} else {
+		} else if (iframe.getAttribute('src')) {
 			// Fallback without the API: reload the embed at the position.
 			const url = new URL(iframe.src);
 
@@ -113,6 +114,9 @@ export const initVideoCommentary = async (root: HTMLElement): Promise<void> => {
 			iframe.src = url.toString();
 		}
 	});
+
+	// Nothing is loaded from YouTube before the visitor has agreed (GDPR lander).
+	await requestConsent(iframe);
 
 	try {
 		player = await connectPlayer(iframe, {

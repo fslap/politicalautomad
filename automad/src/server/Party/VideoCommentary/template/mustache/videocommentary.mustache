@@ -7,7 +7,7 @@
         <div class="video-commentary__player">
             <div class="video-commentary__frame">
                 {{#embed_url}}
-                    <iframe id="{{section_id}}_player" src="{{embed_url}}" title="{{title}}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+                    <iframe id="{{section_id}}_player" data-consent-src="{{embed_url}}" title="{{title}}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
                 {{/embed_url}}
             </div>
         </div>
