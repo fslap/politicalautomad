@@ -28,7 +28,9 @@
 				},
 				{
 					"type": "boolean",
-					"enum": [false]
+					"enum": [
+						false
+					]
 				}
 			],
 			"description": "The page date in the ISO 8601 date-time format like for example `2026-10-02T08:03:25+00:00`. Skip it in order to use the current time or use `false` in order to create the page without a date."
@@ -62,7 +64,12 @@
 			}
 		}
 	},
-	"required": ["parent", "title", "template", "theme"],
+	"required": [
+		"parent",
+		"title",
+		"template",
+		"theme"
+	],
 	"$defs": {
 		"block": {
 			"description": "An Automad content block.",
@@ -138,6 +145,117 @@
 				},
 				{
 					"$ref": "#/$defs/video"
+				},
+				{
+					"$ref": "#/$defs/partyArtMotivation"
+				},
+				{
+					"$ref": "#/$defs/partyCaseLeafletRegion"
+				},
+				{
+					"$ref": "#/$defs/partyContactCloser"
+				},
+				{
+					"$ref": "#/$defs/partyDocuments"
+				},
+				{
+					"$ref": "#/$defs/partyDonateBlock"
+				},
+				{
+					"$ref": "#/$defs/partyEventBlock"
+				},
+				{
+					"$ref": "#/$defs/partyForm"
+				},
+				{
+					"$ref": "#/$defs/partyGallery"
+				},
+				{
+					"$ref": "#/$defs/partyImage"
+				},
+				{
+					"$ref": "#/$defs/partyLandscapeScene"
+				},
+				{
+					"$ref": "#/$defs/partyLeafletMap"
+				},
+				{
+					"$ref": "#/$defs/partyMarkdown"
+				},
+				{
+					"$ref": "#/$defs/partyMusicAnchor"
+				},
+				{
+					"$ref": "#/$defs/partyMusicPlayer"
+				},
+				{
+					"$ref": "#/$defs/partyPartyHeader"
+				},
+				{
+					"$ref": "#/$defs/partyQuote"
+				},
+				{
+					"$ref": "#/$defs/partyRegionScroll"
+				},
+				{
+					"$ref": "#/$defs/partyScrollElement"
+				},
+				{
+					"$ref": "#/$defs/partyScrollReference"
+				},
+				{
+					"$ref": "#/$defs/partySecurityConcept"
+				},
+				{
+					"$ref": "#/$defs/partySkylineBreaker"
+				},
+				{
+					"$ref": "#/$defs/partySplit"
+				},
+				{
+					"$ref": "#/$defs/partyStainedGlass"
+				},
+				{
+					"$ref": "#/$defs/partyTeamBlock"
+				},
+				{
+					"$ref": "#/$defs/partyVerticalSlider"
+				},
+				{
+					"$ref": "#/$defs/partyVideoCommentary"
+				},
+				{
+					"$ref": "#/$defs/partyViewboxHover"
+				},
+				{
+					"$ref": "#/$defs/partyWaterAnimation"
+				},
+				{
+					"$ref": "#/$defs/partyWpButton"
+				},
+				{
+					"$ref": "#/$defs/partyWpColumns"
+				},
+				{
+					"$ref": "#/$defs/partyWpGroup"
+				},
+				{
+					"$ref": "#/$defs/partyWpHeading"
+				},
+				{
+					"$ref": "#/$defs/partyWpImage"
+				},
+				{
+					"$ref": "#/$defs/partyWpParagraph"
+				},
+				{
+					"$ref": "#/$defs/partyWpQuote"
+				},
+				{
+					"$ref": "#/$defs/partyWpSeparator"
+				},
+				{
+					"$ref": "#/$defs/partyWpSpacer"
 				}
 			]
 		},
@@ -159,7 +277,9 @@
 					}
 				}
 			},
-			"required": ["content"],
+			"required": [
+				"content"
+			],
 			"additionalProperties": false
 		},
 		"buttons": {
@@ -174,7 +294,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"data": {
@@ -198,10 +325,16 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["primaryLink", "primaryText"]
+					"required": [
+						"primaryLink",
+						"primaryText"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"callout": {
@@ -216,7 +349,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"data": {
@@ -232,10 +372,16 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["text", "title"]
+					"required": [
+						"text",
+						"title"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"code": {
@@ -250,7 +396,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"data": {
@@ -306,10 +459,15 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["code"]
+					"required": [
+						"code"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"collapsibleSection": {
@@ -324,7 +482,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -355,10 +520,17 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["content", "group", "title"]
+					"required": [
+						"content",
+						"group",
+						"title"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"component": {
@@ -373,7 +545,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -389,10 +568,15 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["id"]
+					"required": [
+						"id"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"delimiter": {
@@ -407,7 +591,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -415,7 +606,9 @@
 					"type": "boolean"
 				}
 			},
-			"required": ["type"],
+			"required": [
+				"type"
+			],
 			"additionalProperties": false
 		},
 		"embed": {
@@ -430,7 +623,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -450,10 +650,15 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["source"]
+					"required": [
+						"source"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"filelist": {
@@ -468,7 +673,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -488,15 +700,25 @@
 						},
 						"sortOrder": {
 							"description": "The sort order of the files by their path, either \"asc\" for ascending or \"desc\" for\ndescending.",
-							"enum": ["asc", "desc"],
+							"enum": [
+								"asc",
+								"desc"
+							],
 							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["file", "glob", "sortOrder"]
+					"required": [
+						"file",
+						"glob",
+						"sortOrder"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"gallery": {
@@ -511,7 +733,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -534,7 +763,11 @@
 						},
 						"layout": {
 							"description": "The gallery layout. \"columns\" creates a masonry layout with columns of equal width, \"rows\"\ncreates justified rows of equal height and \"grid\" creates a uniform grid of equally sized\ncells.",
-							"enum": ["columns", "grid", "rows"],
+							"enum": [
+								"columns",
+								"grid",
+								"rows"
+							],
 							"type": "string"
 						},
 						"rowHeightPx": {
@@ -543,10 +776,15 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["files"]
+					"required": [
+						"files"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"header": {
@@ -561,7 +799,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"data": {
@@ -569,7 +814,14 @@
 					"properties": {
 						"level": {
 							"description": "The heading level from 1 to 6 that is rendered as <h1> to <h6>. Use 2 for main sections\nand higher levels for subsections without skipping levels.",
-							"enum": [1, 2, 3, 4, 5, 6],
+							"enum": [
+								1,
+								2,
+								3,
+								4,
+								5,
+								6
+							],
 							"type": "number"
 						},
 						"text": {
@@ -578,10 +830,16 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["level", "text"]
+					"required": [
+						"level",
+						"text"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"image": {
@@ -596,7 +854,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -616,10 +881,16 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["alt", "url"]
+					"required": [
+						"alt",
+						"url"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"imageSlideshow": {
@@ -634,7 +905,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -661,10 +939,17 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["files", "imageHeightPx", "imageWidthPx"]
+					"required": [
+						"files",
+						"imageHeightPx",
+						"imageWidthPx"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"layoutSection": {
@@ -679,7 +964,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -698,10 +990,15 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["content"]
+					"required": [
+						"content"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"mail": {
@@ -716,7 +1013,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"data": {
@@ -732,10 +1036,15 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["to"]
+					"required": [
+						"to"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"nestedList": {
@@ -750,7 +1059,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"data": {
@@ -765,15 +1081,24 @@
 						},
 						"style": {
 							"description": "The list style. \"ordered\" renders a numbered <ol> list and \"unordered\" renders a bulleted\n<ul> list.",
-							"enum": ["ordered", "unordered"],
+							"enum": [
+								"ordered",
+								"unordered"
+							],
 							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["items", "style"]
+					"required": [
+						"items",
+						"style"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"pagelist": {
@@ -788,7 +1113,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -812,25 +1144,41 @@
 						},
 						"sortField": {
 							"description": "The field that is used for sorting. \":index\" keeps the order of the pages as arranged in\nthe dashboard, \"date\" sorts by the page date and \"title\" sorts alphabetically by title.",
-							"enum": [":index", "date", "title"],
+							"enum": [
+								":index",
+								"date",
+								"title"
+							],
 							"type": "string"
 						},
 						"sortOrder": {
 							"description": "The sort order, either \"asc\" for ascending or \"desc\" for descending. For newest-first\nlistings such as blogs, use \"date\" with \"desc\".",
-							"enum": ["asc", "desc"],
+							"enum": [
+								"asc",
+								"desc"
+							],
 							"type": "string"
 						},
 						"type": {
 							"description": "The relation of the listed pages to the context page. \"children\" lists the subpages of the\ncontext page, \"siblings\" lists the pages that share the same parent and \"related\" lists\npages that share at least one tag with the current page. Skip it in order to list all\npages of the site.",
-							"enum": ["children", "siblings", "related"],
+							"enum": [
+								"children",
+								"siblings",
+								"related"
+							],
 							"type": "string"
 						}
 					},
 					"additionalProperties": false,
-					"required": ["file"]
+					"required": [
+						"file"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"paragraph": {
@@ -845,7 +1193,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"data": {
@@ -861,10 +1216,15 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["text"]
+					"required": [
+						"text"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"quote": {
@@ -879,7 +1239,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"data": {
@@ -895,10 +1262,16 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["text", "caption"]
+					"required": [
+						"text",
+						"caption"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"raw": {
@@ -913,7 +1286,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -929,10 +1309,15 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["code"]
+					"required": [
+						"code"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"snippet": {
@@ -947,7 +1332,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"data": {
@@ -965,7 +1357,9 @@
 					"additionalProperties": false
 				}
 			},
-			"required": ["type"],
+			"required": [
+				"type"
+			],
 			"additionalProperties": false
 		},
 		"table": {
@@ -980,7 +1374,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -1006,10 +1407,15 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["content"]
+					"required": [
+						"content"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"tableOfContents": {
@@ -1024,7 +1430,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"data": {
@@ -1032,14 +1445,19 @@
 					"properties": {
 						"type": {
 							"description": "The list style of the table of contents. \"ordered\" renders a numbered list and \"unordered\"\nrenders a bulleted list. Defaults to \"ordered\".",
-							"enum": ["ordered", "unordered"],
+							"enum": [
+								"ordered",
+								"unordered"
+							],
 							"type": "string"
 						}
 					},
 					"additionalProperties": false
 				}
 			},
-			"required": ["type"],
+			"required": [
+				"type"
+			],
 			"additionalProperties": false
 		},
 		"teX": {
@@ -1054,7 +1472,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -1070,10 +1495,15 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["code"]
+					"required": [
+						"code"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
 			"additionalProperties": false
 		},
 		"video": {
@@ -1088,7 +1518,14 @@
 				},
 				"width": {
 					"description": "The block width as a fraction in the form of 1/2. \nThis property is only used when the block is located inside a layoutSection block.\nSkip this in order to use the default theme defined width.",
-					"enum": ["1/4", "1/3", "1/2", "2/3", "3/4", "1/1"],
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					],
 					"type": "string"
 				},
 				"stretched": {
@@ -1104,10 +1541,3006 @@
 						}
 					},
 					"additionalProperties": false,
-					"required": ["url"]
+					"required": [
+						"url"
+					]
 				}
 			},
-			"required": ["type", "data"],
+			"required": [
+				"type",
+				"data"
+			],
+			"additionalProperties": false
+		},
+		"partyArtMotivation": {
+			"type": "object",
+			"description": "Party component \"Kunst / Motivation\": Collage aus Kunstwerken nach dem Art Builder: relative Leinwand, Spalten werden automatisch gefüllt.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyArtMotivation"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"artworks": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"image": {
+										"type": "string",
+										"description": "Bild"
+									},
+									"description": {
+										"type": "string",
+										"description": "Beschreibung (Alt-Text)"
+									},
+									"size": {
+										"type": "string",
+										"enum": [
+											"",
+											"half",
+											"tricorn",
+											"piece",
+											"wide",
+											"float-island",
+											"default",
+											"full",
+											"third",
+											"quarter",
+											"thumb",
+											"narrow"
+										],
+										"description": "Größe (relativ zur Leinwand)"
+									},
+									"vertical": {
+										"type": "boolean",
+										"description": "Hochformat-Variante (vertical)"
+									},
+									"offset": {
+										"type": "string",
+										"enum": [
+											"0",
+											"5",
+											"10",
+											"15",
+											"20",
+											"25",
+											"30",
+											"35",
+											"40",
+											"45",
+											"50"
+										],
+										"description": "Versatz nach unten (% der Leinwandhöhe)"
+									},
+									"classes": {
+										"type": "string",
+										"description": "Zusätzliche Klassen (optional)"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Kunstwerke"
+						},
+						"ratio": {
+							"type": "string",
+							"description": "Seitenverhältnis der Leinwand. Wie im Art Builder (1600 × 1000). Alle Größen sind relativ zu dieser Fläche und skalieren mit"
+						},
+						"align": {
+							"type": "string",
+							"enum": [
+								"start",
+								"center",
+								"end"
+							],
+							"description": "Vertikale Ausrichtung der Spalten"
+						},
+						"bigger": {
+							"type": "boolean",
+							"description": "Größere Bilder (bigger images)"
+						},
+						"generate_mobile": {
+							"type": "boolean",
+							"description": "Zusätzlich ein Collage-Bild für Mobilgeräte erzeugen"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyCaseLeafletRegion": {
+			"type": "object",
+			"description": "Party component \"Fälle-Karte mit Regionen\": Karte mit durchsuchbarer Fallliste, Regionen-Filter und FragDenStaat-Status.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyCaseLeafletRegion"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"map_center": {
+							"type": "string",
+							"description": "Kartenmitte (lat,lng)"
+						},
+						"map_zoom": {
+							"type": "number",
+							"description": "Zoom"
+						},
+						"map_height": {
+							"type": "string",
+							"description": "Kartenhöhe"
+						},
+						"tile_url": {
+							"type": "string",
+							"description": "Tile-URL"
+						},
+						"region_priority": {
+							"type": "boolean",
+							"description": "Bei Auswahl auf Region zoomen"
+						},
+						"default_region": {
+							"type": "string",
+							"description": "Vorausgewählte Region"
+						},
+						"markers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"description": "Marker-ID"
+									},
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"description": {
+										"type": "string",
+										"description": "Beschreibung"
+									},
+									"lat": {
+										"type": "number",
+										"description": "Breitengrad (lat)"
+									},
+									"lng": {
+										"type": "number",
+										"description": "Längengrad (lng)"
+									},
+									"region": {
+										"type": "string",
+										"description": "Region"
+									},
+									"zoom": {
+										"type": "number",
+										"description": "Zoom (optional)"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Marker"
+						},
+						"items": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"marker_id": {
+										"type": "string",
+										"description": "Marker"
+									},
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"description": {
+										"type": "string",
+										"description": "Beschreibung"
+									},
+									"region": {
+										"type": "string",
+										"description": "Region"
+									},
+									"links": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string",
+													"description": "Beschriftung"
+												},
+												"url": {
+													"type": "string",
+													"description": "URL"
+												},
+												"type": {
+													"type": "string",
+													"enum": [
+														"external",
+														"fragdenstaat"
+													],
+													"description": "Typ"
+												},
+												"status": {
+													"type": "string",
+													"enum": [
+														"",
+														"open",
+														"pending",
+														"success",
+														"denied"
+													],
+													"description": "Status"
+												}
+											},
+											"additionalProperties": false
+										},
+										"description": "Links"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Fälle"
+						},
+						"groups": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string",
+										"description": "Name"
+									},
+									"marker_ids": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "Marker-IDs (eine pro Zeile)"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Gruppen (optional)"
+						},
+						"geojson_content": {
+							"description": "GeoJSON (FeatureCollection)"
+						},
+						"status_icon_base": {
+							"type": "string",
+							"description": "Pfad der Status-Icons"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyContactCloser": {
+			"type": "object",
+			"description": "Party component \"Kontakt-Abschluss\": Abschluss-Section mit optionalem Kontaktinhalt (HTML).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyContactCloser"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"raw_content": {
+							"type": "string",
+							"description": "Inhalt (HTML) HTML."
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyDocuments": {
+			"type": "object",
+			"description": "Party component \"Dokumente\": Horizontale (oder vertikale) Liste von Dokumenten mit Vorschaubild.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyDocuments"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"documents": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"file": {
+										"type": "string",
+										"description": "Datei (z.B. PDF) oder Link"
+									},
+									"preview": {
+										"type": "string",
+										"description": "Vorschaubild"
+									},
+									"description": {
+										"type": "string",
+										"description": "Kurzbeschreibung"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Dokumente"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyDonateBlock": {
+			"type": "object",
+			"description": "Party component \"Spenden\": Spendenaufruf mit Betrags-Buttons.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyDonateBlock"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"message": {
+							"type": "string",
+							"description": "Text"
+						},
+						"amounts": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Beträge (einer pro Zeile)"
+						},
+						"currency": {
+							"type": "string",
+							"description": "Währungszeichen"
+						},
+						"button_text": {
+							"type": "string",
+							"description": "Button-Text"
+						},
+						"donate_url": {
+							"type": "string",
+							"description": "Spenden-Link. Der gewählte Betrag wird als Parameter \"amount\" angehängt"
+						},
+						"note": {
+							"type": "string",
+							"description": "Hinweis"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyEventBlock": {
+			"type": "object",
+			"description": "Party component \"Termine\": Liste kommender Veranstaltungen.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyEventBlock"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"events": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"date": {
+										"type": "string",
+										"description": "Datum"
+									},
+									"time": {
+										"type": "string",
+										"description": "Uhrzeit"
+									},
+									"location": {
+										"type": "string",
+										"description": "Ort"
+									},
+									"description": {
+										"type": "string",
+										"description": "Beschreibung"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link (Anmeldung)"
+									},
+									"link_text": {
+										"type": "string",
+										"description": "Linktext"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Termine"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyForm": {
+			"type": "object",
+			"description": "Party component \"Formular (Turnstile)\": Formular mit frei definierbaren Feldern, Cloudflare Turnstile und Mailversand über die Automad-Mailkonfiguration.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyForm"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"description": {
+							"type": "string",
+							"description": "Beschreibung"
+						},
+						"fields": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"label": {
+										"type": "string",
+										"description": "Beschriftung"
+									},
+									"name": {
+										"type": "string",
+										"description": "Feldname (technisch)"
+									},
+									"type": {
+										"type": "string",
+										"enum": [
+											"text",
+											"email",
+											"tel",
+											"date",
+											"number",
+											"textarea",
+											"select",
+											"checkbox"
+										],
+										"description": "Typ"
+									},
+									"required": {
+										"type": "boolean",
+										"description": "Pflichtfeld"
+									},
+									"options": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "Optionen (nur Auswahl, eine pro Zeile)"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Formularfelder"
+						},
+						"submit_label": {
+							"type": "string",
+							"description": "Text des Absende-Buttons"
+						},
+						"mail_to": {
+							"type": "string",
+							"description": "Empfänger (E-Mail). Wenn gesetzt und keine Ziel-URL angegeben ist, wird das Formular von Automad verarbeitet und über die SMTP-Einstellungen des Dashboards versendet"
+						},
+						"form_action": {
+							"type": "string",
+							"description": "Alternativ: externe Ziel-URL"
+						},
+						"form_method": {
+							"type": "string",
+							"enum": [
+								"post",
+								"get"
+							],
+							"description": "Methode"
+						},
+						"success_message": {
+							"type": "string",
+							"description": "Erfolgsmeldung"
+						},
+						"error_message": {
+							"type": "string",
+							"description": "Fehlermeldung"
+						},
+						"turnstile_site_key": {
+							"type": "string",
+							"description": "Turnstile Site-Key. Der geheime Schlüssel wird nicht hier, sondern in der Umgebungsvariable PARTY_TURNSTILE_SECRET hinterlegt"
+						},
+						"turnstile_theme": {
+							"type": "string",
+							"enum": [
+								"light",
+								"dark",
+								"auto"
+							],
+							"description": "Turnstile-Theme"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyGallery": {
+			"type": "object",
+			"description": "Party component \"Bildergalerie\": Raster aus Bildern mit optionalen Bildunterschriften.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyGallery"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"images": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"src": {
+										"type": "string",
+										"description": "Bild"
+									},
+									"alt": {
+										"type": "string",
+										"description": "Alternativtext"
+									},
+									"caption": {
+										"type": "string",
+										"description": "Bildunterschrift"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Bilder"
+						},
+						"columns": {
+							"type": "number",
+							"description": "Spalten"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyImage": {
+			"type": "object",
+			"description": "Party component \"Bild-Section\": Section mit Titel, Bild und Bildunterschrift.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyImage"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"src": {
+							"type": "string",
+							"description": "Bild"
+						},
+						"alt": {
+							"type": "string",
+							"description": "Alternativtext"
+						},
+						"caption": {
+							"type": "string",
+							"description": "Bildunterschrift"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyLandscapeScene": {
+			"type": "object",
+			"description": "Party component \"Landschafts-Szene\": Aus SVG-Ebenen zusammengesetzte Landschaft.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyLandscapeScene"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"layers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"position": {
+										"type": "string",
+										"enum": [
+											"svgoffsetleft",
+											"svgoffsetmid",
+											"svgoffsetright",
+											"svgoffsettop",
+											"svgoffsetbottom"
+										],
+										"description": "Ebenen-Position"
+									},
+									"svgs": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"file": {
+													"type": "string",
+													"description": "SVG / Bild"
+												},
+												"position": {
+													"type": "string",
+													"description": "Position (pos1 … pos16)"
+												},
+												"animation": {
+													"type": "string",
+													"description": "Beschreibung / Animation"
+												}
+											},
+											"additionalProperties": false
+										},
+										"description": "Grafiken"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Ebenen"
+						},
+						"height": {
+							"type": "string",
+							"description": "Höhe"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyLeafletMap": {
+			"type": "object",
+			"description": "Party component \"Karte (Leaflet)\": OpenStreetMap-Karte mit Markern und optionalem GeoJSON.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyLeafletMap"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"map_center": {
+							"type": "string",
+							"description": "Kartenmitte (lat,lng)"
+						},
+						"map_zoom": {
+							"type": "number",
+							"description": "Zoom"
+						},
+						"map_height": {
+							"type": "string",
+							"description": "Kartenhöhe"
+						},
+						"tile_url": {
+							"type": "string",
+							"description": "Tile-URL"
+						},
+						"markers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"description": "Marker-ID"
+									},
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"description": {
+										"type": "string",
+										"description": "Beschreibung"
+									},
+									"lat": {
+										"type": "number",
+										"description": "Breitengrad (lat)"
+									},
+									"lng": {
+										"type": "number",
+										"description": "Längengrad (lng)"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Marker"
+						},
+						"geojson_content": {
+							"description": "GeoJSON (FeatureCollection)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyMarkdown": {
+			"type": "object",
+			"description": "Party component \"Markdown-Section\": Section mit Titel, optionalem Bild und Markdown-Inhalt.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyMarkdown"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"section_image": {
+							"type": "string",
+							"description": "Section-Bild (Desktop)"
+						},
+						"section_image_mobile": {
+							"type": "string",
+							"description": "Section-Bild (Mobil, optional). Wird auf kleinen Bildschirmen statt des Desktop-Bildes angezeigt"
+						},
+						"markdown_content": {
+							"type": "string",
+							"description": "Markdown-Inhalt Markdown."
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyMusicAnchor": {
+			"type": "object",
+			"description": "Party component \"Musik-Anker\": Unsichtbarer Sprunganker, z.B. für Musik-Links.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyMusicAnchor"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"anchor_id": {
+							"type": "string",
+							"description": "Anker-ID"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyMusicPlayer": {
+			"type": "object",
+			"description": "Party component \"Musik-Player\": Eingebetteter Player (iframe) mit Umschaltung zwischen Plattformen.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyMusicPlayer"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"default_source": {
+							"type": "string",
+							"description": "Standard-Quelle (Embed-URL)"
+						},
+						"player_width": {
+							"type": "string",
+							"description": "Breite"
+						},
+						"player_height": {
+							"type": "string",
+							"description": "Höhe"
+						},
+						"iframe_border_radius": {
+							"type": "string",
+							"description": "Eckenradius"
+						},
+						"platforms": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"text": {
+										"type": "string",
+										"description": "Name"
+									},
+									"url": {
+										"type": "string",
+										"description": "Embed-URL"
+									},
+									"class": {
+										"type": "string",
+										"enum": [
+											"wp-element-button",
+											"spotify",
+											"tidal",
+											"youtube",
+											"soundcloud"
+										],
+										"description": "Stil"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Plattformen"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyPartyHeader": {
+			"type": "object",
+			"description": "Party component \"Partei-Header\": Kopfbereich mit Parteiname (zeilenweise), Hinweistext, Haupt-Link und Intro.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyPartyHeader"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"warning_text": {
+							"type": "string",
+							"description": "Hinweistext"
+						},
+						"party_name": {
+							"type": "string",
+							"description": "Parteiname. Jedes Wort wird als eigene Zeile dargestellt"
+						},
+						"main_link": {
+							"type": "string",
+							"description": "Haupt-Link"
+						},
+						"main_link_text": {
+							"type": "string",
+							"description": "Text des Haupt-Links"
+						},
+						"intro_text": {
+							"type": "string",
+							"description": "Intro-Text"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyQuote": {
+			"type": "object",
+			"description": "Party component \"Zitat-Section\": Großes Zitat mit Autor, Titel und optionalem Bild.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyQuote"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"section_image": {
+							"type": "string",
+							"description": "Section-Bild (Desktop)"
+						},
+						"section_image_mobile": {
+							"type": "string",
+							"description": "Section-Bild (Mobil, optional). Wird auf kleinen Bildschirmen statt des Desktop-Bildes angezeigt"
+						},
+						"quote_text": {
+							"type": "string",
+							"description": "Zitat"
+						},
+						"quote_author": {
+							"type": "string",
+							"description": "Autor"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyRegionScroll": {
+			"type": "object",
+			"description": "Party component \"Regionen-Scroller\": Horizontal scrollende Liste von Regionen mit Sprungankern und Navigations-Button.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyRegionScroll"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"navigation_target": {
+							"type": "string",
+							"description": "Navigationsziel"
+						},
+						"navigation_text": {
+							"type": "string",
+							"description": "Navigationstext"
+						},
+						"scroll_width": {
+							"type": "string",
+							"description": "Breite des Scrollbereichs"
+						},
+						"regions": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"region_id": {
+										"type": "string",
+										"description": "Anker-ID(s), mit Komma getrennt"
+									},
+									"region_name": {
+										"type": "string",
+										"description": "Name"
+									},
+									"region_description": {
+										"type": "string",
+										"description": "Beschreibung"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Regionen"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyScrollElement": {
+			"type": "object",
+			"description": "Party component \"Scroll-Element\": Sprungmarke / Link zu einer Scroll-Referenz-Section.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyScrollElement"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"ref_section_id": {
+							"type": "string",
+							"description": "Ziel-Section-ID"
+						},
+						"ref_label": {
+							"type": "string",
+							"description": "Linktext"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyScrollReference": {
+			"type": "object",
+			"description": "Party component \"Scroll-Referenz\": Horizontal scrollende Themenliste mit Sprungankern – manuell oder aus einer JSON-Datei.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyScrollReference"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"headline": {
+							"type": "string",
+							"description": "Überschrift"
+						},
+						"items": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"description": "Anker-ID"
+									},
+									"subject": {
+										"type": "string",
+										"description": "Thema"
+									},
+									"text": {
+										"type": "string",
+										"description": "Text"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Einträge"
+						},
+						"source_path": {
+							"type": "string",
+							"description": "Alternativ: JSON-Datei. Pfad relativ zum Automad-Verzeichnis. Wird nur verwendet, wenn keine Einträge gepflegt sind"
+						},
+						"source_key": {
+							"type": "string",
+							"description": "JSON-Schlüssel (optional, z.B. de)"
+						},
+						"match": {
+							"type": "string",
+							"description": "Filter (Index, ID oder Thema)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partySecurityConcept": {
+			"type": "object",
+			"description": "Party component \"Konzept / Feature-Liste\": Halbe-Halbe-Section mit Bild, Titel, Untertiteln und Aufzählung.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partySecurityConcept"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"subtitle": {
+							"type": "string",
+							"description": "Untertitel"
+						},
+						"subtitle_emphasis": {
+							"type": "string",
+							"description": "Untertitel (kursiv)"
+						},
+						"main_image": {
+							"type": "string",
+							"description": "Bild (Desktop)"
+						},
+						"main_image_mobile": {
+							"type": "string",
+							"description": "Bild (Mobil, optional). Wird auf kleinen Bildschirmen statt des Desktop-Bildes angezeigt"
+						},
+						"feature_prefix": {
+							"type": "string",
+							"description": "Aufzählungszeichen"
+						},
+						"features": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Punkte (einer pro Zeile)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partySkylineBreaker": {
+			"type": "object",
+			"description": "Party component \"Skyline-Trenner\": Zufällig generierte, nächtliche Skyline als Seitentrenner.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partySkylineBreaker"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"height": {
+							"type": "number",
+							"description": "Höhe (px)"
+						},
+						"seed": {
+							"type": "string",
+							"description": "Seed. \"auto\" erzeugt pro Seite eine eigene Skyline, jeder andere Text eine feste"
+						},
+						"count": {
+							"type": "number",
+							"description": "Anzahl Gebäude (leer = zufällig)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partySplit": {
+			"type": "object",
+			"description": "Party component \"Split (mehrspaltig)\": Beliebig viele Spalten nebeneinander – jede mit eigenem Inhalt (Markdown, Bild, Karte, HTML oder YouTube) und eigener Breite.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partySplit"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"section_image": {
+							"type": "string",
+							"description": "Section-Bild (Desktop)"
+						},
+						"section_image_mobile": {
+							"type": "string",
+							"description": "Section-Bild (Mobil, optional). Wird auf kleinen Bildschirmen statt des Desktop-Bildes angezeigt"
+						},
+						"panes": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string",
+										"description": "Überschrift der Spalte (optional)"
+									},
+									"type": {
+										"type": "string",
+										"enum": [
+											"markdown",
+											"image",
+											"leaflet",
+											"video",
+											"html"
+										],
+										"description": "Inhaltstyp"
+									},
+									"width": {
+										"type": "string",
+										"enum": [
+											"auto",
+											"25",
+											"33.333",
+											"40",
+											"50",
+											"60",
+											"66.666",
+											"75",
+											"100"
+										],
+										"description": "Breite"
+									},
+									"content": {
+										"type": "string",
+										"description": "Markdown (Typ Markdown) Markdown."
+									},
+									"image": {
+										"type": "string",
+										"description": "Bild (Typ Bild)"
+									},
+									"image_alt": {
+										"type": "string",
+										"description": "Alternativtext des Bildes"
+									},
+									"video": {
+										"type": "string",
+										"description": "YouTube-Link (Typ YouTube-Video)"
+									},
+									"html": {
+										"type": "string",
+										"description": "HTML (Typ HTML) HTML."
+									},
+									"map_config": {
+										"description": "Karten-Konfiguration (Typ Karte)"
+									},
+									"classes": {
+										"type": "string",
+										"description": "CSS-Klassen der Spalte"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Spalten"
+						},
+						"gap": {
+							"type": "string",
+							"enum": [
+								"none",
+								"small",
+								"medium",
+								"large"
+							],
+							"description": "Abstand zwischen den Spalten"
+						},
+						"align": {
+							"type": "string",
+							"enum": [
+								"start",
+								"center",
+								"end",
+								"stretch"
+							],
+							"description": "Vertikale Ausrichtung"
+						},
+						"stack": {
+							"type": "string",
+							"enum": [
+								"1000",
+								"700",
+								"never"
+							],
+							"description": "Untereinander anzeigen ab"
+						},
+						"hover_border": {
+							"type": "boolean",
+							"description": "Rahmen beim Überfahren (split-hover-border)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyStainedGlass": {
+			"type": "object",
+			"description": "Party component \"Kirchenfenster mit Musik\": Generiertes, buntes Bleiglasfenster als SVG-Hintergrund mit Stichpunkten. Ein YouTube-Song startet beim Erreichen der Section und stoppt beim Verlassen.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyStainedGlass"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Überschrift über den Stichpunkten (optional)"
+						},
+						"bullets": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Stichpunkte (einer pro Zeile)"
+						},
+						"text_position": {
+							"type": "string",
+							"enum": [
+								"center",
+								"left",
+								"right",
+								"bottom"
+							],
+							"description": "Position der Stichpunkte"
+						},
+						"video": {
+							"type": "string",
+							"description": "YouTube-Song. Ein Startpunkt im Link (t=…) wird übernommen"
+						},
+						"player_size": {
+							"type": "string",
+							"enum": [
+								"small",
+								"medium",
+								"large",
+								"audio"
+							],
+							"description": "Player oben links"
+						},
+						"autoplay": {
+							"type": "boolean",
+							"description": "Beim Erreichen der Section abspielen, beim Verlassen pausieren"
+						},
+						"restart": {
+							"type": "boolean",
+							"description": "Bei jedem Erreichen von vorne beginnen"
+						},
+						"loop": {
+							"type": "boolean",
+							"description": "Song wiederholen"
+						},
+						"volume": {
+							"type": "number",
+							"description": "Lautstärke (0–100)"
+						},
+						"palette": {
+							"type": "string",
+							"enum": [
+								"classic",
+								"fire",
+								"ocean",
+								"forest",
+								"party",
+								"rainbow"
+							],
+							"description": "Farben"
+						},
+						"seed": {
+							"type": "string",
+							"description": "Muster-Seed. Jeder Text erzeugt ein anderes Fenster, derselbe Text immer dasselbe. „auto“ nutzt die Section-ID"
+						},
+						"artifacts": {
+							"description": "Symbole (an/aus). Welche Symbole im Fenster vorkommen, z.B. {\"dove\": true, \"coins\": false}"
+						},
+						"height": {
+							"type": "string",
+							"description": "Höhe der Section"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyTeamBlock": {
+			"type": "object",
+			"description": "Party component \"Team\": Raster mit Personen, Rollen und Kurzbiografien.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyTeamBlock"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"members": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string",
+										"description": "Name"
+									},
+									"role": {
+										"type": "string",
+										"description": "Rolle"
+									},
+									"image": {
+										"type": "string",
+										"description": "Foto"
+									},
+									"bio": {
+										"type": "string",
+										"description": "Kurzbiografie"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Mitglieder"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyVerticalSlider": {
+			"type": "object",
+			"description": "Party component \"Vertikaler Slider\": Vertikal einrastende Folge von Party-Components.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyVerticalSlider"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"height": {
+							"type": "string",
+							"description": "Höhe des Sliders"
+						},
+						"items": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"component": {
+										"type": "string",
+										"enum": [
+											"partyArtMotivation",
+											"partyCaseLeafletRegion",
+											"partyContactCloser",
+											"partyDocuments",
+											"partyDonateBlock",
+											"partyEventBlock",
+											"partyForm",
+											"partyGallery",
+											"partyImage",
+											"partyLandscapeScene",
+											"partyLeafletMap",
+											"partyMarkdown",
+											"partyMusicAnchor",
+											"partyMusicPlayer",
+											"partyPartyHeader",
+											"partyQuote",
+											"partyRegionScroll",
+											"partyScrollElement",
+											"partyScrollReference",
+											"partySecurityConcept",
+											"partySkylineBreaker",
+											"partySplit",
+											"partyStainedGlass",
+											"partyTeamBlock",
+											"partyVideoCommentary",
+											"partyViewboxHover",
+											"partyWaterAnimation",
+											"partyWpButton",
+											"partyWpColumns",
+											"partyWpGroup",
+											"partyWpHeading",
+											"partyWpImage",
+											"partyWpParagraph",
+											"partyWpQuote",
+											"partyWpSeparator",
+											"partyWpSpacer"
+										],
+										"description": "Component"
+									},
+									"data": {
+										"description": "Daten (JSON). Felder der gewählten Component, z.B. {\"title\": \"…\"}"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Slides"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyVideoCommentary": {
+			"type": "object",
+			"description": "Party component \"Video mit Timecode-Kommentaren\": YouTube-Video im Split-Screen mit zeitgestempelten Kommentaren. Klick auf eine Zeitmarke springt zur Stelle im Video.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyVideoCommentary"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"video": {
+							"type": "string",
+							"description": "YouTube-Link"
+						},
+						"intro": {
+							"type": "string",
+							"description": "Einleitung (optional) Markdown."
+						},
+						"comments": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"time": {
+										"type": "string",
+										"description": "Zeitmarke"
+									},
+									"title": {
+										"type": "string",
+										"description": "Überschrift (optional)"
+									},
+									"category": {
+										"type": "string",
+										"enum": [
+											"",
+											"fact",
+											"quote",
+											"context",
+											"critique",
+											"agree",
+											"question"
+										],
+										"description": "Art"
+									},
+									"text": {
+										"type": "string",
+										"description": "Kommentar Markdown."
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Kommentare"
+						},
+						"comments_text": {
+							"type": "string",
+							"description": "Kommentare als Text einfügen (optional). Eine Zeitmarke pro Zeile, z.B. „00:42 – Kommentar …“ oder „[1:02:03] Kommentar …“. Folgezeilen ohne Zeitmarke gehören zum vorherigen Kommentar. Ideal zum Einfügen einer von Claude erstellten Kommentierung"
+						},
+						"video_position": {
+							"type": "string",
+							"enum": [
+								"left",
+								"right"
+							],
+							"description": "Position des Videos"
+						},
+						"follow": {
+							"type": "boolean",
+							"description": "Kommentarliste beim Abspielen mitlaufen lassen"
+						},
+						"pause_on_leave": {
+							"type": "boolean",
+							"description": "Video pausieren, wenn die Section verlassen wird"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyViewboxHover": {
+			"type": "object",
+			"description": "Party component \"Viewbox-Stapel\": Gestapelte Bilder – ein Klick zeigt die zugehörige Info.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyViewboxHover"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"description": {
+							"type": "string",
+							"description": "Beschreibung"
+						},
+						"info_position": {
+							"type": "string",
+							"enum": [
+								"left",
+								"right"
+							],
+							"description": "Position der Info"
+						},
+						"images": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"file": {
+										"type": "string",
+										"description": "Bild"
+									},
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"description": {
+										"type": "string",
+										"description": "Beschreibung"
+									},
+									"x_percent": {
+										"type": "number",
+										"description": "Position X (%)"
+									},
+									"y_percent": {
+										"type": "number",
+										"description": "Position Y (%)"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Bilder"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyWaterAnimation": {
+			"type": "object",
+			"description": "Party component \"Wasser-Animation\": Animierte SVG-Ebenen (Wellen, Boote …).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyWaterAnimation"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"layers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"position": {
+										"type": "string",
+										"enum": [
+											"svgoffsetleft",
+											"svgoffsetmid",
+											"svgoffsetright",
+											"svgoffsettop",
+											"svgoffsetbottom"
+										],
+										"description": "Ebenen-Position"
+									},
+									"svgs": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"file": {
+													"type": "string",
+													"description": "SVG / Bild"
+												},
+												"position": {
+													"type": "string",
+													"description": "Position (pos1 … pos16)"
+												},
+												"animation": {
+													"type": "string",
+													"description": "Animation (water1 … water8)"
+												}
+											},
+											"additionalProperties": false
+										},
+										"description": "Grafiken"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Ebenen"
+						},
+						"height": {
+							"type": "string",
+							"description": "Höhe"
+						},
+						"hide_mobile": {
+							"type": "boolean",
+							"description": "Auf Mobilgeräten ausblenden"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyWpButton": {
+			"type": "object",
+			"description": "Party component \"WP Buttons\": Eine Gruppe von Buttons (wp-block-buttons).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyWpButton"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"buttons": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"label": {
+										"type": "string",
+										"description": "Beschriftung"
+									},
+									"href": {
+										"type": "string",
+										"description": "Link"
+									},
+									"classes": {
+										"type": "string",
+										"description": "CSS-Klassen"
+									},
+									"target": {
+										"type": "string",
+										"enum": [
+											"",
+											"_blank"
+										],
+										"description": "Ziel"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Buttons"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyWpColumns": {
+			"type": "object",
+			"description": "Party component \"WP Spalten\": Zwei Spalten mit freiem HTML (wp-block-columns).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyWpColumns"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"left_html": {
+							"type": "string",
+							"description": "Linke Spalte (HTML) HTML."
+						},
+						"right_html": {
+							"type": "string",
+							"description": "Rechte Spalte (HTML) HTML."
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyWpGroup": {
+			"type": "object",
+			"description": "Party component \"WP Gruppe\": Container mit freiem HTML (wp-block-group).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyWpGroup"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"html": {
+							"type": "string",
+							"description": "Inhalt (HTML) HTML."
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyWpHeading": {
+			"type": "object",
+			"description": "Party component \"WP Überschrift\": Überschrift im WordPress-Block-Stil (wp-block-heading).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyWpHeading"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"level": {
+							"type": "string",
+							"enum": [
+								"h1",
+								"h2",
+								"h3",
+								"h4",
+								"h5",
+								"h6"
+							],
+							"description": "Ebene"
+						},
+						"text": {
+							"type": "string",
+							"description": "Text"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyWpImage": {
+			"type": "object",
+			"description": "Party component \"WP Bild\": Einzelnes Bild mit Bildunterschrift (wp-block-image).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyWpImage"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"src": {
+							"type": "string",
+							"description": "Bild"
+						},
+						"alt": {
+							"type": "string",
+							"description": "Alternativtext"
+						},
+						"caption": {
+							"type": "string",
+							"description": "Bildunterschrift"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyWpParagraph": {
+			"type": "object",
+			"description": "Party component \"WP Absatz (HTML)\": Freier HTML-Absatz im WordPress-Block-Stil.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyWpParagraph"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"html": {
+							"type": "string",
+							"description": "HTML HTML."
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyWpQuote": {
+			"type": "object",
+			"description": "Party component \"WP Zitat\": Zitat im WordPress-Block-Stil (wp-block-quote).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyWpQuote"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"quote": {
+							"type": "string",
+							"description": "Zitat"
+						},
+						"cite": {
+							"type": "string",
+							"description": "Quelle"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyWpSeparator": {
+			"type": "object",
+			"description": "Party component \"WP Trenner\": Horizontale Trennlinie (wp-block-separator).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyWpSeparator"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyWpSpacer": {
+			"type": "object",
+			"description": "Party component \"WP Abstand\": Vertikaler Abstand (wp-block-spacer).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyWpSpacer"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"height": {
+							"type": "string",
+							"description": "Höhe"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
 			"additionalProperties": false
 		}
 	}

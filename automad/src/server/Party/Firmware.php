@@ -34,11 +34,6 @@ final class Firmware {
 	const DIR = '/firmware';
 
 	/**
-	 * The name of the manifest file inside of a patch.
-	 */
-	const MANIFEST = 'firmware.json';
-
-	/**
 	 * Items that can be replaced by a patch. Everything else in an archive is rejected.
 	 */
 	const ITEMS = array(
@@ -65,6 +60,11 @@ final class Firmware {
 		'automad/.setup-completed',
 		'automad/.wizard-completed'
 	);
+
+	/**
+	 * The name of the manifest file inside of a patch.
+	 */
+	const MANIFEST = 'firmware.json';
 
 	/**
 	 * The number of backups that are kept.
@@ -378,25 +378,6 @@ final class Firmware {
 	}
 
 	/**
-	 * Open an archive with PharData. Phar can't handle file names with several dots
-	 * like "politicalautomad-firmware-2.0.0-beta.68.tar.gz", therefore a link with a
-	 * simple name is used.
-	 *
-	 * @param string $file
-	 * @return \PharData
-	 */
-	private static function openArchive(string $file): \PharData {
-		$extension = preg_match('/\.(tar\.gz|tgz)$/i', $file) ? 'tar.gz' : 'tar';
-		$link = sys_get_temp_dir() . '/am-firmware-' . substr(sha1($file . filemtime($file)), 0, 12) . '.' . $extension;
-
-		if (!file_exists($link) && !@symlink($file, $link)) {
-			copy($file, $link);
-		}
-
-		return new \PharData($link);
-	}
-
-	/**
 	 * Read the manifest of a patch.
 	 *
 	 * @param string $file
@@ -427,6 +408,25 @@ final class Firmware {
 		if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
 			throw new \RuntimeException("Das Verzeichnis $dir konnte nicht angelegt werden.");
 		}
+	}
+
+	/**
+	 * Open an archive with PharData. Phar can't handle file names with several dots
+	 * like "politicalautomad-firmware-2.0.0-beta.68.tar.gz", therefore a link with a
+	 * simple name is used.
+	 *
+	 * @param string $file
+	 * @return \PharData
+	 */
+	private static function openArchive(string $file): \PharData {
+		$extension = preg_match('/\.(tar\.gz|tgz)$/i', $file) ? 'tar.gz' : 'tar';
+		$link = sys_get_temp_dir() . '/am-firmware-' . substr(sha1($file . filemtime($file)), 0, 12) . '.' . $extension;
+
+		if (!file_exists($link) && !@symlink($file, $link)) {
+			copy($file, $link);
+		}
+
+		return new \PharData($link);
 	}
 
 	/**

@@ -192,28 +192,6 @@ class Split extends AbstractDynamicTemplateBlock {
 	}
 
 	/**
-	 * Test whether panes differ from the defaults.
-	 *
-	 * @param array $panes
-	 * @return bool
-	 */
-	private static function panesChanged(array $panes): bool {
-		foreach ($panes as $pane) {
-			if (!is_array($pane)) {
-				continue;
-			}
-
-			$content = trim((string) ($pane['content'] ?? ''));
-
-			if (!in_array($content, array('', 'Linke Spalte …', 'Rechte Spalte …'), true) || !empty($pane['image']) || !empty($pane['html']) || !empty($pane['video']) || ($pane['type'] ?? 'markdown') !== 'markdown') {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * Build the template context of a pane.
 	 *
 	 * @param array $pane
@@ -253,5 +231,27 @@ class Split extends AbstractDynamicTemplateBlock {
 				'geojson' => is_array($map['geojson'] ?? null) ? $map['geojson'] : null
 			)) : ''
 		);
+	}
+
+	/**
+	 * Test whether panes differ from the defaults.
+	 *
+	 * @param array $panes
+	 * @return bool
+	 */
+	private static function panesChanged(array $panes): bool {
+		foreach ($panes as $pane) {
+			if (!is_array($pane)) {
+				continue;
+			}
+
+			$content = trim((string) ($pane['content'] ?? ''));
+
+			if (!in_array($content, array('', 'Linke Spalte …', 'Rechte Spalte …'), true) || !empty($pane['image']) || !empty($pane['html']) || !empty($pane['video']) || ($pane['type'] ?? 'markdown') !== 'markdown') {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

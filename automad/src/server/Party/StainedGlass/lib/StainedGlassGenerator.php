@@ -24,6 +24,10 @@ defined('AUTOMAD') or die('Direct access not permitted!');
  */
 final class StainedGlassGenerator {
 	/**
+	 * The available artifacts (symbols) in a 100 × 100 box.
+	 */
+	const ARTIFACTS = array('dove', 'star', 'sun', 'moon', 'coins', 'scales', 'book', 'chalice', 'heart', 'key', 'crown', 'eye', 'flame', 'leaf', 'hands');
+	/**
 	 * The color palettes: glass colors, light colors for the center window, gold and lead.
 	 */
 	const PALETTES = array(
@@ -64,21 +68,16 @@ final class StainedGlassGenerator {
 			'lead' => '#151515'
 		)
 	);
-
-	/**
-	 * The available artifacts (symbols) in a 100 × 100 box.
-	 */
-	const ARTIFACTS = array('dove', 'star', 'sun', 'moon', 'coins', 'scales', 'book', 'chalice', 'heart', 'key', 'crown', 'eye', 'flame', 'leaf', 'hands');
-
-	private \Random\Randomizer $rng;
-	private array $palette;
 	private array $artifacts;
-	private float $w;
 	private float $h;
+	private array $palette;
 	private array $parts = array();
 
+	private \Random\Randomizer $rng;
+	private float $w;
+
 	/**
-	 * @param string|int $seed
+	 * @param int|string $seed
 	 * @param string $palette
 	 * @param array $artifacts the artifacts to use (empty = all)
 	 * @param float $width
@@ -141,21 +140,51 @@ final class StainedGlassGenerator {
 	}
 
 	/**
-	 * A random color of the glass palette.
+	 * Draw an artifact centered at a point.
 	 *
-	 * @return string
+	 * @param string $name
+	 * @param float $cx
+	 * @param float $cy
+	 * @param float $size
 	 */
-	private function glass(): string {
-		return $this->palette['glass'][$this->rng->getInt(0, count($this->palette['glass']) - 1)];
-	}
+	private function artifact(string $name, float $cx, float $cy, float $size): void {
+		$scale = $size / 100;
+		$gold = $this->palette['gold'];
+		$lead = $this->palette['lead'];
+		$light = '#fffaf0';
+		$accent = $this->glass();
 
-	/**
-	 * A random light color.
-	 *
-	 * @return string
-	 */
-	private function light(): string {
-		return $this->palette['light'][$this->rng->getInt(0, count($this->palette['light']) - 1)];
+		$shapes = match ($name) {
+			'dove' => "<path d='M12 58 C30 40 48 42 58 50 C66 34 80 26 94 28 C84 36 80 44 78 52 C86 54 92 60 94 66 C76 66 62 70 50 78 C40 84 26 84 16 76 C26 74 32 70 34 66 C26 66 18 63 12 58 Z' fill='$light'/><circle cx='80' cy='35' r='3' fill='$lead'/><path d='M92 30 L100 32 L92 36 Z' fill='$gold'/>",
+			'star' => "<path d='M50 6 L61 38 L95 38 L67 58 L78 92 L50 72 L22 92 L33 58 L5 38 L39 38 Z' fill='$gold'/>",
+			'sun' => "<circle cx='50' cy='50' r='22' fill='$gold'/>" . join('', array_map(fn ($i) => sprintf("<path d='M50 4 L56 22 L44 22 Z' fill='%s' transform='rotate(%d 50 50)'/>", $gold, $i * 30), range(0, 11))),
+			'moon' => "<path d='M62 10 A40 40 0 1 0 90 72 A32 32 0 1 1 62 10 Z' fill='$light'/>",
+			'coins' => "<circle cx='40' cy='58' r='22' fill='$gold'/><circle cx='40' cy='58' r='14' fill='none' stroke='$lead' stroke-width='3'/><circle cx='64' cy='38' r='18' fill='$gold'/><circle cx='64' cy='38' r='11' fill='none' stroke='$lead' stroke-width='3'/>",
+			'scales' => "<rect x='47' y='16' width='6' height='70' fill='$gold'/><rect x='16' y='24' width='68' height='6' fill='$gold'/><path d='M10 56 L22 30 L34 56 Z M66 56 L78 30 L90 56 Z' fill='$light'/><rect x='34' y='84' width='32' height='8' fill='$gold'/>",
+			'book' => "<path d='M8 22 C24 16 40 18 50 26 C60 18 76 16 92 22 L92 82 C76 76 60 78 50 86 C40 78 24 76 8 82 Z' fill='$light'/><path d='M50 26 L50 86' stroke='$lead' stroke-width='4'/><path d='M18 36 H40 M18 48 H40 M60 36 H82 M60 48 H82' stroke='$accent' stroke-width='4'/>",
+			'chalice' => "<path d='M22 14 H78 C78 42 66 56 50 58 C34 56 22 42 22 14 Z' fill='$gold'/><rect x='46' y='56' width='8' height='22' fill='$gold'/><path d='M28 92 C30 80 70 80 72 92 Z' fill='$gold'/><circle cx='50' cy='32' r='7' fill='$accent'/>",
+			'heart' => "<path d='M50 88 C14 62 6 40 18 24 C30 10 46 16 50 30 C54 16 70 10 82 24 C94 40 86 62 50 88 Z' fill='#d81b3a'/>",
+			'key' => "<circle cx='28' cy='50' r='18' fill='none' stroke='$gold' stroke-width='9'/><rect x='44' y='46' width='48' height='9' fill='$gold'/><rect x='72' y='54' width='8' height='14' fill='$gold'/><rect x='84' y='54' width='8' height='10' fill='$gold'/>",
+			'crown' => "<path d='M10 76 L16 30 L34 52 L50 20 L66 52 L84 30 L90 76 Z' fill='$gold'/><rect x='10' y='76' width='80' height='10' fill='$gold'/><circle cx='50' cy='62' r='6' fill='$accent'/>",
+			'eye' => "<path d='M6 50 C26 22 74 22 94 50 C74 78 26 78 6 50 Z' fill='$light'/><circle cx='50' cy='50' r='16' fill='$accent'/><circle cx='50' cy='50' r='7' fill='$lead'/>",
+			'flame' => "<path d='M50 6 C62 26 82 36 76 64 C72 84 58 94 50 94 C42 94 26 86 24 64 C22 46 38 40 40 24 C46 34 48 40 50 6 Z' fill='#f57c00'/><path d='M50 46 C58 58 64 66 60 78 C58 86 52 88 50 88 C46 88 40 84 40 76 C40 66 48 62 50 46 Z' fill='$gold'/>",
+			'leaf' => "<path d='M14 86 C14 40 44 12 90 12 C90 58 62 88 14 86 Z' fill='#43a047'/><path d='M18 82 L76 24' stroke='$light' stroke-width='4'/>",
+			'hands' => "<path d='M50 12 C42 18 36 40 34 58 L30 88 H48 L50 60 Z' fill='#f2c9a0'/><path d='M50 12 C58 18 64 40 66 58 L70 88 H52 L50 60 Z' fill='#e8b88a'/><path d='M28 86 H72 V96 H28 Z' fill='#c1272d'/>",
+			default => ''
+		};
+
+		if ($shapes === '') {
+			return;
+		}
+
+		$this->parts[] = sprintf(
+			'<g transform="translate(%s %s) scale(%s)" stroke="%s" stroke-width="3" stroke-linejoin="round">%s</g>',
+			round($cx - 50 * $scale, 1),
+			round($cy - 50 * $scale, 1),
+			round($scale, 3),
+			$lead,
+			$shapes
+		);
 	}
 
 	/**
@@ -170,207 +199,49 @@ final class StainedGlassGenerator {
 	}
 
 	/**
-	 * Pick a random artifact.
+	 * The outer frame with small alternating tiles.
 	 *
-	 * @param array $preferred
+	 * @param float $size
+	 */
+	private function frame(float $size): void {
+		$w = $this->w;
+		$h = $this->h;
+		$lead = $this->palette['lead'];
+		$stone = '#8f8b6e';
+		$this->parts[] = sprintf(
+			'<path d="M0 0H%1$sV%2$sH0Z M%3$s %3$sV%4$sH%5$sV%3$sZ" fill="%6$s" fill-rule="evenodd" stroke="%7$s" stroke-width="6"/>',
+			$w,
+			$h,
+			$size,
+			$h - $size,
+			$w - $size,
+			$stone,
+			$lead
+		);
+
+		$step = 60;
+		$s = $size * 0.42;
+
+		for ($x = $step / 2; $x < $w; $x += $step) {
+			foreach (array($size / 2, $h - $size / 2) as $y) {
+				$this->parts[] = sprintf('<rect x="%s" y="%s" width="%s" height="%s" fill="%s" stroke="%s" stroke-width="3"/>', round($x - $s / 2, 1), round($y - $s / 2, 1), round($s, 1), round($s, 1), ((int) ($x / $step)) % 2 ? $this->palette['gold'] : $this->glass(), $lead);
+			}
+		}
+
+		for ($y = $step / 2 + $size; $y < $h - $size; $y += $step) {
+			foreach (array($size / 2, $w - $size / 2) as $x) {
+				$this->parts[] = sprintf('<rect x="%s" y="%s" width="%s" height="%s" fill="%s" stroke="%s" stroke-width="3"/>', round($x - $s / 2, 1), round($y - $s / 2, 1), round($s, 1), round($s, 1), ((int) ($y / $step)) % 2 ? $this->palette['gold'] : $this->glass(), $lead);
+			}
+		}
+	}
+
+	/**
+	 * A random color of the glass palette.
+	 *
 	 * @return string
 	 */
-	private function pickArtifact(array $preferred = array()): string {
-		$pool = array_values(array_intersect($preferred, $this->artifacts)) ?: $this->artifacts;
-
-		return $pool[$this->rng->getInt(0, count($pool) - 1)];
-	}
-
-	/**
-	 * Add a polygon.
-	 *
-	 * @param array $points
-	 * @param string $fill
-	 * @param float $stroke
-	 * @param float $opacity
-	 */
-	private function polygon(array $points, string $fill, float $stroke = 6, float $opacity = 1): void {
-		$this->parts[] = sprintf(
-			'<polygon points="%s" fill="%s" stroke="%s" stroke-width="%s" stroke-linejoin="round"%s/>',
-			join(' ', array_map(fn ($p) => round($p[0], 1) . ',' . round($p[1], 1), $points)),
-			$fill,
-			$this->palette['lead'],
-			$stroke,
-			$opacity < 1 ? ' fill-opacity="' . $opacity . '"' : ''
-		);
-	}
-
-	/**
-	 * A mosaic of irregular glass panes.
-	 *
-	 * @param float $x
-	 * @param float $y
-	 * @param float $w
-	 * @param float $h
-	 * @param int $cols
-	 * @param int $rows
-	 */
-	private function mosaic(float $x, float $y, float $w, float $h, int $cols, int $rows): void {
-		$grid = array();
-		$cw = $w / $cols;
-		$ch = $h / $rows;
-
-		for ($r = 0; $r <= $rows; $r++) {
-			for ($c = 0; $c <= $cols; $c++) {
-				$edge = $r === 0 || $c === 0 || $r === $rows || $c === $cols;
-				$grid[$r][$c] = array(
-					$x + $c * $cw + ($edge ? 0 : $this->float(-0.3, 0.3) * $cw),
-					$y + $r * $ch + ($edge ? 0 : $this->float(-0.3, 0.3) * $ch)
-				);
-			}
-		}
-
-		for ($r = 0; $r < $rows; $r++) {
-			for ($c = 0; $c < $cols; $c++) {
-				$a = $grid[$r][$c];
-				$b = $grid[$r][$c + 1];
-				$d = $grid[$r + 1][$c];
-				$e = $grid[$r + 1][$c + 1];
-
-				// Split some panes diagonally for a more organic look.
-				if ($this->rng->getInt(0, 2) === 0) {
-					$this->polygon(array($a, $b, $e), $this->glass(), 7);
-					$this->polygon(array($a, $e, $d), $this->glass(), 7);
-				} else {
-					$this->polygon(array($a, $b, $e, $d), $this->glass(), 7);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Golden rays around a point.
-	 *
-	 * @param float $cx
-	 * @param float $cy
-	 * @param float $length
-	 * @param int $count
-	 */
-	private function rays(float $cx, float $cy, float $length, int $count): void {
-		$gold = $this->palette['gold'];
-
-		for ($i = 0; $i < $count; $i++) {
-			$angle = (2 * M_PI / $count) * $i + $this->float(-0.05, 0.05);
-			$spread = 0.05;
-			$p1 = array($cx + cos($angle - $spread) * $length, $cy + sin($angle - $spread) * $length);
-			$p2 = array($cx + cos($angle + $spread) * $length, $cy + sin($angle + $spread) * $length);
-
-			$this->polygon(array(array($cx, $cy), $p1, $p2), $i % 2 ? $gold : $this->light(), 4, 0.85);
-		}
-	}
-
-	/**
-	 * A rose window with segments and an artifact in the center.
-	 *
-	 * @param float $cx
-	 * @param float $cy
-	 * @param float $r
-	 * @param int $segments
-	 */
-	private function rose(float $cx, float $cy, float $r, int $segments): void {
-		$lead = $this->palette['lead'];
-		$a = $this->glass();
-		$b = $this->palette['gold'];
-
-		$this->parts[] = sprintf('<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="12"/>', round($cx, 1), round($cy, 1), round($r, 1), $this->light(), $lead);
-
-		for ($i = 0; $i < $segments; $i++) {
-			$a1 = (2 * M_PI / $segments) * $i;
-			$a2 = (2 * M_PI / $segments) * ($i + 1);
-			$this->polygon(array(
-				array($cx + cos($a1) * $r * 0.55, $cy + sin($a1) * $r * 0.55),
-				array($cx + cos($a1) * $r, $cy + sin($a1) * $r),
-				array($cx + cos($a2) * $r, $cy + sin($a2) * $r),
-				array($cx + cos($a2) * $r * 0.55, $cy + sin($a2) * $r * 0.55)
-			), $i % 2 ? $a : $b, 5);
-		}
-
-		$this->parts[] = sprintf('<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="8"/>', round($cx, 1), round($cy, 1), round($r * 0.55, 1), $this->light(), $lead);
-		$this->artifact($this->pickArtifact(), $cx, $cy, $r * 0.85);
-	}
-
-	/**
-	 * A round medallion with an artifact.
-	 *
-	 * @param float $cx
-	 * @param float $cy
-	 * @param float $r
-	 */
-	private function medallion(float $cx, float $cy, float $r): void {
-		$lead = $this->palette['lead'];
-
-		$this->parts[] = sprintf('<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="10"/>', round($cx, 1), round($cy, 1), round($r * 1.18, 1), $this->glass(), $lead);
-		$this->parts[] = sprintf('<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="7"/>', round($cx, 1), round($cy, 1), round($r, 1), $this->palette['gold'], $lead);
-		$this->artifact($this->pickArtifact(), $cx, $cy, $r * 1.45);
-	}
-
-	/**
-	 * A rectangular panel with a sunburst and an artifact.
-	 *
-	 * @param float $x
-	 * @param float $y
-	 * @param float $w
-	 * @param float $h
-	 */
-	private function panel(float $x, float $y, float $w, float $h): void {
-		$color = $this->glass();
-		$this->polygon(array(array($x, $y), array($x + $w, $y), array($x + $w, $y + $h), array($x, $y + $h)), $color, 9);
-
-		$cx = $x + $w / 2;
-		$cy = $y + $h / 2;
-
-		for ($i = 0; $i < 12; $i++) {
-			$angle = M_PI / 6 * $i;
-			$this->parts[] = sprintf(
-				'<line x1="%s" y1="%s" x2="%s" y2="%s" stroke="%s" stroke-width="3" stroke-opacity="0.6"/>',
-				round($cx, 1),
-				round($cy, 1),
-				round($cx + cos($angle) * $w * 0.6, 1),
-				round($cy + sin($angle) * $h * 0.6, 1),
-				$this->palette['gold']
-			);
-		}
-
-		$this->artifact($this->pickArtifact(), $cx, $cy, min($w, $h) * 0.85);
-	}
-
-	/**
-	 * A small square tile with an artifact.
-	 *
-	 * @param float $cx
-	 * @param float $cy
-	 * @param float $size
-	 * @param string $artifact
-	 */
-	private function tile(float $cx, float $cy, float $size, string $artifact): void {
-		$s = $size / 2;
-		$this->polygon(array(array($cx - $s, $cy - $s), array($cx + $s, $cy - $s), array($cx + $s, $cy + $s), array($cx - $s, $cy + $s)), $this->light(), 6);
-		$this->artifact($artifact, $cx, $cy, $size * 0.8);
-	}
-
-	/**
-	 * Scatter small artifacts.
-	 *
-	 * @param float $cx
-	 * @param float $cy
-	 * @param float $rx
-	 * @param float $ry
-	 * @param string $artifact
-	 * @param int $count
-	 */
-	private function scatter(float $cx, float $cy, float $rx, float $ry, string $artifact, int $count): void {
-		if (!in_array($artifact, $this->artifacts, true)) {
-			return;
-		}
-
-		for ($i = 0; $i < $count; $i++) {
-			$this->artifact($artifact, $cx + $this->float(-$rx, $rx), $cy + $this->float(-$ry, $ry), $this->float(40, 70));
-		}
+	private function glass(): string {
+		return $this->palette['glass'][$this->rng->getInt(0, count($this->palette['glass']) - 1)];
 	}
 
 	/**
@@ -443,87 +314,215 @@ final class StainedGlassGenerator {
 	}
 
 	/**
-	 * The outer frame with small alternating tiles.
+	 * A random light color.
 	 *
-	 * @param float $size
+	 * @return string
 	 */
-	private function frame(float $size): void {
-		$w = $this->w;
-		$h = $this->h;
+	private function light(): string {
+		return $this->palette['light'][$this->rng->getInt(0, count($this->palette['light']) - 1)];
+	}
+
+	/**
+	 * A round medallion with an artifact.
+	 *
+	 * @param float $cx
+	 * @param float $cy
+	 * @param float $r
+	 */
+	private function medallion(float $cx, float $cy, float $r): void {
 		$lead = $this->palette['lead'];
-		$stone = '#8f8b6e';
-		$this->parts[] = sprintf(
-			'<path d="M0 0H%1$sV%2$sH0Z M%3$s %3$sV%4$sH%5$sV%3$sZ" fill="%6$s" fill-rule="evenodd" stroke="%7$s" stroke-width="6"/>',
-			$w,
-			$h,
-			$size,
-			$h - $size,
-			$w - $size,
-			$stone,
-			$lead
-		);
 
-		$step = 60;
-		$s = $size * 0.42;
+		$this->parts[] = sprintf('<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="10"/>', round($cx, 1), round($cy, 1), round($r * 1.18, 1), $this->glass(), $lead);
+		$this->parts[] = sprintf('<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="7"/>', round($cx, 1), round($cy, 1), round($r, 1), $this->palette['gold'], $lead);
+		$this->artifact($this->pickArtifact(), $cx, $cy, $r * 1.45);
+	}
 
-		for ($x = $step / 2; $x < $w; $x += $step) {
-			foreach (array($size / 2, $h - $size / 2) as $y) {
-				$this->parts[] = sprintf('<rect x="%s" y="%s" width="%s" height="%s" fill="%s" stroke="%s" stroke-width="3"/>', round($x - $s / 2, 1), round($y - $s / 2, 1), round($s, 1), round($s, 1), ((int) ($x / $step)) % 2 ? $this->palette['gold'] : $this->glass(), $lead);
+	/**
+	 * A mosaic of irregular glass panes.
+	 *
+	 * @param float $x
+	 * @param float $y
+	 * @param float $w
+	 * @param float $h
+	 * @param int $cols
+	 * @param int $rows
+	 */
+	private function mosaic(float $x, float $y, float $w, float $h, int $cols, int $rows): void {
+		$grid = array();
+		$cw = $w / $cols;
+		$ch = $h / $rows;
+
+		for ($r = 0; $r <= $rows; $r++) {
+			for ($c = 0; $c <= $cols; $c++) {
+				$edge = $r === 0 || $c === 0 || $r === $rows || $c === $cols;
+				$grid[$r][$c] = array(
+					$x + $c * $cw + ($edge ? 0 : $this->float(-0.3, 0.3) * $cw),
+					$y + $r * $ch + ($edge ? 0 : $this->float(-0.3, 0.3) * $ch)
+				);
 			}
 		}
 
-		for ($y = $step / 2 + $size; $y < $h - $size; $y += $step) {
-			foreach (array($size / 2, $w - $size / 2) as $x) {
-				$this->parts[] = sprintf('<rect x="%s" y="%s" width="%s" height="%s" fill="%s" stroke="%s" stroke-width="3"/>', round($x - $s / 2, 1), round($y - $s / 2, 1), round($s, 1), round($s, 1), ((int) ($y / $step)) % 2 ? $this->palette['gold'] : $this->glass(), $lead);
+		for ($r = 0; $r < $rows; $r++) {
+			for ($c = 0; $c < $cols; $c++) {
+				$a = $grid[$r][$c];
+				$b = $grid[$r][$c + 1];
+				$d = $grid[$r + 1][$c];
+				$e = $grid[$r + 1][$c + 1];
+
+				// Split some panes diagonally for a more organic look.
+				if ($this->rng->getInt(0, 2) === 0) {
+					$this->polygon(array($a, $b, $e), $this->glass(), 7);
+					$this->polygon(array($a, $e, $d), $this->glass(), 7);
+				} else {
+					$this->polygon(array($a, $b, $e, $d), $this->glass(), 7);
+				}
 			}
 		}
 	}
 
 	/**
-	 * Draw an artifact centered at a point.
+	 * A rectangular panel with a sunburst and an artifact.
 	 *
-	 * @param string $name
+	 * @param float $x
+	 * @param float $y
+	 * @param float $w
+	 * @param float $h
+	 */
+	private function panel(float $x, float $y, float $w, float $h): void {
+		$color = $this->glass();
+		$this->polygon(array(array($x, $y), array($x + $w, $y), array($x + $w, $y + $h), array($x, $y + $h)), $color, 9);
+
+		$cx = $x + $w / 2;
+		$cy = $y + $h / 2;
+
+		for ($i = 0; $i < 12; $i++) {
+			$angle = M_PI / 6 * $i;
+			$this->parts[] = sprintf(
+				'<line x1="%s" y1="%s" x2="%s" y2="%s" stroke="%s" stroke-width="3" stroke-opacity="0.6"/>',
+				round($cx, 1),
+				round($cy, 1),
+				round($cx + cos($angle) * $w * 0.6, 1),
+				round($cy + sin($angle) * $h * 0.6, 1),
+				$this->palette['gold']
+			);
+		}
+
+		$this->artifact($this->pickArtifact(), $cx, $cy, min($w, $h) * 0.85);
+	}
+
+	/**
+	 * Pick a random artifact.
+	 *
+	 * @param array $preferred
+	 * @return string
+	 */
+	private function pickArtifact(array $preferred = array()): string {
+		$pool = array_values(array_intersect($preferred, $this->artifacts)) ?: $this->artifacts;
+
+		return $pool[$this->rng->getInt(0, count($pool) - 1)];
+	}
+
+	/**
+	 * Add a polygon.
+	 *
+	 * @param array $points
+	 * @param string $fill
+	 * @param float $stroke
+	 * @param float $opacity
+	 */
+	private function polygon(array $points, string $fill, float $stroke = 6, float $opacity = 1): void {
+		$this->parts[] = sprintf(
+			'<polygon points="%s" fill="%s" stroke="%s" stroke-width="%s" stroke-linejoin="round"%s/>',
+			join(' ', array_map(fn ($p) => round($p[0], 1) . ',' . round($p[1], 1), $points)),
+			$fill,
+			$this->palette['lead'],
+			$stroke,
+			$opacity < 1 ? ' fill-opacity="' . $opacity . '"' : ''
+		);
+	}
+
+	/**
+	 * Golden rays around a point.
+	 *
 	 * @param float $cx
 	 * @param float $cy
-	 * @param float $size
+	 * @param float $length
+	 * @param int $count
 	 */
-	private function artifact(string $name, float $cx, float $cy, float $size): void {
-		$scale = $size / 100;
+	private function rays(float $cx, float $cy, float $length, int $count): void {
 		$gold = $this->palette['gold'];
+
+		for ($i = 0; $i < $count; $i++) {
+			$angle = (2 * M_PI / $count) * $i + $this->float(-0.05, 0.05);
+			$spread = 0.05;
+			$p1 = array($cx + cos($angle - $spread) * $length, $cy + sin($angle - $spread) * $length);
+			$p2 = array($cx + cos($angle + $spread) * $length, $cy + sin($angle + $spread) * $length);
+
+			$this->polygon(array(array($cx, $cy), $p1, $p2), $i % 2 ? $gold : $this->light(), 4, 0.85);
+		}
+	}
+
+	/**
+	 * A rose window with segments and an artifact in the center.
+	 *
+	 * @param float $cx
+	 * @param float $cy
+	 * @param float $r
+	 * @param int $segments
+	 */
+	private function rose(float $cx, float $cy, float $r, int $segments): void {
 		$lead = $this->palette['lead'];
-		$light = '#fffaf0';
-		$accent = $this->glass();
+		$a = $this->glass();
+		$b = $this->palette['gold'];
 
-		$shapes = match ($name) {
-			'dove' => "<path d='M12 58 C30 40 48 42 58 50 C66 34 80 26 94 28 C84 36 80 44 78 52 C86 54 92 60 94 66 C76 66 62 70 50 78 C40 84 26 84 16 76 C26 74 32 70 34 66 C26 66 18 63 12 58 Z' fill='$light'/><circle cx='80' cy='35' r='3' fill='$lead'/><path d='M92 30 L100 32 L92 36 Z' fill='$gold'/>",
-			'star' => "<path d='M50 6 L61 38 L95 38 L67 58 L78 92 L50 72 L22 92 L33 58 L5 38 L39 38 Z' fill='$gold'/>",
-			'sun' => "<circle cx='50' cy='50' r='22' fill='$gold'/>" . join('', array_map(fn ($i) => sprintf("<path d='M50 4 L56 22 L44 22 Z' fill='%s' transform='rotate(%d 50 50)'/>", $gold, $i * 30), range(0, 11))),
-			'moon' => "<path d='M62 10 A40 40 0 1 0 90 72 A32 32 0 1 1 62 10 Z' fill='$light'/>",
-			'coins' => "<circle cx='40' cy='58' r='22' fill='$gold'/><circle cx='40' cy='58' r='14' fill='none' stroke='$lead' stroke-width='3'/><circle cx='64' cy='38' r='18' fill='$gold'/><circle cx='64' cy='38' r='11' fill='none' stroke='$lead' stroke-width='3'/>",
-			'scales' => "<rect x='47' y='16' width='6' height='70' fill='$gold'/><rect x='16' y='24' width='68' height='6' fill='$gold'/><path d='M10 56 L22 30 L34 56 Z M66 56 L78 30 L90 56 Z' fill='$light'/><rect x='34' y='84' width='32' height='8' fill='$gold'/>",
-			'book' => "<path d='M8 22 C24 16 40 18 50 26 C60 18 76 16 92 22 L92 82 C76 76 60 78 50 86 C40 78 24 76 8 82 Z' fill='$light'/><path d='M50 26 L50 86' stroke='$lead' stroke-width='4'/><path d='M18 36 H40 M18 48 H40 M60 36 H82 M60 48 H82' stroke='$accent' stroke-width='4'/>",
-			'chalice' => "<path d='M22 14 H78 C78 42 66 56 50 58 C34 56 22 42 22 14 Z' fill='$gold'/><rect x='46' y='56' width='8' height='22' fill='$gold'/><path d='M28 92 C30 80 70 80 72 92 Z' fill='$gold'/><circle cx='50' cy='32' r='7' fill='$accent'/>",
-			'heart' => "<path d='M50 88 C14 62 6 40 18 24 C30 10 46 16 50 30 C54 16 70 10 82 24 C94 40 86 62 50 88 Z' fill='#d81b3a'/>",
-			'key' => "<circle cx='28' cy='50' r='18' fill='none' stroke='$gold' stroke-width='9'/><rect x='44' y='46' width='48' height='9' fill='$gold'/><rect x='72' y='54' width='8' height='14' fill='$gold'/><rect x='84' y='54' width='8' height='10' fill='$gold'/>",
-			'crown' => "<path d='M10 76 L16 30 L34 52 L50 20 L66 52 L84 30 L90 76 Z' fill='$gold'/><rect x='10' y='76' width='80' height='10' fill='$gold'/><circle cx='50' cy='62' r='6' fill='$accent'/>",
-			'eye' => "<path d='M6 50 C26 22 74 22 94 50 C74 78 26 78 6 50 Z' fill='$light'/><circle cx='50' cy='50' r='16' fill='$accent'/><circle cx='50' cy='50' r='7' fill='$lead'/>",
-			'flame' => "<path d='M50 6 C62 26 82 36 76 64 C72 84 58 94 50 94 C42 94 26 86 24 64 C22 46 38 40 40 24 C46 34 48 40 50 6 Z' fill='#f57c00'/><path d='M50 46 C58 58 64 66 60 78 C58 86 52 88 50 88 C46 88 40 84 40 76 C40 66 48 62 50 46 Z' fill='$gold'/>",
-			'leaf' => "<path d='M14 86 C14 40 44 12 90 12 C90 58 62 88 14 86 Z' fill='#43a047'/><path d='M18 82 L76 24' stroke='$light' stroke-width='4'/>",
-			'hands' => "<path d='M50 12 C42 18 36 40 34 58 L30 88 H48 L50 60 Z' fill='#f2c9a0'/><path d='M50 12 C58 18 64 40 66 58 L70 88 H52 L50 60 Z' fill='#e8b88a'/><path d='M28 86 H72 V96 H28 Z' fill='#c1272d'/>",
-			default => ''
-		};
+		$this->parts[] = sprintf('<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="12"/>', round($cx, 1), round($cy, 1), round($r, 1), $this->light(), $lead);
 
-		if ($shapes === '') {
+		for ($i = 0; $i < $segments; $i++) {
+			$a1 = (2 * M_PI / $segments) * $i;
+			$a2 = (2 * M_PI / $segments) * ($i + 1);
+			$this->polygon(array(
+				array($cx + cos($a1) * $r * 0.55, $cy + sin($a1) * $r * 0.55),
+				array($cx + cos($a1) * $r, $cy + sin($a1) * $r),
+				array($cx + cos($a2) * $r, $cy + sin($a2) * $r),
+				array($cx + cos($a2) * $r * 0.55, $cy + sin($a2) * $r * 0.55)
+			), $i % 2 ? $a : $b, 5);
+		}
+
+		$this->parts[] = sprintf('<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="8"/>', round($cx, 1), round($cy, 1), round($r * 0.55, 1), $this->light(), $lead);
+		$this->artifact($this->pickArtifact(), $cx, $cy, $r * 0.85);
+	}
+
+	/**
+	 * Scatter small artifacts.
+	 *
+	 * @param float $cx
+	 * @param float $cy
+	 * @param float $rx
+	 * @param float $ry
+	 * @param string $artifact
+	 * @param int $count
+	 */
+	private function scatter(float $cx, float $cy, float $rx, float $ry, string $artifact, int $count): void {
+		if (!in_array($artifact, $this->artifacts, true)) {
 			return;
 		}
 
-		$this->parts[] = sprintf(
-			'<g transform="translate(%s %s) scale(%s)" stroke="%s" stroke-width="3" stroke-linejoin="round">%s</g>',
-			round($cx - 50 * $scale, 1),
-			round($cy - 50 * $scale, 1),
-			round($scale, 3),
-			$lead,
-			$shapes
-		);
+		for ($i = 0; $i < $count; $i++) {
+			$this->artifact($artifact, $cx + $this->float(-$rx, $rx), $cy + $this->float(-$ry, $ry), $this->float(40, 70));
+		}
+	}
+
+	/**
+	 * A small square tile with an artifact.
+	 *
+	 * @param float $cx
+	 * @param float $cy
+	 * @param float $size
+	 * @param string $artifact
+	 */
+	private function tile(float $cx, float $cy, float $size, string $artifact): void {
+		$s = $size / 2;
+		$this->polygon(array(array($cx - $s, $cy - $s), array($cx + $s, $cy - $s), array($cx + $s, $cy + $s), array($cx - $s, $cy + $s)), $this->light(), 6);
+		$this->artifact($artifact, $cx, $cy, $size * 0.8);
 	}
 }

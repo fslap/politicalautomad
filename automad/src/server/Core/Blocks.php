@@ -64,10 +64,6 @@ class Blocks {
 	 */
 	private static bool $isRendering = false;
 
-	public static function getDynamicRegister(): ?DynamicBlockRegister {
-		return self::$dynamicRegister;
-	}
-
 	/**
 	 * Return an array of blocks that are converted from agent data.
 	 *
@@ -106,6 +102,10 @@ class Blocks {
 		}
 
 		return $blocks;
+	}
+
+	public static function getDynamicRegister(): ?DynamicBlockRegister {
+		return self::$dynamicRegister;
 	}
 
 	/**
@@ -271,6 +271,18 @@ class Blocks {
 		return preg_replace('/\s+/', ' ', join(' ', $content)) ?? '';
 	}
 
+	protected static function resolveObjectCallback(string $blockType, string $method): callable|string {
+		if (self::$dynamicRegister !== null && self::$dynamicRegister->type($blockType)) {
+			$block = self::$dynamicRegister->superobject($blockType);
+
+			if ($block !== null && $block !== false) {
+				return array($block, $method);
+			}
+		}
+
+		return '\\Automad\\Blocks\\' . ucfirst($blockType) . '::' . $method;
+	}
+
 	/**
 	 * Return the converted representation of an array of blocks.
 	 *
@@ -310,18 +322,6 @@ class Blocks {
 		}
 
 		return $content;
-	}
-
-	protected static function resolveObjectCallback(string $blockType, string $method): callable|string {
-		if (self::$dynamicRegister !== null && self::$dynamicRegister->type($blockType)) {
-			$block = self::$dynamicRegister->superobject($blockType);
-
-			if ($block !== null && $block !== false) {
-				return array($block, $method);
-			}
-		}
-
-		return '\\Automad\\Blocks\\' . ucfirst($blockType) . '::' . $method;
 	}
 
 	/**

@@ -796,47 +796,6 @@ class PageSchema {
 	}
 
 	/**
-	 * The shared properties of a page that are returned by every tool that returns pages.
-	 *
-	 * @return array
-	 */
-	private static function pageBaseProperties(): array {
-		return array(
-			'id' => array(
-				'type' => 'string',
-				'description' => 'The ID is the local absolute URL path of the page like for example `/about` or `/work/project`.'
-			),
-			'url' => array(
-				'type' => 'string',
-				'description' => 'The full URL of the page.'
-			),
-			'title' => array('type' => 'string'),
-			'parent' => array(
-				'type' => 'string',
-				'description' => 'The ID of the parent page.'
-			),
-			'lastModified' => array(
-				'type' => 'string',
-				'description' => 'The date and time of the last modification.'
-			),
-			'template' => array(
-				'type' => 'string',
-				'description' => 'The template used by the page.'
-			),
-			'publicationState' => array(
-				'type' => 'string',
-				'enum' => array('published', 'draft')
-			),
-			'private' => array('type' => 'boolean'),
-			'hidden' => array('type' => 'boolean'),
-			'tags' => array(
-				'type' => 'array',
-				'items' => array('type' => 'string')
-			)
-		);
-	}
-
-	/**
 	 * The output schema of a single page including its content.
 	 *
 	 * @param string $title
@@ -883,6 +842,47 @@ class PageSchema {
 				)
 			),
 			'required' => array('id', 'content', 'meta')
+		);
+	}
+
+	/**
+	 * The shared properties of a page that are returned by every tool that returns pages.
+	 *
+	 * @return array
+	 */
+	private static function pageBaseProperties(): array {
+		return array(
+			'id' => array(
+				'type' => 'string',
+				'description' => 'The ID is the local absolute URL path of the page like for example `/about` or `/work/project`.'
+			),
+			'url' => array(
+				'type' => 'string',
+				'description' => 'The full URL of the page.'
+			),
+			'title' => array('type' => 'string'),
+			'parent' => array(
+				'type' => 'string',
+				'description' => 'The ID of the parent page.'
+			),
+			'lastModified' => array(
+				'type' => 'string',
+				'description' => 'The date and time of the last modification.'
+			),
+			'template' => array(
+				'type' => 'string',
+				'description' => 'The template used by the page.'
+			),
+			'publicationState' => array(
+				'type' => 'string',
+				'enum' => array('published', 'draft')
+			),
+			'private' => array('type' => 'boolean'),
+			'hidden' => array('type' => 'boolean'),
+			'tags' => array(
+				'type' => 'array',
+				'items' => array('type' => 'string')
+			)
 		);
 	}
 }

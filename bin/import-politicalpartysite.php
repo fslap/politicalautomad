@@ -142,18 +142,22 @@ function convertSection(string $component, array $config): array {
 		case 'Quote':
 		case 'Split':
 			$config = splitImageField($config, 'section_image');
+
 			break;
 		case 'SecurityConcept':
 			$config = splitImageField($config, 'main_image');
+
 			break;
 		case 'Form':
 			// The original form posted to an external handler, Automad sends the mails itself.
 			$config['mail_to'] = '';
 			$config['form_action'] = '';
+
 			break;
 		case 'ArtMotivation':
 			unset($config['section_image'], $config['gallery_type'], $config['float_style']);
 			$config['generate_mobile'] = false;
+
 			break;
 	}
 

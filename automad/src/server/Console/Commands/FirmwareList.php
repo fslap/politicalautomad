@@ -8,8 +8,6 @@
 
 namespace Automad\Console\Commands;
 
-use Automad\Console\Argument;
-use Automad\Console\ArgumentCollection;
 use Automad\Console\Console;
 use Automad\Party\Firmware;
 

@@ -122,6 +122,42 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 	}
 
 	/**
+	 * Return the JSON schema of the block for AI agents (MCP), see Automad\Ai\Mcp\Schema\PageSchema.
+	 *
+	 * @return array
+	 */
+	public function agentSchema(): array {
+		$definition = $this->definition();
+		$properties = array(
+			'id' => array('$ref' => '#/$defs/blockId'),
+			'type' => array('const' => $this->type()),
+			'width' => array(
+				'type' => 'string',
+				'description' => 'The block width as a fraction, only used inside of layoutSection blocks.',
+				'enum' => array('1/4', '1/3', '1/2', '2/3', '3/4', '1/1')
+			)
+		);
+
+		if ($definition['stretchable'] ?? true) {
+			$properties['stretched'] = array('type' => 'boolean', 'description' => 'If true the block is stretched to the full width.');
+		}
+
+		$properties['data'] = array(
+			'type' => 'object',
+			'properties' => self::agentFieldsSchema($this->fields()),
+			'additionalProperties' => false
+		);
+
+		return array(
+			'type' => 'object',
+			'description' => trim('Party component "' . ($definition['title'] ?? $this->shortName()) . '": ' . ($definition['description'] ?? '')),
+			'properties' => $properties,
+			'required' => array('type'),
+			'additionalProperties' => false
+		);
+	}
+
+	/**
 	 * Build the template context from the block data that is already merged with the field defaults.
 	 *
 	 * @param array $config
@@ -165,42 +201,6 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 			'stretchable' => $definition['stretchable'] ?? true,
 			'fields' => $this->fields(),
 			'defaults' => $this->defaults()
-		);
-	}
-
-	/**
-	 * Return the JSON schema of the block for AI agents (MCP), see Automad\Ai\Mcp\Schema\PageSchema.
-	 *
-	 * @return array
-	 */
-	public function agentSchema(): array {
-		$definition = $this->definition();
-		$properties = array(
-			'id' => array('$ref' => '#/$defs/blockId'),
-			'type' => array('const' => $this->type()),
-			'width' => array(
-				'type' => 'string',
-				'description' => 'The block width as a fraction, only used inside of layoutSection blocks.',
-				'enum' => array('1/4', '1/3', '1/2', '2/3', '3/4', '1/1')
-			)
-		);
-
-		if ($definition['stretchable'] ?? true) {
-			$properties['stretched'] = array('type' => 'boolean', 'description' => 'If true the block is stretched to the full width.');
-		}
-
-		$properties['data'] = array(
-			'type' => 'object',
-			'properties' => self::agentFieldsSchema($this->fields()),
-			'additionalProperties' => false
-		);
-
-		return array(
-			'type' => 'object',
-			'description' => trim('Party component "' . ($definition['title'] ?? $this->shortName()) . '": ' . ($definition['description'] ?? '')),
-			'properties' => $properties,
-			'required' => array('type'),
-			'additionalProperties' => false
 		);
 	}
 
@@ -249,77 +249,6 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 			),
 			'tunes' => $tunes
 		);
-	}
-
-	/**
-	 * Convert block data into the representation for agents.
-	 *
-	 * @param array $block
-	 * @param ComponentCollection|null $ComponentCollection
-	 * @return array
-	 */
-	public function toAgent(array $block, ?ComponentCollection $ComponentCollection = null): array {
-		$agent = array('id' => $block['id'] ?? '', 'type' => $this->type());
-		$layout = $block['tunes']['layout'] ?? array();
-
-		if (!empty($layout['width'])) {
-			$agent['width'] = $layout['width'];
-		}
-
-		if (!empty($layout['stretched'])) {
-			$agent['stretched'] = true;
-		}
-
-		if (!empty($block['data'])) {
-			$agent['data'] = $block['data'];
-		}
-
-		return $agent;
-	}
-
-	/**
-	 * Convert field definitions into JSON schema properties.
-	 *
-	 * @param array $fields
-	 * @return array
-	 */
-	private static function agentFieldsSchema(array $fields): array {
-		$properties = array();
-
-		foreach ($fields as $field) {
-			if (self::isVirtual($field)) {
-				continue;
-			}
-
-			$description = trim(($field['label'] ?? $field['name']) . '. ' . ($field['help'] ?? ''), '. ');
-
-			$schema = match ($field['type']) {
-				'number' => array('type' => 'number'),
-				'toggle' => array('type' => 'boolean'),
-				'strings' => array('type' => 'array', 'items' => array('type' => 'string')),
-				'json' => array(),
-				'list' => array(
-					'type' => 'array',
-					'items' => array(
-						'type' => 'object',
-						'properties' => self::agentFieldsSchema($field['fields'] ?? array()),
-						'additionalProperties' => false
-					)
-				),
-				'markdown' => array('type' => 'string', 'description' => 'Markdown.'),
-				'html' => array('type' => 'string', 'description' => 'HTML.'),
-				default => array('type' => 'string')
-			};
-
-			if ($field['type'] === 'select' && !empty($field['options']) && empty($field['optionsFrom'])) {
-				$schema['enum'] = array_map('strval', array_keys($field['options']));
-			}
-
-			$schema['description'] = trim($description . ' ' . ($schema['description'] ?? ''));
-			$properties[$field['name']] = $schema;
-		}
-
-		return $properties;
 	}
 
 	/**
@@ -469,6 +398,32 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 	}
 
 	/**
+	 * Convert block data into the representation for agents.
+	 *
+	 * @param array $block
+	 * @param ComponentCollection|null $ComponentCollection
+	 * @return array
+	 */
+	public function toAgent(array $block, ?ComponentCollection $ComponentCollection = null): array {
+		$agent = array('id' => $block['id'] ?? '', 'type' => $this->type());
+		$layout = $block['tunes']['layout'] ?? array();
+
+		if (!empty($layout['width'])) {
+			$agent['width'] = $layout['width'];
+		}
+
+		if (!empty($layout['stretched'])) {
+			$agent['stretched'] = true;
+		}
+
+		if (!empty($block['data'])) {
+			$agent['data'] = $block['data'];
+		}
+
+		return $agent;
+	}
+
+	/**
 	 * Return a searchable string representation of a block.
 	 *
 	 * @param array $block
@@ -504,6 +459,21 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 	 * @return array{title: string, icon: string, description?: string, stretchable?: bool, fields: array}
 	 */
 	abstract protected function definition(): array;
+
+	/**
+	 * Return the field definitions of a desktop image and an optional mobile image,
+	 * both with the image picker of the dashboard.
+	 *
+	 * @param string $name the name of the desktop field, the mobile field gets the suffix "_mobile"
+	 * @param string $label
+	 * @return array
+	 */
+	protected static function imagePairFields(string $name, string $label): array {
+		return array(
+			array('name' => $name, 'type' => 'image', 'label' => "$label (Desktop)"),
+			array('name' => "{$name}_mobile", 'type' => 'image', 'label' => "$label (Mobil, optional)", 'help' => 'Wird auf kleinen Bildschirmen statt des Desktop-Bildes angezeigt.')
+		);
+	}
 
 	/**
 	 * Return a JSON string that is safe to be used inside of HTML attributes and script tags.
@@ -580,6 +550,7 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 	 * Split a comma separated "desktop[,mobile]" image value.
 	 *
 	 * @param string $value
+	 * @param string $mobile
 	 * @return array{desktop: string, mobile: string}
 	 */
 	protected function splitImages(string $value, string $mobile = ''): array {
@@ -595,18 +566,48 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 	}
 
 	/**
-	 * Return the field definitions of a desktop image and an optional mobile image,
-	 * both with the image picker of the dashboard.
+	 * Convert field definitions into JSON schema properties.
 	 *
-	 * @param string $name the name of the desktop field, the mobile field gets the suffix "_mobile"
-	 * @param string $label
+	 * @param array $fields
 	 * @return array
 	 */
-	protected static function imagePairFields(string $name, string $label): array {
-		return array(
-			array('name' => $name, 'type' => 'image', 'label' => "$label (Desktop)"),
-			array('name' => "{$name}_mobile", 'type' => 'image', 'label' => "$label (Mobil, optional)", 'help' => 'Wird auf kleinen Bildschirmen statt des Desktop-Bildes angezeigt.')
-		);
+	private static function agentFieldsSchema(array $fields): array {
+		$properties = array();
+
+		foreach ($fields as $field) {
+			if (self::isVirtual($field)) {
+				continue;
+			}
+
+			$description = trim(($field['label'] ?? $field['name']) . '. ' . ($field['help'] ?? ''), '. ');
+
+			$schema = match ($field['type']) {
+				'number' => array('type' => 'number'),
+				'toggle' => array('type' => 'boolean'),
+				'strings' => array('type' => 'array', 'items' => array('type' => 'string')),
+				'json' => array(),
+				'list' => array(
+					'type' => 'array',
+					'items' => array(
+						'type' => 'object',
+						'properties' => self::agentFieldsSchema($field['fields'] ?? array()),
+						'additionalProperties' => false
+					)
+				),
+				'markdown' => array('type' => 'string', 'description' => 'Markdown.'),
+				'html' => array('type' => 'string', 'description' => 'HTML.'),
+				default => array('type' => 'string')
+			};
+
+			if ($field['type'] === 'select' && !empty($field['options']) && empty($field['optionsFrom'])) {
+				$schema['enum'] = array_map('strval', array_keys($field['options']));
+			}
+
+			$schema['description'] = trim($description . ' ' . ($schema['description'] ?? ''));
+			$properties[$field['name']] = $schema;
+		}
+
+		return $properties;
 	}
 
 	/**

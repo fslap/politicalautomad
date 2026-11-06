@@ -60,7 +60,8 @@ export class FirmwareComponent extends BaseComponent {
 
 		if (error || !data) {
 			this.innerHTML = '';
-			create('p', [CSS.textMuted], {}, this).textContent = error || 'Fehler beim Laden.';
+			create('p', [CSS.textMuted], {}, this).textContent =
+				error || 'Fehler beim Laden.';
 
 			return;
 		}
@@ -77,23 +78,36 @@ export class FirmwareComponent extends BaseComponent {
 		this.innerHTML = html`
 			<div class="${CSS.card}">
 				<div class="${CSS.cardBody}">
-					<p>Installierte Version: <strong>$${data.version || 'unbekannt'}</strong></p>
-					<p class="${CSS.textMuted}">
-						Firmware-Patches ersetzen nur den Programmcode (automad, lib, vendor, packages).
-						Inhalte, Benutzer und Einstellungen (config, pages, shared) bleiben unverändert.
-						Vor jedem Patch wird automatisch ein Backup angelegt.
+					<p>
+						Installierte Version:
+						<strong>$${data.version || 'unbekannt'}</strong>
 					</p>
 					<p class="${CSS.textMuted}">
-						Patch erstellen: <code>php bin/dist.php --patch</code><br />
-						Die <code>.tar.gz</code>-Datei per FTP oder Shell in diesen Ordner kopieren:<br />
+						Firmware-Patches ersetzen nur den Programmcode (automad,
+						lib, vendor, packages). Inhalte, Benutzer und
+						Einstellungen (config, pages, shared) bleiben
+						unverändert. Vor jedem Patch wird automatisch ein Backup
+						angelegt.
+					</p>
+					<p class="${CSS.textMuted}">
+						Patch erstellen: <code>php bin/dist.php --patch</code
+						><br />
+						Die <code>.tar.gz</code>-Datei per FTP oder Shell in
+						diesen Ordner kopieren:<br />
 						<code>$${data.directory}</code><br />
-						Per Shell geht auch: <code>php automad/console firmware:apply</code>
+						Per Shell geht auch:
+						<code>php automad/console firmware:apply</code>
 					</p>
 				</div>
 			</div>
 		`;
 
-		const patches = create('div', [CSS.flex, CSS.flexColumn, CSS.flexGap], {}, this);
+		const patches = create(
+			'div',
+			[CSS.flex, CSS.flexColumn, CSS.flexGap],
+			{},
+			this
+		);
 
 		if (!data.patches.length) {
 			create('p', [CSS.textMuted], {}, patches).textContent =
@@ -107,30 +121,54 @@ export class FirmwareComponent extends BaseComponent {
 				{},
 				patches,
 				html`
-					<div class="${CSS.cardBody} ${CSS.flex} ${CSS.flexBetween} ${CSS.flexGap}">
+					<div
+						class="${CSS.cardBody} ${CSS.flex} ${CSS.flexBetween} ${CSS.flexGap}"
+					>
 						<div>
-							<strong>$${patch.version || patch.file}</strong><br />
+							<strong>$${patch.version || patch.file}</strong
+							><br />
 							<small class="${CSS.textMuted}">
-								$${patch.file} · $${(patch.size / 1048576).toFixed(1)} MB
-								${patch.created ? `· ${new Date(patch.created).toLocaleString()}` : ''}
+								$${patch.file} ·
+								$${(patch.size / 1048576).toFixed(1)} MB
+								${patch.created
+									? `· ${new Date(patch.created).toLocaleString()}`
+									: ''}
 							</small>
-							${patch.error ? html`<br /><small>$${patch.error}</small>` : ''}
+							${patch.error
+								? html`<br /><small>$${patch.error}</small>`
+								: ''}
 						</div>
-						<button class="${CSS.button} ${CSS.buttonPrimary}">Einspielen</button>
+						<button class="${CSS.button} ${CSS.buttonPrimary}">
+							Einspielen
+						</button>
 					</div>
 				`
 			);
 
-			this.listen(row.querySelector('button'), 'click', () => this.apply(patch));
+			this.listen(row.querySelector('button'), 'click', () =>
+				this.apply(patch)
+			);
 		});
 
 		if (data.backups.length) {
 			const backups = create('div', [CSS.card], {}, this);
-			const body = create('div', [CSS.cardBody, CSS.flex, CSS.flexBetween, CSS.flexGap], {}, backups);
+			const body = create(
+				'div',
+				[CSS.cardBody, CSS.flex, CSS.flexBetween, CSS.flexGap],
+				{},
+				backups
+			);
 
-			create('span', [], {}, body).textContent = `Letztes Backup: ${data.backups[0]}`;
+			create('span', [], {}, body).textContent =
+				`Letztes Backup: ${data.backups[0]}`;
 
-			const button = create('button', [CSS.button], {}, body, 'Zurücksetzen');
+			const button = create(
+				'button',
+				[CSS.button],
+				{},
+				body,
+				'Zurücksetzen'
+			);
 
 			this.listen(button, 'click', () => this.rollback(data.backups[0]));
 		}
@@ -142,13 +180,19 @@ export class FirmwareComponent extends BaseComponent {
 	 * @param patch
 	 */
 	private async apply(patch: FirmwarePatch): Promise<void> {
-		if (!window.confirm(`Firmware ${patch.version || patch.file} jetzt einspielen?`)) {
+		if (
+			!window.confirm(
+				`Firmware ${patch.version || patch.file} jetzt einspielen?`
+			)
+		) {
 			return;
 		}
 
 		this.innerHTML = '<am-spinner></am-spinner>';
 
-		const { success, error } = await requestApi(FirmwareController.apply, { file: patch.file });
+		const { success, error } = await requestApi(FirmwareController.apply, {
+			file: patch.file,
+		});
 
 		if (error) {
 			notifyError(error);
@@ -173,7 +217,10 @@ export class FirmwareComponent extends BaseComponent {
 			return;
 		}
 
-		const { success, error } = await requestApi(FirmwareController.rollback, { backup });
+		const { success, error } = await requestApi(
+			FirmwareController.rollback,
+			{ backup }
+		);
 
 		if (error) {
 			notifyError(error);

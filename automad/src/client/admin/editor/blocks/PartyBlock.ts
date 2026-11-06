@@ -941,7 +941,8 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 		);
 
 		if (field.help) {
-			create('small', [CSS.textMuted], {}, wrapper).textContent = field.help;
+			create('small', [CSS.textMuted], {}, wrapper).textContent =
+				field.help;
 		}
 
 		const update = () => {
@@ -955,8 +956,15 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 		this.listen(button, 'click', async (event: Event) => {
 			event.preventDefault();
 
-			const { modal, body } = createGenericModal(field.label || 'Datei wählen');
-			const list = create('div', [CSS.flex, CSS.flexColumn, CSS.flexGap], {}, body);
+			const { modal, body } = createGenericModal(
+				field.label || 'Datei wählen'
+			);
+			const list = create(
+				'div',
+				[CSS.flex, CSS.flexColumn, CSS.flexGap],
+				{},
+				body
+			);
 			const sources = [
 				{ title: 'Dateien dieser Seite', url: getPageURL() || '' },
 				{ title: 'Globale Dateien (shared)', url: '' },
@@ -966,9 +974,12 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 			);
 
 			for (const source of sources) {
-				const { data } = await requestApi(FileCollectionController.list, {
-					url: source.url,
-				});
+				const { data } = await requestApi(
+					FileCollectionController.list,
+					{
+						url: source.url,
+					}
+				);
 
 				const files: KeyValueMap[] = data?.files ?? [];
 
@@ -983,7 +994,10 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 					const item = create(
 						'button',
 						[CSS.button],
-						{ type: 'button', style: 'justify-content: flex-start;' },
+						{
+							type: 'button',
+							style: 'justify-content: flex-start;',
+						},
 						list,
 						`<i class="bi bi-file-earmark"></i><span></span>`
 					);

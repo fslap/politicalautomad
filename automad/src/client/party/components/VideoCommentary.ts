@@ -6,7 +6,11 @@
  */
 
 import { parseConfig } from './Map';
-import { connectPlayer, observeVisibility, type YouTubePlayer } from './YouTube';
+import {
+	connectPlayer,
+	observeVisibility,
+	type YouTubePlayer,
+} from './YouTube';
 
 interface VideoCommentaryConfig {
 	videoId: string;
@@ -21,10 +25,17 @@ interface VideoCommentaryConfig {
  * @param root
  */
 export const initVideoCommentary = async (root: HTMLElement): Promise<void> => {
-	const config = parseConfig<VideoCommentaryConfig>(root, 'data-party-video-commentary');
-	const iframe = root.querySelector<HTMLIFrameElement>('.video-commentary__frame iframe');
+	const config = parseConfig<VideoCommentaryConfig>(
+		root,
+		'data-party-video-commentary'
+	);
+	const iframe = root.querySelector<HTMLIFrameElement>(
+		'.video-commentary__frame iframe'
+	);
 	const list = root.querySelector<HTMLElement>('.video-commentary__comments');
-	const comments = Array.from(root.querySelectorAll<HTMLElement>('.video-commentary__comment'));
+	const comments = Array.from(
+		root.querySelectorAll<HTMLElement>('.video-commentary__comment')
+	);
 
 	if (!iframe || !config.videoId) {
 		return;
@@ -53,7 +64,8 @@ export const initVideoCommentary = async (root: HTMLElement): Promise<void> => {
 
 		if (current && list && config.follow) {
 			// Scroll inside of the list only, the page itself is not moved.
-			const top = current.offsetTop - list.offsetTop - list.clientHeight / 3;
+			const top =
+				current.offsetTop - list.offsetTop - list.clientHeight / 3;
 
 			list.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
 		}
@@ -77,7 +89,9 @@ export const initVideoCommentary = async (root: HTMLElement): Promise<void> => {
 	};
 
 	root.addEventListener('click', (event) => {
-		const button = (event.target as HTMLElement).closest<HTMLElement>('[data-seek]');
+		const button = (event.target as HTMLElement).closest<HTMLElement>(
+			'[data-seek]'
+		);
 
 		if (!button) {
 			return;
@@ -113,10 +127,14 @@ export const initVideoCommentary = async (root: HTMLElement): Promise<void> => {
 	}
 
 	if (config.pauseOnLeave) {
-		observeVisibility(root, (visible) => {
-			if (!visible && player && player.getPlayerState() === 1) {
-				player.pauseVideo();
-			}
-		}, 0.1);
+		observeVisibility(
+			root,
+			(visible) => {
+				if (!visible && player && player.getPlayerState() === 1) {
+					player.pauseVideo();
+				}
+			},
+			0.1
+		);
 	}
 };

@@ -6,7 +6,11 @@
  */
 
 import { parseConfig } from './Map';
-import { connectPlayer, observeVisibility, type YouTubePlayer } from './YouTube';
+import {
+	connectPlayer,
+	observeVisibility,
+	type YouTubePlayer,
+} from './YouTube';
 
 interface StainedGlassConfig {
 	autoplay: boolean;
@@ -24,9 +28,16 @@ interface StainedGlassConfig {
  * @param root
  */
 export const initStainedGlass = async (root: HTMLElement): Promise<void> => {
-	const config = parseConfig<StainedGlassConfig>(root, 'data-party-stained-glass');
-	const iframe = root.querySelector<HTMLIFrameElement>('.stained-glass__frame iframe');
-	const soundButton = root.querySelector<HTMLButtonElement>('.stained-glass__sound');
+	const config = parseConfig<StainedGlassConfig>(
+		root,
+		'data-party-stained-glass'
+	);
+	const iframe = root.querySelector<HTMLIFrameElement>(
+		'.stained-glass__frame iframe'
+	);
+	const soundButton = root.querySelector<HTMLButtonElement>(
+		'.stained-glass__sound'
+	);
 
 	if (!iframe || !config.autoplay) {
 		return;
