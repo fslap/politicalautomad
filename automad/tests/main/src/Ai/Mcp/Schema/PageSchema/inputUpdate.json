@@ -211,10 +211,16 @@
 					"$ref": "#/$defs/partyArtMotivation"
 				},
 				{
+					"$ref": "#/$defs/partyCardRow"
+				},
+				{
 					"$ref": "#/$defs/partyCaseLeafletRegion"
 				},
 				{
 					"$ref": "#/$defs/partyContactCloser"
+				},
+				{
+					"$ref": "#/$defs/partyDocumentCard"
 				},
 				{
 					"$ref": "#/$defs/partyDocuments"
@@ -232,7 +238,25 @@
 					"$ref": "#/$defs/partyGallery"
 				},
 				{
+					"$ref": "#/$defs/partyGazeBreaker"
+				},
+				{
+					"$ref": "#/$defs/partyHeroTitle"
+				},
+				{
+					"$ref": "#/$defs/partyHouseRow"
+				},
+				{
+					"$ref": "#/$defs/partyHoverCorner"
+				},
+				{
+					"$ref": "#/$defs/partyHoverDecor"
+				},
+				{
 					"$ref": "#/$defs/partyImage"
+				},
+				{
+					"$ref": "#/$defs/partyInfoStack"
 				},
 				{
 					"$ref": "#/$defs/partyLandscapeScene"
@@ -241,13 +265,22 @@
 					"$ref": "#/$defs/partyLeafletMap"
 				},
 				{
+					"$ref": "#/$defs/partyListCard"
+				},
+				{
 					"$ref": "#/$defs/partyMarkdown"
+				},
+				{
+					"$ref": "#/$defs/partyMarkdownViewer"
 				},
 				{
 					"$ref": "#/$defs/partyMusicAnchor"
 				},
 				{
 					"$ref": "#/$defs/partyMusicPlayer"
+				},
+				{
+					"$ref": "#/$defs/partyNextArrow"
 				},
 				{
 					"$ref": "#/$defs/partyPartyHeader"
@@ -257,6 +290,9 @@
 				},
 				{
 					"$ref": "#/$defs/partyRegionScroll"
+				},
+				{
+					"$ref": "#/$defs/partyRollTiles"
 				},
 				{
 					"$ref": "#/$defs/partyScrollElement"
@@ -269,6 +305,24 @@
 				},
 				{
 					"$ref": "#/$defs/partySkylineBreaker"
+				},
+				{
+					"$ref": "#/$defs/partySlideCards"
+				},
+				{
+					"$ref": "#/$defs/partySlideDocument"
+				},
+				{
+					"$ref": "#/$defs/partySlideFirst"
+				},
+				{
+					"$ref": "#/$defs/partySlideListForm"
+				},
+				{
+					"$ref": "#/$defs/partySlideMap"
+				},
+				{
+					"$ref": "#/$defs/partySlideViewer"
 				},
 				{
 					"$ref": "#/$defs/partySplit"
@@ -290,6 +344,9 @@
 				},
 				{
 					"$ref": "#/$defs/partyWaterAnimation"
+				},
+				{
+					"$ref": "#/$defs/partyWaveLine"
 				},
 				{
 					"$ref": "#/$defs/partyWpButton"
@@ -1745,6 +1802,82 @@
 			],
 			"additionalProperties": false
 		},
+		"partyCardRow": {
+			"type": "object",
+			"description": "Party component \"Kartenreihe (Bilanz)\": Karten mit Bild, Titel und Text nebeneinander (Skizze: Bilanz).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyCardRow"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string",
+							"description": "Überschrift"
+						},
+						"cards": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"image": {
+										"type": "string",
+										"description": "Bild"
+									},
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"value": {
+										"type": "string",
+										"description": "Kennzahl (optional, z.B. 12.400 EUR)"
+									},
+									"text": {
+										"type": "string",
+										"description": "Text"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Karten"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
 		"partyCaseLeafletRegion": {
 			"type": "object",
 			"description": "Party component \"Fälle-Karte mit Regionen\": Karte mit durchsuchbarer Fallliste, Regionen-Filter und FragDenStaat-Status.",
@@ -1984,6 +2117,68 @@
 						"classes": {
 							"type": "string",
 							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyDocumentCard": {
+			"type": "object",
+			"description": "Party component \"Dokumentkarte\": Karte mit Vorschau, Textauszug und Ansehen-Knopf (Skizze: Folie 2 links).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyDocumentCard"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"preview": {
+							"type": "string",
+							"description": "Vorschaubild (optional)"
+						},
+						"excerpt": {
+							"type": "string",
+							"description": "Textauszug Markdown."
+						},
+						"file": {
+							"type": "string",
+							"description": "Dokument (PDF) oder Link"
+						},
+						"button": {
+							"type": "string",
+							"description": "Knopf"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
 						}
 					},
 					"additionalProperties": false
@@ -2449,6 +2644,513 @@
 			],
 			"additionalProperties": false
 		},
+		"partyGazeBreaker": {
+			"type": "object",
+			"description": "Party component \"Blick-Breaker\": Band aus gleich breiten Spalten mit kleinen Bildern, die den Besucher ansehen.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyGazeBreaker"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"columns": {
+							"type": "number",
+							"description": "Anzahl Spalten (gleichmäßig aufgeteilt)"
+						},
+						"height": {
+							"type": "string",
+							"description": "Höhe des Bands"
+						},
+						"dividers": {
+							"type": "boolean",
+							"description": "Trennlinien zwischen den Spalten"
+						},
+						"items": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"image": {
+										"type": "string",
+										"description": "Bild"
+									},
+									"alt": {
+										"type": "string",
+										"description": "Beschreibung (Alt-Text)"
+									},
+									"column": {
+										"type": "number",
+										"description": "Spalte (1 = links)"
+									},
+									"vertical": {
+										"type": "string",
+										"enum": [
+											"top",
+											"middle",
+											"bottom"
+										],
+										"description": "Position vertikal"
+									},
+									"horizontal": {
+										"type": "string",
+										"enum": [
+											"left",
+											"center",
+											"right"
+										],
+										"description": "Position horizontal"
+									},
+									"size": {
+										"type": "string",
+										"enum": [
+											"s",
+											"m",
+											"l",
+											"xl"
+										],
+										"description": "Größe"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link (optional)"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Bilder"
+						},
+						"hover_animation": {
+							"type": "string",
+							"enum": [
+								"",
+								"tilt",
+								"move",
+								"float",
+								"wobble",
+								"look"
+							],
+							"description": "Animation beim Darüberfahren (Hover)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyHeroTitle": {
+			"type": "object",
+			"description": "Party component \"Titel mit Mehr-Pfeil\": Großer mehrzeiliger Titel mit einem Mehr-Pfeil zum nächsten Abschnitt (Skizze: First Page).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyHeroTitle"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel (eine Zeile pro Wort/Zeile)"
+						},
+						"more_label": {
+							"type": "string",
+							"description": "Text am Pfeil"
+						},
+						"more_target": {
+							"type": "string",
+							"description": "Ziel des Pfeils (#anker, leer = nächster Abschnitt)"
+						},
+						"align": {
+							"type": "string",
+							"enum": [
+								"left",
+								"center"
+							],
+							"description": "Ausrichtung"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyHouseRow": {
+			"type": "object",
+			"description": "Party component \"Häuserzeile / Skyline\": Frei gestaltbare Häuser (Wohnblock, Satteldach, Laden, Hochhaus, Kuppel, Kirche, Fernsehturm, Fabrik, Bahnhof) oder eine zufällige Skyline, optional hereinrollend.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyHouseRow"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"mode": {
+							"type": "string",
+							"enum": [
+								"manual",
+								"random"
+							],
+							"description": "Häuser"
+						},
+						"houses": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"type": {
+										"type": "string",
+										"enum": [
+											"flat",
+											"gable",
+											"hut",
+											"shop",
+											"tower",
+											"dome",
+											"church",
+											"tvtower",
+											"factory",
+											"station"
+										],
+										"description": "Typ"
+									},
+									"width": {
+										"type": "number",
+										"description": "Breite (1 – 20)"
+									},
+									"floors": {
+										"type": "number",
+										"description": "Stockwerke (Höhe)"
+									},
+									"windows": {
+										"type": "number",
+										"description": "Fenster pro Stockwerk"
+									},
+									"door": {
+										"type": "boolean",
+										"description": "Tür"
+									},
+									"details": {
+										"type": "boolean",
+										"description": "Details (Antennen, Schornstein, Kreuz, Rauch …)"
+									},
+									"color": {
+										"type": "string",
+										"enum": [
+											"",
+											"blue",
+											"orange",
+											"purple",
+											"green",
+											"gold",
+											"red",
+											"grey"
+										],
+										"description": "Farbe"
+									},
+									"label": {
+										"type": "string",
+										"description": "Beschriftung (Tooltip)"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Häuser (von links nach rechts)"
+						},
+						"seed": {
+							"type": "string",
+							"description": "Zufall: Startwert (gleicher Wert = gleiche Skyline)"
+						},
+						"count": {
+							"type": "number",
+							"description": "Zufall: Anzahl Häuser"
+						},
+						"style": {
+							"type": "string",
+							"enum": [
+								"line",
+								"filled",
+								"mixed"
+							],
+							"description": "Stil"
+						},
+						"gap": {
+							"type": "number",
+							"description": "Abstand zwischen den Häusern (0 – 10)"
+						},
+						"height": {
+							"type": "string",
+							"description": "Höhe"
+						},
+						"align": {
+							"type": "string",
+							"enum": [
+								"left",
+								"center",
+								"right",
+								"spread"
+							],
+							"description": "Ausrichtung"
+						},
+						"ground": {
+							"type": "boolean",
+							"description": "Bodenlinie"
+						},
+						"roll_in": {
+							"type": "string",
+							"enum": [
+								"",
+								"hover",
+								"view",
+								"always"
+							],
+							"description": "Hereinrollen"
+						},
+						"hover_animation": {
+							"type": "string",
+							"enum": [
+								"",
+								"tilt",
+								"move",
+								"float",
+								"wobble",
+								"look"
+							],
+							"description": "Animation beim Darüberfahren (Hover)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyHoverCorner": {
+			"type": "object",
+			"description": "Party component \"Hover-Ecke\": Schraffierte Ecke, die beim Darüberfahren Text oder Link zeigt.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyHoverCorner"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"corner": {
+							"type": "string",
+							"enum": [
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Ecke"
+						},
+						"corner_label": {
+							"type": "string",
+							"description": "Text (erscheint beim Hover)"
+						},
+						"corner_link": {
+							"type": "string",
+							"description": "Link"
+						},
+						"height": {
+							"type": "string",
+							"description": "Höhe des Bereichs"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyHoverDecor": {
+			"type": "object",
+			"description": "Party component \"Hover-Deko\": Kleines Bild in einer Ecke, das beim Darüberfahren kippt oder sich bewegt.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyHoverDecor"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"decor_image": {
+							"type": "string",
+							"description": "Bild (leer = Segelboot)"
+						},
+						"decor_position": {
+							"type": "string",
+							"enum": [
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Position"
+						},
+						"decor_animation": {
+							"type": "string",
+							"enum": [
+								"tilt",
+								"move",
+								"float",
+								"wobble"
+							],
+							"description": "Animation"
+						},
+						"height": {
+							"type": "string",
+							"description": "Höhe des Bereichs"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
 		"partyImage": {
 			"type": "object",
 			"description": "Party component \"Bild-Section\": Section mit Titel, Bild und Bildunterschrift.",
@@ -2501,6 +3203,64 @@
 						"classes": {
 							"type": "string",
 							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyInfoStack": {
+			"type": "object",
+			"description": "Party component \"Info-Stapel\": Überschrift, Text und hervorgehobene Box untereinander (Skizze: Folie 2 rechts).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyInfoStack"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string",
+							"description": "Überschrift"
+						},
+						"text": {
+							"type": "string",
+							"description": "Text Markdown."
+						},
+						"box": {
+							"type": "string",
+							"description": "Hervorgehobene Box Markdown."
+						},
+						"box_image": {
+							"type": "string",
+							"description": "Bild in der Box (optional)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
 						}
 					},
 					"additionalProperties": false
@@ -2705,6 +3465,18 @@
 							"type": "string",
 							"description": "Feste Höhe (optional). Leer lassen, dann skaliert die Szene mit der Breite"
 						},
+						"hover_animation": {
+							"type": "string",
+							"enum": [
+								"",
+								"tilt",
+								"move",
+								"float",
+								"wobble",
+								"look"
+							],
+							"description": "Animation beim Darüberfahren (Hover)"
+						},
 						"classes": {
 							"type": "string",
 							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
@@ -2817,6 +3589,71 @@
 			],
 			"additionalProperties": false
 		},
+		"partyListCard": {
+			"type": "object",
+			"description": "Party component \"Listenkarte (Satzung)\": Karte mit Reiter-Titel und Aufzählung (Skizze: Satzung).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyListCard"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string",
+							"description": "Reiter-Titel"
+						},
+						"items": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Punkte (einer pro Zeile)"
+						},
+						"text": {
+							"type": "string",
+							"description": "Text unter der Liste Markdown."
+						},
+						"link": {
+							"type": "string",
+							"description": "Link oder Dokument"
+						},
+						"link_label": {
+							"type": "string",
+							"description": "Linktext"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
 		"partyMarkdown": {
 			"type": "object",
 			"description": "Party component \"Markdown-Section\": Section mit Titel, optionalem Bild und Markdown-Inhalt.",
@@ -2869,6 +3706,87 @@
 						"classes": {
 							"type": "string",
 							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyMarkdownViewer": {
+			"type": "object",
+			"description": "Party component \"Markdown-Viewer\": Kapitel mit Lang-, Zusammenfassungs- und Kurzfassung, blättern mit Pfeilen (Skizze: Last Page).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyMarkdownViewer"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"chapters": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"full": {
+										"type": "string",
+										"description": "Eröffnen (ganzer Text) Markdown."
+									},
+									"summary": {
+										"type": "string",
+										"description": "Zusammengefasst Markdown."
+									},
+									"short": {
+										"type": "string",
+										"description": "Gekürzt Markdown."
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Kapitel"
+						},
+						"mode": {
+							"type": "string",
+							"enum": [
+								"full",
+								"summary",
+								"short"
+							],
+							"description": "Ansicht beim Laden"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
 						}
 					},
 					"additionalProperties": false
@@ -3030,6 +3948,73 @@
 						"classes": {
 							"type": "string",
 							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyNextArrow": {
+			"type": "object",
+			"description": "Party component \"Weiter-Pfeil\": Doppelstrich-Pfeil zum nächsten oder vorherigen Abschnitt, optional mit Text (Skizze: Navigation).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyNextArrow"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"direction": {
+							"type": "string",
+							"enum": [
+								"down",
+								"up"
+							],
+							"description": "Richtung"
+						},
+						"label": {
+							"type": "string",
+							"description": "Text"
+						},
+						"target": {
+							"type": "string",
+							"description": "Ziel (#anker, leer = nächster bzw. vorheriger Abschnitt)"
+						},
+						"align": {
+							"type": "string",
+							"enum": [
+								"left",
+								"center",
+								"right"
+							],
+							"description": "Ausrichtung"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
 						}
 					},
 					"additionalProperties": false
@@ -3238,6 +4223,83 @@
 						"classes": {
 							"type": "string",
 							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyRollTiles": {
+			"type": "object",
+			"description": "Party component \"Rollkacheln\": Kleine Kacheln, die beim Darüberfahren hereinrollen (Skizze: roll in hover).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyRollTiles"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"tiles": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"image": {
+										"type": "string",
+										"description": "Bild"
+									},
+									"label": {
+										"type": "string",
+										"description": "Beschriftung"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Kacheln"
+						},
+						"position": {
+							"type": "string",
+							"enum": [
+								"bottom-right",
+								"bottom-left",
+								"inline"
+							],
+							"description": "Position"
+						},
+						"always": {
+							"type": "boolean",
+							"description": "Immer sichtbar (nicht erst beim Hover)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
 						}
 					},
 					"additionalProperties": false
@@ -3507,6 +4569,1733 @@
 						"classes": {
 							"type": "string",
 							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partySlideCards": {
+			"type": "object",
+			"description": "Party component \"Folie: Bilanz\": Folie mit Kartenreihe, hereinrollenden Häusern beim Hover und Wellenlinie (Skizze: Bilanz).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partySlideCards"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Folie: Section-ID (Anker)"
+						},
+						"slide_title": {
+							"type": "string",
+							"description": "Folie: Name im Folien-Menü"
+						},
+						"slide_background": {
+							"type": "string",
+							"enum": [
+								"",
+								"party-slide--paper",
+								"bgblue",
+								"bgorange",
+								"bgpurple",
+								"bgcoolgreen",
+								"bggold",
+								"bgred",
+								"darklast"
+							],
+							"description": "Folie: Hintergrund"
+						},
+						"slide_ratio": {
+							"type": "string",
+							"enum": [
+								"16-9",
+								"auto"
+							],
+							"description": "Folie: Format"
+						},
+						"slide_nav": {
+							"type": "boolean",
+							"description": "Folie: Menü und Pfeile anzeigen"
+						},
+						"slide_corner": {
+							"type": "string",
+							"enum": [
+								"",
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Schraffierte Ecke"
+						},
+						"slide_corner_label": {
+							"type": "string",
+							"description": "Folie: Text in der Ecke (erscheint beim Hover)"
+						},
+						"slide_corner_link": {
+							"type": "string",
+							"description": "Folie: Link der Ecke"
+						},
+						"slide_decor_image": {
+							"type": "string",
+							"description": "Folie: Deko-Bild (Hover)"
+						},
+						"slide_decor_position": {
+							"type": "string",
+							"enum": [
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Position Deko-Bild"
+						},
+						"slide_decor_animation": {
+							"type": "string",
+							"enum": [
+								"tilt",
+								"move",
+								"float",
+								"wobble"
+							],
+							"description": "Folie: Animation Deko-Bild"
+						},
+						"classes": {
+							"type": "string",
+							"description": "Folie: CSS-Klassen"
+						},
+						"cards_title": {
+							"type": "string",
+							"description": "Karten: Überschrift"
+						},
+						"cards_cards": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"image": {
+										"type": "string",
+										"description": "Bild"
+									},
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"value": {
+										"type": "string",
+										"description": "Kennzahl (optional, z.B. 12.400 EUR)"
+									},
+									"text": {
+										"type": "string",
+										"description": "Text"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Karten: Karten"
+						},
+						"cards_classes": {
+							"type": "string",
+							"description": "Karten: CSS-Klassen"
+						},
+						"houses_section_id": {
+							"type": "string",
+							"description": "Rollhäuser: Section-ID (Anker)"
+						},
+						"houses_mode": {
+							"type": "string",
+							"enum": [
+								"manual",
+								"random"
+							],
+							"description": "Rollhäuser: Häuser"
+						},
+						"houses_houses": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"type": {
+										"type": "string",
+										"enum": [
+											"flat",
+											"gable",
+											"hut",
+											"shop",
+											"tower",
+											"dome",
+											"church",
+											"tvtower",
+											"factory",
+											"station"
+										],
+										"description": "Typ"
+									},
+									"width": {
+										"type": "number",
+										"description": "Breite (1 – 20)"
+									},
+									"floors": {
+										"type": "number",
+										"description": "Stockwerke (Höhe)"
+									},
+									"windows": {
+										"type": "number",
+										"description": "Fenster pro Stockwerk"
+									},
+									"door": {
+										"type": "boolean",
+										"description": "Tür"
+									},
+									"details": {
+										"type": "boolean",
+										"description": "Details (Antennen, Schornstein, Kreuz, Rauch …)"
+									},
+									"color": {
+										"type": "string",
+										"enum": [
+											"",
+											"blue",
+											"orange",
+											"purple",
+											"green",
+											"gold",
+											"red",
+											"grey"
+										],
+										"description": "Farbe"
+									},
+									"label": {
+										"type": "string",
+										"description": "Beschriftung (Tooltip)"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Rollhäuser: Häuser (von links nach rechts)"
+						},
+						"houses_seed": {
+							"type": "string",
+							"description": "Rollhäuser: Zufall: Startwert (gleicher Wert = gleiche Skyline)"
+						},
+						"houses_count": {
+							"type": "number",
+							"description": "Rollhäuser: Zufall: Anzahl Häuser"
+						},
+						"houses_style": {
+							"type": "string",
+							"enum": [
+								"line",
+								"filled",
+								"mixed"
+							],
+							"description": "Rollhäuser: Stil"
+						},
+						"houses_gap": {
+							"type": "number",
+							"description": "Rollhäuser: Abstand zwischen den Häusern (0 – 10)"
+						},
+						"houses_height": {
+							"type": "string",
+							"description": "Rollhäuser: Höhe"
+						},
+						"houses_align": {
+							"type": "string",
+							"enum": [
+								"left",
+								"center",
+								"right",
+								"spread"
+							],
+							"description": "Rollhäuser: Ausrichtung"
+						},
+						"houses_ground": {
+							"type": "boolean",
+							"description": "Rollhäuser: Bodenlinie"
+						},
+						"houses_roll_in": {
+							"type": "string",
+							"enum": [
+								"",
+								"hover",
+								"view",
+								"always"
+							],
+							"description": "Rollhäuser: Hereinrollen"
+						},
+						"houses_hover_animation": {
+							"type": "string",
+							"enum": [
+								"",
+								"tilt",
+								"move",
+								"float",
+								"wobble",
+								"look"
+							],
+							"description": "Rollhäuser: Animation beim Darüberfahren (Hover)"
+						},
+						"houses_classes": {
+							"type": "string",
+							"description": "Rollhäuser: CSS-Klassen"
+						},
+						"tiles_tiles": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"image": {
+										"type": "string",
+										"description": "Bild"
+									},
+									"label": {
+										"type": "string",
+										"description": "Beschriftung"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Rollkacheln: Kacheln"
+						},
+						"tiles_position": {
+							"type": "string",
+							"enum": [
+								"bottom-right",
+								"bottom-left",
+								"inline"
+							],
+							"description": "Rollkacheln: Position"
+						},
+						"tiles_always": {
+							"type": "boolean",
+							"description": "Rollkacheln: Immer sichtbar (nicht erst beim Hover)"
+						},
+						"tiles_classes": {
+							"type": "string",
+							"description": "Rollkacheln: CSS-Klassen"
+						},
+						"wave_variant": {
+							"type": "string",
+							"enum": [
+								"line",
+								"double",
+								"water"
+							],
+							"description": "Wellenlinie: Art"
+						},
+						"wave_boat": {
+							"type": "boolean",
+							"description": "Wellenlinie: Segelboot"
+						},
+						"wave_boat_position": {
+							"type": "number",
+							"description": "Wellenlinie: Position des Boots (0 – 100 %)"
+						},
+						"wave_height": {
+							"type": "string",
+							"description": "Wellenlinie: Höhe"
+						},
+						"wave_color": {
+							"type": "string",
+							"enum": [
+								"",
+								"blue",
+								"green",
+								"orange",
+								"purple"
+							],
+							"description": "Wellenlinie: Farbe"
+						},
+						"wave_animate": {
+							"type": "boolean",
+							"description": "Wellenlinie: Wellen bewegen sich"
+						},
+						"wave_classes": {
+							"type": "string",
+							"description": "Wellenlinie: CSS-Klassen"
+						},
+						"wave": {
+							"type": "boolean",
+							"description": "Wellenlinie anzeigen"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partySlideDocument": {
+			"type": "object",
+			"description": "Party component \"Folie: Dokument\": Folie mit Dokumentkarte, Info-Stapel und Hover-Deko (Skizze: Folie 2).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partySlideDocument"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Folie: Section-ID (Anker)"
+						},
+						"slide_title": {
+							"type": "string",
+							"description": "Folie: Name im Folien-Menü"
+						},
+						"slide_background": {
+							"type": "string",
+							"enum": [
+								"",
+								"party-slide--paper",
+								"bgblue",
+								"bgorange",
+								"bgpurple",
+								"bgcoolgreen",
+								"bggold",
+								"bgred",
+								"darklast"
+							],
+							"description": "Folie: Hintergrund"
+						},
+						"slide_ratio": {
+							"type": "string",
+							"enum": [
+								"16-9",
+								"auto"
+							],
+							"description": "Folie: Format"
+						},
+						"slide_nav": {
+							"type": "boolean",
+							"description": "Folie: Menü und Pfeile anzeigen"
+						},
+						"slide_corner": {
+							"type": "string",
+							"enum": [
+								"",
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Schraffierte Ecke"
+						},
+						"slide_corner_label": {
+							"type": "string",
+							"description": "Folie: Text in der Ecke (erscheint beim Hover)"
+						},
+						"slide_corner_link": {
+							"type": "string",
+							"description": "Folie: Link der Ecke"
+						},
+						"slide_decor_image": {
+							"type": "string",
+							"description": "Folie: Deko-Bild (Hover)"
+						},
+						"slide_decor_position": {
+							"type": "string",
+							"enum": [
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Position Deko-Bild"
+						},
+						"slide_decor_animation": {
+							"type": "string",
+							"enum": [
+								"tilt",
+								"move",
+								"float",
+								"wobble"
+							],
+							"description": "Folie: Animation Deko-Bild"
+						},
+						"classes": {
+							"type": "string",
+							"description": "Folie: CSS-Klassen"
+						},
+						"doc_title": {
+							"type": "string",
+							"description": "Dokument: Titel"
+						},
+						"doc_preview": {
+							"type": "string",
+							"description": "Dokument: Vorschaubild (optional)"
+						},
+						"doc_excerpt": {
+							"type": "string",
+							"description": "Dokument: Textauszug Markdown."
+						},
+						"doc_file": {
+							"type": "string",
+							"description": "Dokument: Dokument (PDF) oder Link"
+						},
+						"doc_button": {
+							"type": "string",
+							"description": "Dokument: Knopf"
+						},
+						"doc_classes": {
+							"type": "string",
+							"description": "Dokument: CSS-Klassen"
+						},
+						"info_title": {
+							"type": "string",
+							"description": "Info: Überschrift"
+						},
+						"info_text": {
+							"type": "string",
+							"description": "Info: Text Markdown."
+						},
+						"info_box": {
+							"type": "string",
+							"description": "Info: Hervorgehobene Box Markdown."
+						},
+						"info_box_image": {
+							"type": "string",
+							"description": "Info: Bild in der Box (optional)"
+						},
+						"info_classes": {
+							"type": "string",
+							"description": "Info: CSS-Klassen"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partySlideFirst": {
+			"type": "object",
+			"description": "Party component \"Folie: Startseite\": Folie mit großem Titel, Mehr-Pfeil, Häusern, Wellen und Boot (Skizze: First Page).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partySlideFirst"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Folie: Section-ID (Anker)"
+						},
+						"slide_title": {
+							"type": "string",
+							"description": "Folie: Name im Folien-Menü"
+						},
+						"slide_background": {
+							"type": "string",
+							"enum": [
+								"",
+								"party-slide--paper",
+								"bgblue",
+								"bgorange",
+								"bgpurple",
+								"bgcoolgreen",
+								"bggold",
+								"bgred",
+								"darklast"
+							],
+							"description": "Folie: Hintergrund"
+						},
+						"slide_ratio": {
+							"type": "string",
+							"enum": [
+								"16-9",
+								"auto"
+							],
+							"description": "Folie: Format"
+						},
+						"slide_nav": {
+							"type": "boolean",
+							"description": "Folie: Menü und Pfeile anzeigen"
+						},
+						"slide_corner": {
+							"type": "string",
+							"enum": [
+								"",
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Schraffierte Ecke"
+						},
+						"slide_corner_label": {
+							"type": "string",
+							"description": "Folie: Text in der Ecke (erscheint beim Hover)"
+						},
+						"slide_corner_link": {
+							"type": "string",
+							"description": "Folie: Link der Ecke"
+						},
+						"slide_decor_image": {
+							"type": "string",
+							"description": "Folie: Deko-Bild (Hover)"
+						},
+						"slide_decor_position": {
+							"type": "string",
+							"enum": [
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Position Deko-Bild"
+						},
+						"slide_decor_animation": {
+							"type": "string",
+							"enum": [
+								"tilt",
+								"move",
+								"float",
+								"wobble"
+							],
+							"description": "Folie: Animation Deko-Bild"
+						},
+						"classes": {
+							"type": "string",
+							"description": "Folie: CSS-Klassen"
+						},
+						"hero_section_id": {
+							"type": "string",
+							"description": "Titel: Section-ID (Anker)"
+						},
+						"hero_title": {
+							"type": "string",
+							"description": "Titel: Titel (eine Zeile pro Wort/Zeile)"
+						},
+						"hero_more_label": {
+							"type": "string",
+							"description": "Titel: Text am Pfeil"
+						},
+						"hero_more_target": {
+							"type": "string",
+							"description": "Titel: Ziel des Pfeils (#anker, leer = nächster Abschnitt)"
+						},
+						"hero_align": {
+							"type": "string",
+							"enum": [
+								"left",
+								"center"
+							],
+							"description": "Titel: Ausrichtung"
+						},
+						"hero_classes": {
+							"type": "string",
+							"description": "Titel: CSS-Klassen"
+						},
+						"houses_section_id": {
+							"type": "string",
+							"description": "Häuser: Section-ID (Anker)"
+						},
+						"houses_mode": {
+							"type": "string",
+							"enum": [
+								"manual",
+								"random"
+							],
+							"description": "Häuser: Häuser"
+						},
+						"houses_houses": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"type": {
+										"type": "string",
+										"enum": [
+											"flat",
+											"gable",
+											"hut",
+											"shop",
+											"tower",
+											"dome",
+											"church",
+											"tvtower",
+											"factory",
+											"station"
+										],
+										"description": "Typ"
+									},
+									"width": {
+										"type": "number",
+										"description": "Breite (1 – 20)"
+									},
+									"floors": {
+										"type": "number",
+										"description": "Stockwerke (Höhe)"
+									},
+									"windows": {
+										"type": "number",
+										"description": "Fenster pro Stockwerk"
+									},
+									"door": {
+										"type": "boolean",
+										"description": "Tür"
+									},
+									"details": {
+										"type": "boolean",
+										"description": "Details (Antennen, Schornstein, Kreuz, Rauch …)"
+									},
+									"color": {
+										"type": "string",
+										"enum": [
+											"",
+											"blue",
+											"orange",
+											"purple",
+											"green",
+											"gold",
+											"red",
+											"grey"
+										],
+										"description": "Farbe"
+									},
+									"label": {
+										"type": "string",
+										"description": "Beschriftung (Tooltip)"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Häuser: Häuser (von links nach rechts)"
+						},
+						"houses_seed": {
+							"type": "string",
+							"description": "Häuser: Zufall: Startwert (gleicher Wert = gleiche Skyline)"
+						},
+						"houses_count": {
+							"type": "number",
+							"description": "Häuser: Zufall: Anzahl Häuser"
+						},
+						"houses_style": {
+							"type": "string",
+							"enum": [
+								"line",
+								"filled",
+								"mixed"
+							],
+							"description": "Häuser: Stil"
+						},
+						"houses_gap": {
+							"type": "number",
+							"description": "Häuser: Abstand zwischen den Häusern (0 – 10)"
+						},
+						"houses_height": {
+							"type": "string",
+							"description": "Häuser: Höhe"
+						},
+						"houses_align": {
+							"type": "string",
+							"enum": [
+								"left",
+								"center",
+								"right",
+								"spread"
+							],
+							"description": "Häuser: Ausrichtung"
+						},
+						"houses_ground": {
+							"type": "boolean",
+							"description": "Häuser: Bodenlinie"
+						},
+						"houses_roll_in": {
+							"type": "string",
+							"enum": [
+								"",
+								"hover",
+								"view",
+								"always"
+							],
+							"description": "Häuser: Hereinrollen"
+						},
+						"houses_hover_animation": {
+							"type": "string",
+							"enum": [
+								"",
+								"tilt",
+								"move",
+								"float",
+								"wobble",
+								"look"
+							],
+							"description": "Häuser: Animation beim Darüberfahren (Hover)"
+						},
+						"houses_classes": {
+							"type": "string",
+							"description": "Häuser: CSS-Klassen"
+						},
+						"wave_variant": {
+							"type": "string",
+							"enum": [
+								"line",
+								"double",
+								"water"
+							],
+							"description": "Wellen: Art"
+						},
+						"wave_boat": {
+							"type": "boolean",
+							"description": "Wellen: Segelboot"
+						},
+						"wave_boat_position": {
+							"type": "number",
+							"description": "Wellen: Position des Boots (0 – 100 %)"
+						},
+						"wave_height": {
+							"type": "string",
+							"description": "Wellen: Höhe"
+						},
+						"wave_color": {
+							"type": "string",
+							"enum": [
+								"",
+								"blue",
+								"green",
+								"orange",
+								"purple"
+							],
+							"description": "Wellen: Farbe"
+						},
+						"wave_animate": {
+							"type": "boolean",
+							"description": "Wellen: Wellen bewegen sich"
+						},
+						"wave_classes": {
+							"type": "string",
+							"description": "Wellen: CSS-Klassen"
+						},
+						"scene_image": {
+							"type": "string",
+							"description": "Szene: eigenes Bild statt Häusern und Wellen (optional)"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partySlideListForm": {
+			"type": "object",
+			"description": "Party component \"Folie: Satzung und Formular\": Folie mit Listenkarte und Formular, die Ecke zeigt beim Hover mehr (Skizze: Satzung / Mitglied werden).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partySlideListForm"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Folie: Section-ID (Anker)"
+						},
+						"slide_title": {
+							"type": "string",
+							"description": "Folie: Name im Folien-Menü"
+						},
+						"slide_background": {
+							"type": "string",
+							"enum": [
+								"",
+								"party-slide--paper",
+								"bgblue",
+								"bgorange",
+								"bgpurple",
+								"bgcoolgreen",
+								"bggold",
+								"bgred",
+								"darklast"
+							],
+							"description": "Folie: Hintergrund"
+						},
+						"slide_ratio": {
+							"type": "string",
+							"enum": [
+								"16-9",
+								"auto"
+							],
+							"description": "Folie: Format"
+						},
+						"slide_nav": {
+							"type": "boolean",
+							"description": "Folie: Menü und Pfeile anzeigen"
+						},
+						"slide_corner": {
+							"type": "string",
+							"enum": [
+								"",
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Schraffierte Ecke"
+						},
+						"slide_corner_label": {
+							"type": "string",
+							"description": "Folie: Text in der Ecke (erscheint beim Hover)"
+						},
+						"slide_corner_link": {
+							"type": "string",
+							"description": "Folie: Link der Ecke"
+						},
+						"slide_decor_image": {
+							"type": "string",
+							"description": "Folie: Deko-Bild (Hover)"
+						},
+						"slide_decor_position": {
+							"type": "string",
+							"enum": [
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Position Deko-Bild"
+						},
+						"slide_decor_animation": {
+							"type": "string",
+							"enum": [
+								"tilt",
+								"move",
+								"float",
+								"wobble"
+							],
+							"description": "Folie: Animation Deko-Bild"
+						},
+						"classes": {
+							"type": "string",
+							"description": "Folie: CSS-Klassen"
+						},
+						"list_title": {
+							"type": "string",
+							"description": "Liste: Reiter-Titel"
+						},
+						"list_items": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Liste: Punkte (einer pro Zeile)"
+						},
+						"list_text": {
+							"type": "string",
+							"description": "Liste: Text unter der Liste Markdown."
+						},
+						"list_link": {
+							"type": "string",
+							"description": "Liste: Link oder Dokument"
+						},
+						"list_link_label": {
+							"type": "string",
+							"description": "Liste: Linktext"
+						},
+						"list_classes": {
+							"type": "string",
+							"description": "Liste: CSS-Klassen"
+						},
+						"form_section_id": {
+							"type": "string",
+							"description": "Formular: Section-ID (Anker)"
+						},
+						"form_title": {
+							"type": "string",
+							"description": "Formular: Titel"
+						},
+						"form_description": {
+							"type": "string",
+							"description": "Formular: Beschreibung"
+						},
+						"form_fields": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"label": {
+										"type": "string",
+										"description": "Beschriftung"
+									},
+									"name": {
+										"type": "string",
+										"description": "Feldname (technisch)"
+									},
+									"type": {
+										"type": "string",
+										"enum": [
+											"text",
+											"email",
+											"tel",
+											"date",
+											"number",
+											"textarea",
+											"select",
+											"checkbox"
+										],
+										"description": "Typ"
+									},
+									"required": {
+										"type": "boolean",
+										"description": "Pflichtfeld"
+									},
+									"options": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "Optionen (nur Auswahl, eine pro Zeile)"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Formular: Formularfelder"
+						},
+						"form_submit_label": {
+							"type": "string",
+							"description": "Formular: Text des Absende-Buttons"
+						},
+						"form_mail_to": {
+							"type": "string",
+							"description": "Formular: Empfänger (E-Mail). Wenn gesetzt und keine Ziel-URL angegeben ist, wird das Formular von Automad verarbeitet und über die SMTP-Einstellungen des Dashboards versendet"
+						},
+						"form_form_action": {
+							"type": "string",
+							"description": "Formular: Alternativ: externe Ziel-URL"
+						},
+						"form_form_method": {
+							"type": "string",
+							"enum": [
+								"post",
+								"get"
+							],
+							"description": "Formular: Methode"
+						},
+						"form_success_message": {
+							"type": "string",
+							"description": "Formular: Erfolgsmeldung"
+						},
+						"form_error_message": {
+							"type": "string",
+							"description": "Formular: Fehlermeldung"
+						},
+						"form_turnstile_site_key": {
+							"type": "string",
+							"description": "Formular: Turnstile Site-Key. Der geheime Schlüssel wird nicht hier, sondern in der Umgebungsvariable PARTY_TURNSTILE_SECRET hinterlegt"
+						},
+						"form_turnstile_theme": {
+							"type": "string",
+							"enum": [
+								"light",
+								"dark",
+								"auto"
+							],
+							"description": "Formular: Turnstile-Theme"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partySlideMap": {
+			"type": "object",
+			"description": "Party component \"Folie: Karte mit Liste\": Folie mit Leaflet-Karte (Route, Polygone, Marker) und Liste, die bei vielen Einträgen ausklappt (Skizze: Folie 3).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partySlideMap"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Folie: Section-ID (Anker)"
+						},
+						"slide_title": {
+							"type": "string",
+							"description": "Folie: Name im Folien-Menü"
+						},
+						"slide_background": {
+							"type": "string",
+							"enum": [
+								"",
+								"party-slide--paper",
+								"bgblue",
+								"bgorange",
+								"bgpurple",
+								"bgcoolgreen",
+								"bggold",
+								"bgred",
+								"darklast"
+							],
+							"description": "Folie: Hintergrund"
+						},
+						"slide_ratio": {
+							"type": "string",
+							"enum": [
+								"16-9",
+								"auto"
+							],
+							"description": "Folie: Format"
+						},
+						"slide_nav": {
+							"type": "boolean",
+							"description": "Folie: Menü und Pfeile anzeigen"
+						},
+						"slide_corner": {
+							"type": "string",
+							"enum": [
+								"",
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Schraffierte Ecke"
+						},
+						"slide_corner_label": {
+							"type": "string",
+							"description": "Folie: Text in der Ecke (erscheint beim Hover)"
+						},
+						"slide_corner_link": {
+							"type": "string",
+							"description": "Folie: Link der Ecke"
+						},
+						"slide_decor_image": {
+							"type": "string",
+							"description": "Folie: Deko-Bild (Hover)"
+						},
+						"slide_decor_position": {
+							"type": "string",
+							"enum": [
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Position Deko-Bild"
+						},
+						"slide_decor_animation": {
+							"type": "string",
+							"enum": [
+								"tilt",
+								"move",
+								"float",
+								"wobble"
+							],
+							"description": "Folie: Animation Deko-Bild"
+						},
+						"classes": {
+							"type": "string",
+							"description": "Folie: CSS-Klassen"
+						},
+						"map_section_id": {
+							"type": "string",
+							"description": "Karte: Section-ID (Anker)"
+						},
+						"map_title": {
+							"type": "string",
+							"description": "Karte: Titel"
+						},
+						"map_map_center": {
+							"type": "string",
+							"description": "Karte: Kartenmitte (lat,lng)"
+						},
+						"map_map_zoom": {
+							"type": "number",
+							"description": "Karte: Zoom"
+						},
+						"map_map_height": {
+							"type": "string",
+							"description": "Karte: Kartenhöhe"
+						},
+						"map_tile_url": {
+							"type": "string",
+							"description": "Karte: Tile-URL"
+						},
+						"map_region_priority": {
+							"type": "boolean",
+							"description": "Karte: Bei Auswahl auf Region zoomen"
+						},
+						"map_default_region": {
+							"type": "string",
+							"description": "Karte: Vorausgewählte Region"
+						},
+						"map_markers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"description": "Marker-ID"
+									},
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"description": {
+										"type": "string",
+										"description": "Beschreibung"
+									},
+									"lat": {
+										"type": "number",
+										"description": "Breitengrad (lat)"
+									},
+									"lng": {
+										"type": "number",
+										"description": "Längengrad (lng)"
+									},
+									"region": {
+										"type": "string",
+										"description": "Region"
+									},
+									"zoom": {
+										"type": "number",
+										"description": "Zoom (optional)"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Karte: Marker"
+						},
+						"map_items": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"marker_id": {
+										"type": "string",
+										"description": "Marker"
+									},
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"description": {
+										"type": "string",
+										"description": "Beschreibung"
+									},
+									"region": {
+										"type": "string",
+										"description": "Region"
+									},
+									"links": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"label": {
+													"type": "string",
+													"description": "Beschriftung"
+												},
+												"url": {
+													"type": "string",
+													"description": "URL"
+												},
+												"type": {
+													"type": "string",
+													"enum": [
+														"external",
+														"fragdenstaat"
+													],
+													"description": "Typ"
+												},
+												"status": {
+													"type": "string",
+													"enum": [
+														"",
+														"open",
+														"pending",
+														"success",
+														"denied"
+													],
+													"description": "Status"
+												}
+											},
+											"additionalProperties": false
+										},
+										"description": "Links"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Karte: Fälle"
+						},
+						"map_groups": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string",
+										"description": "Name"
+									},
+									"marker_ids": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "Marker-IDs (eine pro Zeile)"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Karte: Gruppen (optional)"
+						},
+						"map_geojson_content": {
+							"description": "Karte: GeoJSON (FeatureCollection)"
+						},
+						"map_status_icon_base": {
+							"type": "string",
+							"description": "Karte: Pfad der Status-Icons"
+						},
+						"list_expand": {
+							"type": "number",
+							"description": "Liste: ab so vielen Einträgen ausklappbar (volle Breite)"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partySlideViewer": {
+			"type": "object",
+			"description": "Party component \"Folie: Markdown-Viewer\": Letzte Folie: Markdown-Viewer über einer Stadt-Skyline (Skizze: Last Page).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partySlideViewer"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Folie: Section-ID (Anker)"
+						},
+						"slide_title": {
+							"type": "string",
+							"description": "Folie: Name im Folien-Menü"
+						},
+						"slide_background": {
+							"type": "string",
+							"enum": [
+								"",
+								"party-slide--paper",
+								"bgblue",
+								"bgorange",
+								"bgpurple",
+								"bgcoolgreen",
+								"bggold",
+								"bgred",
+								"darklast"
+							],
+							"description": "Folie: Hintergrund"
+						},
+						"slide_ratio": {
+							"type": "string",
+							"enum": [
+								"16-9",
+								"auto"
+							],
+							"description": "Folie: Format"
+						},
+						"slide_nav": {
+							"type": "boolean",
+							"description": "Folie: Menü und Pfeile anzeigen"
+						},
+						"slide_corner": {
+							"type": "string",
+							"enum": [
+								"",
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Schraffierte Ecke"
+						},
+						"slide_corner_label": {
+							"type": "string",
+							"description": "Folie: Text in der Ecke (erscheint beim Hover)"
+						},
+						"slide_corner_link": {
+							"type": "string",
+							"description": "Folie: Link der Ecke"
+						},
+						"slide_decor_image": {
+							"type": "string",
+							"description": "Folie: Deko-Bild (Hover)"
+						},
+						"slide_decor_position": {
+							"type": "string",
+							"enum": [
+								"top-right",
+								"bottom-right",
+								"bottom-left",
+								"top-left"
+							],
+							"description": "Folie: Position Deko-Bild"
+						},
+						"slide_decor_animation": {
+							"type": "string",
+							"enum": [
+								"tilt",
+								"move",
+								"float",
+								"wobble"
+							],
+							"description": "Folie: Animation Deko-Bild"
+						},
+						"classes": {
+							"type": "string",
+							"description": "Folie: CSS-Klassen"
+						},
+						"viewer_title": {
+							"type": "string",
+							"description": "Viewer: Titel"
+						},
+						"viewer_chapters": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string",
+										"description": "Titel"
+									},
+									"full": {
+										"type": "string",
+										"description": "Eröffnen (ganzer Text) Markdown."
+									},
+									"summary": {
+										"type": "string",
+										"description": "Zusammengefasst Markdown."
+									},
+									"short": {
+										"type": "string",
+										"description": "Gekürzt Markdown."
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Viewer: Kapitel"
+						},
+						"viewer_mode": {
+							"type": "string",
+							"enum": [
+								"full",
+								"summary",
+								"short"
+							],
+							"description": "Viewer: Ansicht beim Laden"
+						},
+						"viewer_classes": {
+							"type": "string",
+							"description": "Viewer: CSS-Klassen"
+						},
+						"city_section_id": {
+							"type": "string",
+							"description": "Stadt: Section-ID (Anker)"
+						},
+						"city_mode": {
+							"type": "string",
+							"enum": [
+								"manual",
+								"random"
+							],
+							"description": "Stadt: Häuser"
+						},
+						"city_houses": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"type": {
+										"type": "string",
+										"enum": [
+											"flat",
+											"gable",
+											"hut",
+											"shop",
+											"tower",
+											"dome",
+											"church",
+											"tvtower",
+											"factory",
+											"station"
+										],
+										"description": "Typ"
+									},
+									"width": {
+										"type": "number",
+										"description": "Breite (1 – 20)"
+									},
+									"floors": {
+										"type": "number",
+										"description": "Stockwerke (Höhe)"
+									},
+									"windows": {
+										"type": "number",
+										"description": "Fenster pro Stockwerk"
+									},
+									"door": {
+										"type": "boolean",
+										"description": "Tür"
+									},
+									"details": {
+										"type": "boolean",
+										"description": "Details (Antennen, Schornstein, Kreuz, Rauch …)"
+									},
+									"color": {
+										"type": "string",
+										"enum": [
+											"",
+											"blue",
+											"orange",
+											"purple",
+											"green",
+											"gold",
+											"red",
+											"grey"
+										],
+										"description": "Farbe"
+									},
+									"label": {
+										"type": "string",
+										"description": "Beschriftung (Tooltip)"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Stadt: Häuser (von links nach rechts)"
+						},
+						"city_seed": {
+							"type": "string",
+							"description": "Stadt: Zufall: Startwert (gleicher Wert = gleiche Skyline)"
+						},
+						"city_count": {
+							"type": "number",
+							"description": "Stadt: Zufall: Anzahl Häuser"
+						},
+						"city_style": {
+							"type": "string",
+							"enum": [
+								"line",
+								"filled",
+								"mixed"
+							],
+							"description": "Stadt: Stil"
+						},
+						"city_gap": {
+							"type": "number",
+							"description": "Stadt: Abstand zwischen den Häusern (0 – 10)"
+						},
+						"city_height": {
+							"type": "string",
+							"description": "Stadt: Höhe"
+						},
+						"city_align": {
+							"type": "string",
+							"enum": [
+								"left",
+								"center",
+								"right",
+								"spread"
+							],
+							"description": "Stadt: Ausrichtung"
+						},
+						"city_ground": {
+							"type": "boolean",
+							"description": "Stadt: Bodenlinie"
+						},
+						"city_roll_in": {
+							"type": "string",
+							"enum": [
+								"",
+								"hover",
+								"view",
+								"always"
+							],
+							"description": "Stadt: Hereinrollen"
+						},
+						"city_hover_animation": {
+							"type": "string",
+							"enum": [
+								"",
+								"tilt",
+								"move",
+								"float",
+								"wobble",
+								"look"
+							],
+							"description": "Stadt: Animation beim Darüberfahren (Hover)"
+						},
+						"city_classes": {
+							"type": "string",
+							"description": "Stadt: CSS-Klassen"
+						},
+						"scene_image": {
+							"type": "string",
+							"description": "Szene: Hintergrundbild statt der Stadt (optional)"
 						}
 					},
 					"additionalProperties": false
@@ -3921,32 +6710,51 @@
 										"type": "string",
 										"enum": [
 											"partyArtMotivation",
+											"partyCardRow",
 											"partyCaseLeafletRegion",
 											"partyContactCloser",
+											"partyDocumentCard",
 											"partyDocuments",
 											"partyDonateBlock",
 											"partyEventBlock",
 											"partyForm",
 											"partyGallery",
+											"partyGazeBreaker",
+											"partyHeroTitle",
+											"partyHouseRow",
+											"partyHoverCorner",
+											"partyHoverDecor",
 											"partyImage",
+											"partyInfoStack",
 											"partyLandscapeScene",
 											"partyLeafletMap",
+											"partyListCard",
 											"partyMarkdown",
+											"partyMarkdownViewer",
 											"partyMusicAnchor",
 											"partyMusicPlayer",
+											"partyNextArrow",
 											"partyPartyHeader",
 											"partyQuote",
 											"partyRegionScroll",
+											"partyRollTiles",
 											"partyScrollElement",
 											"partyScrollReference",
 											"partySecurityConcept",
 											"partySkylineBreaker",
+											"partySlideCards",
+											"partySlideDocument",
+											"partySlideFirst",
+											"partySlideListForm",
+											"partySlideMap",
+											"partySlideViewer",
 											"partySplit",
 											"partyStainedGlass",
 											"partyTeamBlock",
 											"partyVideoCommentary",
 											"partyViewboxHover",
 											"partyWaterAnimation",
+											"partyWaveLine",
 											"partyWpButton",
 											"partyWpColumns",
 											"partyWpGroup",
@@ -4379,6 +7187,18 @@
 							"type": "string",
 							"description": "Feste Höhe (optional). Leer lassen, dann skaliert die Szene mit der Breite"
 						},
+						"hover_animation": {
+							"type": "string",
+							"enum": [
+								"",
+								"tilt",
+								"move",
+								"float",
+								"wobble",
+								"look"
+							],
+							"description": "Animation beim Darüberfahren (Hover)"
+						},
 						"hide_mobile": {
 							"type": "boolean",
 							"description": "Auf Mobilgeräten ausblenden"
@@ -4386,6 +7206,84 @@
 						"classes": {
 							"type": "string",
 							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyWaveLine": {
+			"type": "object",
+			"description": "Party component \"Wellenlinie\": Wellenlinie als Trenner, optional mit Wasserfläche und Segelboot (Skizze: First Page, Bilanz).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyWaveLine"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"variant": {
+							"type": "string",
+							"enum": [
+								"line",
+								"double",
+								"water"
+							],
+							"description": "Art"
+						},
+						"boat": {
+							"type": "boolean",
+							"description": "Segelboot"
+						},
+						"boat_position": {
+							"type": "number",
+							"description": "Position des Boots (0 – 100 %)"
+						},
+						"height": {
+							"type": "string",
+							"description": "Höhe"
+						},
+						"color": {
+							"type": "string",
+							"enum": [
+								"",
+								"blue",
+								"green",
+								"orange",
+								"purple"
+							],
+							"description": "Farbe"
+						},
+						"animate": {
+							"type": "boolean",
+							"description": "Wellen bewegen sich"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
 						}
 					},
 					"additionalProperties": false

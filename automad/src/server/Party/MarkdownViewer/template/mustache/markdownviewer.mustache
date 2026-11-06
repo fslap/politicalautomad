@@ -1,0 +1,25 @@
+<div class="md-viewer {{classes}}" data-md-viewer data-mode="{{mode}}">
+    <div class="md-viewer__bar">
+        <div class="md-viewer__modes" role="group" aria-label="Ansicht">
+            <button type="button" data-md-mode="full">Eröffnen</button>
+            <button type="button" data-md-mode="summary">Zusammenfassen</button>
+            <button type="button" data-md-mode="short">Kürzen</button>
+        </div>
+        {{#multiple}}
+            <div class="md-viewer__pager">
+                <button type="button" data-md-prev aria-label="Vorheriges Kapitel">&#9664;</button>
+                <span data-md-position>1 / {{count}}</span>
+                <button type="button" data-md-next aria-label="Nächstes Kapitel">&#9654;</button>
+            </div>
+        {{/multiple}}
+    </div>
+    {{#title}}<h2 class="md-viewer__title">{{title}}</h2>{{/title}}
+    {{#chapters}}
+        <section class="md-viewer__chapter" data-md-chapter="{{index}}"{{^first}} hidden{{/first}}>
+            {{#title}}<h3>{{title}}</h3>{{/title}}
+            <div class="md-viewer__text" data-md-text="full">{{{full}}}</div>
+            <div class="md-viewer__text" data-md-text="summary">{{{summary}}}</div>
+            <div class="md-viewer__text" data-md-text="short">{{{short}}}</div>
+        </section>
+    {{/chapters}}
+</div>

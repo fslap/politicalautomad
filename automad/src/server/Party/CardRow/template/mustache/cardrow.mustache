@@ -1,0 +1,13 @@
+<div class="card-row {{classes}}" style="{{style}}">
+    {{#title}}<h2 class="card-row__title">{{title}}</h2>{{/title}}
+    <div class="card-row__grid">
+        {{#cards}}
+            <article class="card-row__card">
+                {{#image}}<img src="{{image}}" alt="{{title}}" decoding="async">{{/image}}
+                {{#value}}<p class="card-row__value">{{value}}</p>{{/value}}
+                {{#title}}<h3>{{#link}}<a href="{{link}}">{{/link}}{{title}}{{#link}}</a>{{/link}}</h3>{{/title}}
+                {{#text}}<p>{{text}}</p>{{/text}}
+            </article>
+        {{/cards}}
+    </div>
+</div>

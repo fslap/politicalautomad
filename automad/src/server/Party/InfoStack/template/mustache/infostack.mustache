@@ -1,0 +1,10 @@
+<div class="info-stack {{classes}}">
+    {{#title}}<h2 class="info-stack__title">{{title}}</h2>{{/title}}
+    {{#text_html}}<div class="info-stack__text">{{{text_html}}}</div>{{/text_html}}
+    {{#has_box}}
+        <div class="info-stack__box">
+            {{#box_image}}<img src="{{box_image}}" alt="" decoding="async">{{/box_image}}
+            {{{box_html}}}
+        </div>
+    {{/has_box}}
+</div>

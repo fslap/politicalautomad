@@ -1,0 +1,8 @@
+<div class="list-card {{classes}}">
+    {{#title}}<p class="list-card__tab">{{title}}</p>{{/title}}
+    <div class="list-card__body">
+        <ul>{{#items}}<li>{{.}}</li>{{/items}}</ul>
+        {{{text_html}}}
+        {{#link}}<a class="list-card__link" href="{{link}}" target="_blank" rel="noopener">{{link_label}}</a>{{/link}}
+    </div>
+</div>

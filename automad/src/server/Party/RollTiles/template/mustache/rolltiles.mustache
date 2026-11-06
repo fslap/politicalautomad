@@ -1,0 +1,10 @@
+{{#has_tiles}}
+<div class="roll-tiles roll-tiles--{{position}}{{#always}} roll-tiles--always{{/always}} {{classes}}">
+    {{#tiles}}
+        <a class="roll-tiles__tile" style="{{style}}" {{#link}}href="{{link}}"{{/link}}>
+            {{#image}}<img src="{{image}}" alt="{{label}}" decoding="async">{{/image}}
+            {{#label}}<span>{{label}}</span>{{/label}}
+        </a>
+    {{/tiles}}
+</div>
+{{/has_tiles}}

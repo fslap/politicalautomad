@@ -1,0 +1,13 @@
+<div class="{{classes}}" style="{{style}}">
+    <svg class="wave-line__svg" viewBox="0 0 1600 120" preserveAspectRatio="none" aria-hidden="true">
+        {{#is_water}}
+            <path class="wave-line__back" d="M0 60 C 200 20, 400 100, 600 60 S 1000 20, 1200 60 S 1500 95, 1600 50 L1600 120 L0 120 Z"/>
+            <path class="wave-line__front" d="M0 80 C 220 45, 420 115, 640 80 S 1040 45, 1260 80 S 1520 105, 1600 75 L1600 120 L0 120 Z"/>
+        {{/is_water}}
+        {{^is_water}}
+            <path class="wave-line__stroke" d="M0 60 C 200 25, 400 95, 600 60 S 1000 25, 1200 60 S 1500 90, 1600 55"/>
+            {{#is_double}}<path class="wave-line__stroke" d="M0 85 C 200 50, 400 120, 600 85 S 1000 50, 1200 85 S 1500 115, 1600 80"/>{{/is_double}}
+        {{/is_water}}
+    </svg>
+    {{#boat}}<span class="wave-line__boat party-hover-item">{{{boat}}}</span>{{/boat}}
+</div>

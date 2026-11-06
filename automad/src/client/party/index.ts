@@ -38,6 +38,13 @@ import { initConsentFrame } from './components/Consent';
 import { initDonate } from './components/Donate';
 import { initLook } from './components/Look';
 import { initMap } from './components/Map';
+import { initMarkdownViewer } from './components/MarkdownViewer';
+import {
+	initListExpand,
+	initMore,
+	initRollView,
+	initSlide,
+} from './components/Slides';
 import { initMusicPlayer } from './components/MusicPlayer';
 import { initStainedGlass } from './components/StainedGlass';
 import { initTurnstile } from './components/Turnstile';
@@ -59,6 +66,11 @@ const behaviours: Array<
 	['[data-party-stained-glass]', initStainedGlass],
 	['[data-party-music-player]', initMusicPlayer],
 	['[data-party-look]', initLook],
+	['[data-party-slide]', initSlide],
+	['[data-slide-more]', initMore],
+	['[data-md-viewer]', initMarkdownViewer],
+	['[data-list-expand]', initListExpand],
+	['[data-party-roll-view]', initRollView],
 ];
 
 const init = (): void => {

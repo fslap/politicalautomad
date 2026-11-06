@@ -1,0 +1,7 @@
+<article class="doc-card {{classes}}">
+    {{#title}}<h3 class="doc-card__title">{{title}}</h3>{{/title}}
+    {{#preview}}<img class="doc-card__preview" src="{{preview}}" alt="{{title}}" decoding="async">{{/preview}}
+    {{#excerpt_html}}<div class="doc-card__excerpt">{{{excerpt_html}}}</div>{{/excerpt_html}}
+    {{^preview}}{{^excerpt_html}}<div class="doc-card__lines" aria-hidden="true"><span></span><span></span><span></span><span></span></div>{{/excerpt_html}}{{/preview}}
+    {{#file}}<a class="doc-card__button" href="{{file}}" target="_blank" rel="noopener">{{button}}</a>{{/file}}
+</article>

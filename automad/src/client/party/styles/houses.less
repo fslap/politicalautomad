@@ -1,0 +1,225 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// Häuserzeile / Skyline (HouseRow)
+.am-party {
+	.house-row {
+		--house-color: currentColor;
+
+		position: relative;
+		height: var(--houses-height, 220px);
+		color: var(--party-bg-blue, #2b3566);
+
+		> svg {
+			display: block;
+			width: 100%;
+			height: 100%;
+			overflow: visible;
+		}
+	}
+
+	[class*='bg'] .house-row,
+	.darklast .house-row,
+	.house-row[class*='bg'] {
+		color: #fff;
+	}
+
+	.house {
+		color: var(--house-color);
+		transform-box: fill-box;
+		transform-origin: center bottom;
+	}
+
+	.house--blue {
+		--house-color: var(--party-bg-blue, #2b3566);
+	}
+
+	.house--orange {
+		--house-color: var(--party-bg-orange, #a95a36);
+	}
+
+	.house--purple {
+		--house-color: var(--party-bg-purple, #5c4370);
+	}
+
+	.house--green {
+		--house-color: var(--party-bg-green, #3e6b56);
+	}
+
+	.house--gold {
+		--house-color: var(--party-bg-gold, #d8b25c);
+	}
+
+	.house--red {
+		--house-color: var(--party-bg-red, #8a3a40);
+	}
+
+	.house--grey {
+		--house-color: #7c7f8c;
+	}
+
+	.house__body,
+	.house__roof,
+	.house__window,
+	.house__door,
+	.house__line,
+	.house-row__ground {
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 3;
+		stroke-linejoin: round;
+		stroke-linecap: round;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.house__window,
+	.house__door {
+		stroke-width: 2;
+	}
+
+	.house__awning {
+		fill: currentColor;
+		opacity: 0.55;
+	}
+
+	.house__awning--alt {
+		opacity: 0.15;
+	}
+
+	.house__smoke circle {
+		fill: currentColor;
+		opacity: 0.18;
+		animation: house-smoke 4s ease-in-out infinite;
+		transform-box: fill-box;
+		transform-origin: center;
+	}
+
+	.house__smoke circle:nth-child(2) {
+		animation-delay: -1.3s;
+	}
+
+	.house__smoke circle:nth-child(3) {
+		animation-delay: -2.6s;
+	}
+
+	@keyframes house-smoke {
+		0%,
+		100% {
+			translate: 0 0;
+			opacity: 0.18;
+		}
+
+		50% {
+			translate: 4px -6px;
+			opacity: 0.08;
+		}
+	}
+
+	// Filled: colored houses with light windows.
+	.house-row__svg--filled,
+	.house-row__svg--mixed .house:nth-child(even) {
+		.house__body,
+		.house__roof {
+			fill: currentColor;
+		}
+
+		.house__window,
+		.house__door {
+			fill: #fff;
+			stroke: #fff;
+			opacity: 0.85;
+		}
+
+		.house__line {
+			stroke: currentColor;
+		}
+	}
+
+	.house-row__svg--filled .house__awning--alt,
+	.house-row__svg--mixed .house:nth-child(even) .house__awning--alt {
+		fill: #fff;
+		opacity: 0.8;
+	}
+
+	// Hereinrollen (one house after the other).
+	.house-row--roll .house-row__ground {
+		opacity: 0;
+		transition: opacity 0.4s ease;
+	}
+
+	.house-row--roll-hover:hover .house-row__ground,
+	.party-slide:hover .house-row--roll-hover .house-row__ground,
+	.house-row--roll-view.is-in .house-row__ground,
+	.house-row--roll-always .house-row__ground {
+		opacity: 1;
+	}
+
+	.house-row--roll .house {
+		opacity: 0;
+		translate: 40px 30px;
+		rotate: 18deg;
+		transition:
+			translate 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+			rotate 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+			opacity 0.35s ease;
+		transition-delay: calc(var(--i, 0) * 90ms);
+	}
+
+	.house-row--roll-hover:hover .house,
+	.party-slide:hover .house-row--roll-hover .house,
+	.house-row--roll-view.is-in .house,
+	.house-row--roll-always .house {
+		opacity: 1;
+		translate: 0 0;
+		rotate: 0deg;
+	}
+
+	.house-row--roll-always .house {
+		animation: house-roll-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+		animation-delay: calc(var(--i, 0) * 90ms);
+	}
+
+	@keyframes house-roll-in {
+		from {
+			opacity: 0;
+			translate: 40px 30px;
+			rotate: 18deg;
+		}
+	}
+
+	@media (hover: none) {
+		.house-row--roll-hover .house {
+			opacity: 1;
+			translate: 0 0;
+			rotate: 0deg;
+		}
+	}
+
+	// Hover animations of single houses.
+	.house-row.party-hover--tilt .house:hover {
+		rotate: -4deg;
+	}
+
+	.house-row.party-hover--move .house:hover {
+		translate: 0 -8px;
+	}
+
+	.house-row .house {
+		transition-property: translate, rotate, opacity;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.house-row .house,
+		.house__smoke circle {
+			animation: none !important;
+			transition: none !important;
+			opacity: 1 !important;
+			translate: none !important;
+			rotate: none !important;
+		}
+	}
+}

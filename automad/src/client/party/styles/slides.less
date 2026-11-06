@@ -1,0 +1,1237 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// Slides and their elements (sketch "First Page" … "Last Page").
+.am-party {
+	// Slide frame ----------------------------------------------------------------
+	.party-slide {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		padding: clamp(3.25rem, 6vw, 4.5rem) clamp(1.25rem, 5vw, 4.5rem);
+		background: #fff;
+		color: var(--party-ink, #1f2128);
+		isolation: isolate;
+
+		&.party-slide--paper {
+			background: var(--party-paper, #f6f4f0);
+		}
+
+		&.darklast {
+			background: var(--party-bg-dark, #24252b);
+			color: #f2f2f4;
+			width: auto;
+			margin: 0;
+		}
+	}
+
+	// 16:9 is the minimum size (1280, 1600, 1920 … wide screens), slides with more content grow.
+	@media (min-width: 1000px) {
+		.party-slide--ratio-16-9 {
+			min-height: clamp(560px, 56.25vw, 100vh);
+		}
+	}
+
+	.party-slide__body {
+		position: relative;
+		z-index: 2;
+		flex: 1 1 auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: clamp(1rem, 2.5vw, 2rem);
+		min-height: 0;
+	}
+
+	.party-slide__nav--top {
+		position: absolute;
+		inset: clamp(0.75rem, 2vw, 1.25rem) clamp(0.75rem, 2vw, 1.25rem) auto;
+		z-index: 6;
+		display: flex;
+		justify-content: center;
+		pointer-events: none;
+
+		> * {
+			pointer-events: auto;
+		}
+	}
+
+	.party-slide__menu {
+		position: absolute;
+		left: 0;
+		top: 0;
+		display: grid;
+		gap: 4px;
+		width: 40px;
+		height: 40px;
+		padding: 11px 10px;
+		border: 1.5px solid currentColor;
+		border-radius: 8px;
+		background: transparent;
+		color: inherit;
+		cursor: pointer;
+		opacity: 0.75;
+
+		span {
+			display: block;
+			height: 2px;
+			background: currentColor;
+			border-radius: 2px;
+		}
+
+		&:hover,
+		&[aria-expanded='true'] {
+			opacity: 1;
+		}
+	}
+
+	.party-slide__overview {
+		position: absolute;
+		left: 0;
+		top: 48px;
+		display: grid;
+		min-width: 15rem;
+		max-height: 60vh;
+		overflow: auto;
+		padding: 0.4rem;
+		border-radius: 10px;
+		background: #fff;
+		color: var(--party-ink, #1f2128);
+		box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+
+		button {
+			border: 0;
+			background: none;
+			color: inherit;
+			font: inherit;
+			font-size: 0.92rem;
+			text-align: left;
+			padding: 0.5rem 0.75rem;
+			border-radius: 6px;
+			cursor: pointer;
+
+			&:hover {
+				background: rgba(0, 0, 0, 0.06);
+			}
+
+			&.is-current {
+				font-weight: 700;
+			}
+		}
+	}
+
+	.party-slide__arrow {
+		width: 44px;
+		height: 30px;
+		border: 0;
+		background: none;
+		color: inherit;
+		font-size: 1.6rem;
+		line-height: 1;
+		cursor: pointer;
+		opacity: 0.6;
+		transition:
+			opacity 0.2s ease,
+			translate 0.2s ease;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.party-slide__arrow--up:hover {
+		translate: 0 -3px;
+	}
+
+	.party-slide__arrow--down {
+		position: absolute;
+		left: 50%;
+		bottom: clamp(0.5rem, 1.5vw, 1rem);
+		z-index: 6;
+		translate: -50% 0;
+
+		&:hover {
+			translate: -50% 3px;
+		}
+	}
+
+	// Hover corner ("show/hide") ------------------------------------------------
+	.party-corner {
+		--corner: clamp(70px, 9vw, 120px);
+
+		position: absolute;
+		z-index: 5;
+		width: var(--corner);
+		height: var(--corner);
+		color: inherit;
+		text-decoration: none;
+		transition:
+			width 0.35s ease,
+			height 0.35s ease;
+
+		&:hover {
+			--corner: clamp(120px, 15vw, 200px);
+		}
+	}
+
+	.party-corner__hatch {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			135deg,
+			currentColor 0 2px,
+			transparent 2px 11px
+		);
+		opacity: 0.55;
+	}
+
+	.party-corner__label {
+		position: absolute;
+		max-width: 70%;
+		padding: 0.25em 0.5em;
+		border-radius: 4px;
+		background: var(--party-bg-dark, #24252b);
+		color: #fff;
+		font-size: 0.85rem;
+		font-weight: 700;
+		line-height: 1.25;
+		opacity: 0;
+		transition: opacity 0.3s ease 0.1s;
+	}
+
+	.party-corner:hover .party-corner__label,
+	.party-corner:focus .party-corner__label {
+		opacity: 1;
+	}
+
+	.party-corner--top-right {
+		top: 0;
+		right: 0;
+
+		.party-corner__hatch {
+			clip-path: polygon(0 0, 100% 0, 100% 100%);
+		}
+
+		.party-corner__label {
+			top: 12%;
+			right: 8%;
+		}
+	}
+
+	.party-corner--top-left {
+		top: 0;
+		left: 0;
+
+		.party-corner__hatch {
+			clip-path: polygon(0 0, 100% 0, 0 100%);
+		}
+
+		.party-corner__label {
+			top: 12%;
+			left: 8%;
+		}
+	}
+
+	.party-corner--bottom-right {
+		bottom: 0;
+		right: 0;
+
+		.party-corner__hatch {
+			clip-path: polygon(100% 0, 100% 100%, 0 100%);
+		}
+
+		.party-corner__label {
+			bottom: 12%;
+			right: 8%;
+		}
+	}
+
+	.party-corner--bottom-left {
+		bottom: 0;
+		left: 0;
+
+		.party-corner__hatch {
+			clip-path: polygon(0 0, 100% 100%, 0 100%);
+		}
+
+		.party-corner__label {
+			bottom: 12%;
+			left: 8%;
+		}
+	}
+
+	// Slides with a menu: the top left corner leaves room for the menu button.
+	.party-slide .party-corner--top-left {
+		--corner: clamp(50px, 6vw, 80px);
+	}
+
+	.party-corner-area,
+	.party-decor-area {
+		position: relative;
+		overflow: hidden;
+	}
+
+	// Hover decoration ----------------------------------------------------------
+	.party-decor {
+		position: absolute;
+		z-index: 4;
+		width: clamp(48px, 6vw, 84px);
+		color: currentColor;
+		opacity: 0.85;
+		transition:
+			rotate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+			translate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+		img,
+		svg {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+	}
+
+	.party-decor--bottom-right {
+		right: 6%;
+		bottom: 8%;
+	}
+
+	.party-decor--bottom-left {
+		left: 6%;
+		bottom: 8%;
+	}
+
+	.party-decor--top-right {
+		right: 6%;
+		top: 10%;
+	}
+
+	.party-decor--top-left {
+		left: 6%;
+		top: 10%;
+	}
+
+	.party-slide:hover .party-decor--tilt,
+	.party-decor-area:hover .party-decor--tilt {
+		rotate: -14deg;
+	}
+
+	.party-slide:hover .party-decor--move,
+	.party-decor-area:hover .party-decor--move {
+		translate: -30% -20%;
+	}
+
+	.party-slide:hover .party-decor--float,
+	.party-decor-area:hover .party-decor--float {
+		animation: party-hover-float 2.4s ease-in-out infinite;
+	}
+
+	.party-slide:hover .party-decor--wobble,
+	.party-decor-area:hover .party-decor--wobble {
+		animation: party-hover-wobble 0.9s ease-in-out infinite;
+	}
+
+	// Drawn scenes inside of slides (SVG groups react to the hover classes).
+	.party-slide__scene {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 1;
+		height: 46%;
+		pointer-events: none;
+		color: var(--party-bg-blue, #2b3566);
+
+		> img,
+		> svg {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: bottom;
+		}
+
+		g.party-hover-item,
+		path.party-hover-item {
+			transform-box: fill-box;
+			transform-origin: center bottom;
+		}
+	}
+
+	.party-slide:hover .party-slide__scene.party-hover {
+		pointer-events: none;
+	}
+
+	.party-slide__scene.party-hover--tilt .party-hover-item {
+		transition: rotate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	.party-slide:hover .party-slide__scene.party-hover--tilt {
+		.party-hover-item:nth-child(odd) {
+			rotate: -2deg;
+		}
+
+		.party-hover-item:nth-child(even) {
+			rotate: 2deg;
+		}
+	}
+
+	.party-slide:hover
+		.party-slide__scene.party-hover--float
+		.party-hover-item {
+		animation: party-hover-float 2.6s ease-in-out infinite;
+	}
+
+	.party-slide:hover
+		.party-slide__scene.party-hover--wobble
+		.party-hover-item {
+		animation: party-hover-wobble 1.1s ease-in-out infinite;
+	}
+
+	.party-slide:hover .party-slide__scene.party-hover--move .party-hover-item {
+		translate: 2% -2%;
+		transition: translate 0.6s ease;
+	}
+
+	.party-slide__boat {
+		color: var(--party-ink, #1f2128);
+	}
+
+	[class*='bg'] .party-slide__scene,
+	.darklast .party-slide__scene {
+		color: #fff;
+	}
+
+	// First page
+	.party-slide--first .party-slide__body {
+		justify-content: flex-start;
+		padding-bottom: 26%;
+	}
+
+	// Title with "Mehr" ---------------------------------------------------------
+	.hero-title {
+		display: grid;
+		grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+		align-items: center;
+		gap: 1.5rem 3rem;
+	}
+
+	.hero-title--center {
+		grid-template-columns: minmax(0, 1fr);
+		justify-items: center;
+		text-align: center;
+	}
+
+	.hero-title__text {
+		display: grid;
+		margin: 0;
+		font-size: clamp(2.2rem, 1.2rem + 4vw, 4.8rem);
+		line-height: 1.02;
+		letter-spacing: -0.02em;
+	}
+
+	.hero-title__more {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: center;
+		justify-self: center;
+		gap: 0.15rem;
+		color: inherit;
+		text-decoration: none;
+		font-size: clamp(1.2rem, 1rem + 1vw, 1.8rem);
+		font-weight: 800;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.hero-title__chevron {
+		width: 1.1em;
+		height: 1.1em;
+		border-right: 3px solid currentColor;
+		border-bottom: 3px solid currentColor;
+		rotate: 45deg;
+		animation: party-more 1.8s ease-in-out infinite;
+	}
+
+	@keyframes party-more {
+		0%,
+		100% {
+			translate: 0 -20%;
+		}
+
+		50% {
+			translate: 0 20%;
+		}
+	}
+
+	@media (max-width: 700px) {
+		.hero-title {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	// Columns of slides
+	.party-slide__cols {
+		display: grid;
+		gap: clamp(1.25rem, 3vw, 3rem);
+		align-items: start;
+	}
+
+	.party-slide__cols--doc {
+		grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+	}
+
+	.party-slide__cols--listform {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+	}
+
+	@media (max-width: 800px) {
+		.party-slide__cols--doc,
+		.party-slide__cols--listform {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	// Document card -------------------------------------------------------------
+	.doc-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 1.25rem;
+		border: 1.5px solid currentColor;
+		border-radius: 10px;
+		background: rgba(255, 255, 255, 0.7);
+		color: var(--party-ink, #1f2128);
+		max-height: 70vh;
+		overflow: hidden;
+	}
+
+	.doc-card__title {
+		margin: 0;
+		font-size: 1.15rem;
+	}
+
+	.doc-card__preview {
+		width: 100%;
+		max-height: 18rem;
+		object-fit: cover;
+		object-position: top;
+		border-radius: 6px;
+		border: 1px solid var(--party-line, rgba(0, 0, 0, 0.12));
+	}
+
+	.doc-card__excerpt {
+		font-size: 0.92rem;
+		line-height: 1.55;
+		overflow: hidden;
+		mask-image: linear-gradient(#000 70%, transparent);
+		max-height: 14rem;
+
+		> :first-child {
+			margin-top: 0;
+		}
+	}
+
+	.doc-card__lines {
+		display: grid;
+		gap: 0.7rem;
+		padding: 0.5rem 0;
+
+		span {
+			height: 0.5rem;
+			border-radius: 4px;
+			background: currentColor;
+			opacity: 0.18;
+		}
+
+		span:nth-child(2) {
+			width: 85%;
+		}
+
+		span:nth-child(4) {
+			width: 60%;
+		}
+	}
+
+	.doc-card__button,
+	.doc-card__button:visited {
+		align-self: flex-start;
+		padding: 0.35em 1em;
+		border: 1.5px solid currentColor;
+		border-radius: 6px;
+		color: inherit;
+		font-weight: 700;
+		text-decoration: none;
+		font-size: 0.92rem;
+
+		&:hover {
+			background: var(--party-ink, #1f2128);
+			color: #fff;
+			opacity: 1;
+		}
+	}
+
+	// Info stack --------------------------------------------------------------------
+	.info-stack {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.info-stack__title {
+		margin: 0;
+		padding-bottom: 0.4rem;
+		border-bottom: 2px solid currentColor;
+	}
+
+	.info-stack__text > :first-child {
+		margin-top: 0;
+	}
+
+	.info-stack__box {
+		padding: 1.25rem;
+		border-radius: 10px;
+		background: rgba(0, 0, 0, 0.05);
+
+		img {
+			display: block;
+			width: 100%;
+			border-radius: 6px;
+			margin-bottom: 0.75rem;
+		}
+
+		> :last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	[class*='bg'] .info-stack__box,
+	.darklast .info-stack__box {
+		background: rgba(255, 255, 255, 0.1);
+	}
+
+	// Card row (Bilanz) ---------------------------------------------------------------
+	.card-row__title {
+		margin-bottom: 1rem;
+	}
+
+	.card-row__grid {
+		display: grid;
+		grid-template-columns: repeat(var(--cards, 3), minmax(0, 1fr));
+		gap: clamp(1rem, 2vw, 1.75rem);
+	}
+
+	.card-row__card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding: 1rem;
+		border: 1.5px solid currentColor;
+		border-radius: 10px;
+		background: rgba(255, 255, 255, 0.55);
+		color: var(--party-ink, #1f2128);
+		transition:
+			translate 0.3s ease,
+			box-shadow 0.3s ease;
+
+		&:hover {
+			translate: 0 -4px;
+			box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+		}
+
+		img {
+			width: 100%;
+			aspect-ratio: 4 / 3;
+			object-fit: cover;
+			border-radius: 6px;
+		}
+
+		h3 {
+			margin: 0;
+			font-size: 1.1rem;
+		}
+
+		p {
+			margin: 0;
+			font-size: 0.92rem;
+		}
+
+		a {
+			color: inherit;
+		}
+	}
+
+	.card-row__value {
+		font-size: 1.5rem !important;
+		font-weight: 800;
+		letter-spacing: -0.01em;
+	}
+
+	@media (max-width: 800px) {
+		.card-row__grid {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	.party-slide__waveline {
+		display: block;
+		width: 100%;
+		height: 40px;
+		opacity: 0.5;
+	}
+
+	// Roll tiles ("roll in :hover") -----------------------------------------------------
+	.roll-tiles {
+		display: flex;
+		gap: 0.6rem;
+		z-index: 4;
+	}
+
+	.party-slide .roll-tiles--bottom-right,
+	.party-slide .roll-tiles--bottom-left {
+		position: absolute;
+		bottom: clamp(2.5rem, 5vw, 3.5rem);
+	}
+
+	.party-slide .roll-tiles--bottom-right {
+		right: clamp(1.25rem, 5vw, 4.5rem);
+	}
+
+	.party-slide .roll-tiles--bottom-left {
+		left: clamp(1.25rem, 5vw, 4.5rem);
+	}
+
+	.roll-tiles--bottom-right {
+		justify-content: flex-end;
+	}
+
+	.roll-tiles__tile {
+		display: grid;
+		place-items: center;
+		width: clamp(64px, 7vw, 92px);
+		aspect-ratio: 1;
+		overflow: hidden;
+		border: 1.5px solid currentColor;
+		border-radius: 8px;
+		background: #fff;
+		color: var(--party-ink, #1f2128);
+		text-decoration: none;
+		font-size: 0.75rem;
+		font-weight: 700;
+		text-align: center;
+		opacity: 0;
+		translate: 0 140%;
+		rotate: -30deg;
+		transition:
+			translate 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+			rotate 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+			opacity 0.3s ease;
+		transition-delay: calc(var(--i, 0) * 70ms);
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		img + span {
+			position: absolute;
+			inset: auto 0 0;
+			padding: 0.15rem;
+			background: rgba(255, 255, 255, 0.85);
+		}
+	}
+
+	.party-slide:hover .roll-tiles__tile,
+	.am-party-roll-tiles:hover .roll-tiles__tile,
+	.roll-tiles--always .roll-tiles__tile,
+	.roll-tiles__tile:focus {
+		opacity: 1;
+		translate: 0 0;
+		rotate: 0deg;
+	}
+
+	.am-party-roll-tiles {
+		min-height: 120px;
+		padding: 1rem;
+	}
+
+	@media (hover: none) {
+		.roll-tiles__tile {
+			opacity: 1;
+			translate: 0 0;
+			rotate: 0deg;
+		}
+	}
+
+	// List card (Satzung) ---------------------------------------------------------------
+	.list-card {
+		color: var(--party-ink, #1f2128);
+	}
+
+	.list-card__tab {
+		display: inline-block;
+		margin: 0;
+		padding: 0.35rem 1rem;
+		border: 1.5px solid currentColor;
+		border-bottom: 0;
+		border-radius: 8px 8px 0 0;
+		background: #fff;
+		font-weight: 800;
+	}
+
+	.list-card__body {
+		padding: 1.25rem 1.5rem;
+		border: 1.5px solid currentColor;
+		border-radius: 0 10px 10px 10px;
+		background: #fff;
+
+		ul {
+			margin: 0 0 0.75rem;
+			padding-left: 1.2em;
+		}
+
+		li {
+			list-style: disc;
+			margin: 0.35em 0;
+		}
+	}
+
+	.list-card__link {
+		font-weight: 700;
+	}
+
+	// Form inside of a slide
+	.party-slide__form .wp-block-group.widthcontainer {
+		padding: 0 !important;
+		background: none;
+	}
+
+	// Markdown viewer -----------------------------------------------------------------------
+	.md-viewer {
+		display: grid;
+		gap: 0.75rem;
+		padding: clamp(1rem, 2.5vw, 1.75rem);
+		border: 1.5px solid currentColor;
+		border-radius: 10px;
+		background: rgba(255, 255, 255, 0.92);
+		color: var(--party-ink, #1f2128);
+	}
+
+	.md-viewer__bar {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.5rem;
+	}
+
+	.md-viewer__modes,
+	.md-viewer__pager {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+
+		button {
+			border: 1.5px solid currentColor;
+			border-radius: 6px;
+			background: transparent;
+			color: inherit;
+			font: inherit;
+			font-size: 0.85rem;
+			font-weight: 700;
+			padding: 0.25em 0.75em;
+			cursor: pointer;
+		}
+
+		button[aria-pressed='true'] {
+			background: var(--party-ink, #1f2128);
+			color: #fff;
+		}
+	}
+
+	.md-viewer__pager span {
+		min-width: 3.5em;
+		text-align: center;
+		font-size: 0.85rem;
+	}
+
+	.md-viewer__title {
+		margin: 0;
+	}
+
+	.md-viewer__chapter h3 {
+		margin-top: 0;
+	}
+
+	.md-viewer__text {
+		display: none;
+		max-height: 50vh;
+		overflow: auto;
+
+		> :first-child {
+			margin-top: 0;
+		}
+	}
+
+	.md-viewer[data-mode='full'] [data-md-text='full'],
+	.md-viewer[data-mode='summary'] [data-md-text='summary'],
+	.md-viewer[data-mode='short'] [data-md-text='short'] {
+		display: block;
+	}
+
+	.party-slide--viewer {
+		.party-slide__body {
+			justify-content: flex-start;
+		}
+
+		.party-slide__scene {
+			height: 100%;
+		}
+
+		.party-slide__viewer {
+			position: relative;
+			z-index: 3;
+			width: min(100%, 44rem);
+
+			.md-viewer {
+				background: #fff;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+			}
+		}
+	}
+
+	// Map slide ---------------------------------------------------------------------------
+	.party-slide--map .party-slide__body {
+		justify-content: stretch;
+	}
+
+	.party-slide__map {
+		position: relative;
+		flex: 1 1 auto;
+		min-height: 0;
+
+		.case-leaflet-region {
+			padding: 0;
+			height: 100%;
+		}
+	}
+
+	.party-slide__expand {
+		align-self: flex-start;
+		margin: 0 0 0.5rem;
+		padding: 0.3em 0.9em;
+		border: 1.5px solid currentColor;
+		border-radius: 6px;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		font-size: 0.85rem;
+		font-weight: 700;
+		cursor: pointer;
+	}
+
+	// "Full wenn Liste lang": the list takes the full width instead of the map.
+	.party-slide__map.is-list-expanded {
+		.case-leaflet-region__layout {
+			display: block !important;
+		}
+
+		.case-leaflet-region__mapcol {
+			display: none;
+		}
+
+		.case-leaflet-region__listcol {
+			display: flex;
+			flex-direction: column;
+			width: 100% !important;
+			max-width: none;
+		}
+
+		.case-leaflet-region__list {
+			display: grid;
+			grid-template-columns: repeat(
+				auto-fill,
+				minmax(min(100%, 17rem), 1fr)
+			);
+			gap: 0.75rem;
+			max-height: none;
+			overflow: visible;
+			contain: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-title__chevron,
+		.party-slide__scene .party-hover-item,
+		.party-decor {
+			animation: none !important;
+		}
+	}
+}
+
+// Elements used on their own (outside of slides) get some space around them.
+.am-party {
+	> .hero-title,
+	> .doc-card,
+	> .info-stack,
+	> .card-row,
+	> .roll-tiles,
+	> .list-card,
+	> .md-viewer {
+		margin-block: clamp(1rem, 2.5vw, 2rem);
+	}
+}
+
+// Double chevrons (arrows of the sketch), wave line and next arrow -----------------------
+.am-party {
+	.party-chevrons {
+		display: block;
+		width: 32px;
+		height: 28px;
+	}
+
+	.party-slide__arrow {
+		display: grid;
+		place-items: center;
+		width: 48px;
+		height: 36px;
+		font-size: inherit;
+	}
+
+	.hero-title__chevron {
+		width: auto;
+		height: auto;
+		border: 0;
+		rotate: 0deg;
+
+		.party-chevrons {
+			width: 1.6em;
+			height: 1.4em;
+		}
+	}
+
+	.next-arrow {
+		display: flex;
+		padding: 0.75rem 0;
+	}
+
+	.next-arrow--left {
+		justify-content: flex-start;
+	}
+
+	.next-arrow--center {
+		justify-content: center;
+	}
+
+	.next-arrow--right {
+		justify-content: flex-end;
+	}
+
+	.next-arrow__link,
+	.next-arrow__link:visited {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.2rem;
+		color: inherit;
+		text-decoration: none;
+		font-weight: 800;
+
+		.party-chevrons {
+			animation: party-more 1.8s ease-in-out infinite;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.next-arrow__link[data-direction='up'] {
+		flex-direction: column-reverse;
+	}
+
+	.wave-line {
+		position: relative;
+		height: var(--wave-height, 120px);
+		color: var(--party-bg-blue, #2b3566);
+		overflow: hidden;
+	}
+
+	.wave-line--green {
+		color: var(--party-bg-green, #3e6b56);
+	}
+
+	.wave-line--orange {
+		color: var(--party-bg-orange, #a95a36);
+	}
+
+	.wave-line--purple {
+		color: var(--party-bg-purple, #5c4370);
+	}
+
+	[class*='bg'] .wave-line,
+	.darklast .wave-line {
+		color: #fff;
+	}
+
+	.wave-line__svg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.wave-line__back {
+		fill: currentColor;
+		opacity: 0.18;
+	}
+
+	.wave-line__front {
+		fill: currentColor;
+		opacity: 0.38;
+	}
+
+	.wave-line__stroke {
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 3;
+		vector-effect: non-scaling-stroke;
+		opacity: 0.6;
+	}
+
+	.wave-line--animate .wave-line__back {
+		animation: wave-drift 7s ease-in-out infinite;
+	}
+
+	.wave-line--animate .wave-line__front {
+		animation: wave-drift 5s ease-in-out infinite reverse;
+	}
+
+	@keyframes wave-drift {
+		0%,
+		100% {
+			translate: 0 0;
+		}
+
+		50% {
+			translate: -2% 4%;
+		}
+	}
+
+	.wave-line__boat {
+		position: absolute;
+		left: var(--boat-x, 50%);
+		bottom: 28%;
+		width: clamp(42px, 5vw, 72px);
+		translate: -50% 0;
+		color: var(--party-ink, #1f2128);
+		transform-origin: center bottom;
+		animation: boat-rock 4s ease-in-out infinite;
+
+		svg {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+	}
+
+	@keyframes boat-rock {
+		0%,
+		100% {
+			rotate: -4deg;
+		}
+
+		50% {
+			rotate: 4deg;
+		}
+	}
+
+	.wave-line--line .wave-line__boat,
+	.wave-line--double .wave-line__boat {
+		bottom: 40%;
+	}
+
+	// First slide: houses on the left, the waves in front.
+	.party-slide__scene--first {
+		height: 42%;
+		color: inherit;
+
+		.party-slide__houses {
+			position: absolute;
+			left: 0;
+			bottom: 20%;
+			width: min(42%, 480px);
+			height: 80%;
+
+			.house-row {
+				height: 100%;
+			}
+		}
+
+		.party-slide__waves {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: 45%;
+
+			.wave-line {
+				height: 100%;
+			}
+		}
+	}
+
+	// Bilanz: rolling houses and tiles in the bottom right corner.
+	.party-slide__rollers {
+		position: absolute;
+		right: clamp(1.25rem, 5vw, 4.5rem);
+		bottom: clamp(2.5rem, 5vw, 3.5rem);
+		z-index: 4;
+		display: flex;
+		align-items: flex-end;
+		gap: 1rem;
+		justify-content: flex-end;
+		max-width: 60%;
+		pointer-events: none;
+
+		> * {
+			pointer-events: auto;
+		}
+
+		.house-row {
+			flex: 0 0 auto;
+			width: clamp(140px, 16vw, 240px);
+		}
+
+		.roll-tiles {
+			position: static !important;
+		}
+	}
+
+	// Last page: the city covers the lower half.
+	.party-slide__scene--city {
+		height: 58%;
+		opacity: 0.9;
+
+		.house-row {
+			height: 100%;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.party-slide__rollers {
+			position: static;
+			width: 100%;
+		}
+
+		.party-slide__scene--first .party-slide__houses {
+			width: 70%;
+		}
+	}
+}

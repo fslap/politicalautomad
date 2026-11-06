@@ -1,0 +1,10 @@
+<div class="hero-title hero-title--{{align}} {{classes}}">
+    {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+    <h1 class="hero-title__text">{{#lines}}<span>{{.}}</span>{{/lines}}</h1>
+    {{#more_label}}
+        <a class="hero-title__more" href="{{more_target}}{{^more_target}}#{{/more_target}}" data-slide-more>
+            <span>{{more_label}}</span>
+            <span class="hero-title__chevron">{{{chevrons}}}</span>
+        </a>
+    {{/more_label}}
+</div>
