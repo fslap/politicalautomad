@@ -46,7 +46,7 @@ import {
 	getPageURL,
 	PartyBlockController,
 	query,
-	requestAPI,
+	requestApi,
 	resolveFileUrl,
 	uniqueId,
 } from '@/admin/core';
@@ -465,7 +465,7 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 	 */
 	private changed = debounce(() => {
 		this.renderSummary();
-		this.blockAPI.dispatchChange();
+		this.blockApi.dispatchChange();
 
 		if (this.previewEnabled) {
 			this.renderPreview();
@@ -563,7 +563,7 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 			return;
 		}
 
-		const { data } = await requestAPI(PartyBlockController.preview, {
+		const { data } = await requestApi(PartyBlockController.preview, {
 			type: this.definition.type,
 			data: JSON.stringify(this.getData()),
 			url: getPageURL() || '/',

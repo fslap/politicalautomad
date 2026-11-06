@@ -50,7 +50,7 @@ import { renderFeedSection } from './Partials/System/Feed';
 import { renderI18nSection } from './Partials/System/I18n';
 import { renderLanguageSection } from './Partials/System/Language';
 import { renderMcpSection } from './Partials/System/Mcp';
-import { renderUpdateSection } from './Partials/System/Update';
+import { FirmwareComponent } from '@/admin/components/Party/Firmware';
 import { renderUsersSection } from './Partials/System/Users';
 import { renderMailSection } from './Partials/System/Mail';
 import type {
@@ -67,6 +67,14 @@ interface SystemSectionData {
 	render: () => void;
 	narrowIcon?: boolean;
 }
+
+/**
+ * Render the firmware patch section.
+ *
+ * @returns the rendered HTML
+ */
+const renderFirmwareSection = (): string =>
+	`<${FirmwareComponent.TAG_NAME}></${FirmwareComponent.TAG_NAME}>`;
 
 /**
  * The system settings sections data.
@@ -162,11 +170,12 @@ const getSystemSections = (): SystemSectionData[] => {
 		},
 		{
 			section: Section.update,
-			icon: 'arrow-repeat',
-			title: App.text('systemUpdate'),
-			info: App.text('systemUpdateCardInfo'),
-			state: '<am-system-update-indicator></am-system-update-indicator>',
-			render: renderUpdateSection,
+			icon: 'cpu',
+			// politicalautomad: the upstream updater is replaced by firmware patches.
+			title: 'Firmware-Patch',
+			info: 'Code-Updates als tar-Patch einspielen, Inhalte und Einstellungen bleiben erhalten.',
+			state: `<span class="${CSS.textMuted}">Updates nur per Firmware-Patch</span>`,
+			render: renderFirmwareSection,
 		},
 	];
 };

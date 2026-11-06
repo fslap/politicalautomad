@@ -75,6 +75,18 @@ final class BlockBootstrap {
 		return $definitions;
 	}
 
+	/**
+	 * Return instances of all registered party blocks.
+	 *
+	 * @return AbstractDynamicTemplateBlock[]
+	 */
+	public static function blocks(): array {
+		return array_values(array_filter(
+			array_map(fn (string $class) => new $class(), All::$components),
+			fn (object $block) => $block instanceof AbstractDynamicTemplateBlock
+		));
+	}
+
 	public static function init(): DynamicBlockRegister {
 		$register = self::createRegister();
 		Blocks::setDynamicRegister($register);

@@ -80,7 +80,9 @@ class Update {
 	 * @return bool
 	 */
 	public static function isDisabled(): bool {
-		return file_exists(AM_BASE_DIR . '/.no-updates');
+		// politicalautomad: the upstream updater would replace this fork with the original Automad.
+		// Updates are installed as firmware patches instead, see Automad\Party\Firmware.
+		return true;
 	}
 
 	/**

@@ -169,12 +169,157 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 	}
 
 	/**
+	 * Return the JSON schema of the block for AI agents (MCP), see Automad\Ai\Mcp\Schema\PageSchema.
+	 *
+	 * @return array
+	 */
+	public function agentSchema(): array {
+		$definition = $this->definition();
+		$properties = array(
+			'id' => array('$ref' => '#/$defs/blockId'),
+			'type' => array('const' => $this->type()),
+			'width' => array(
+				'type' => 'string',
+				'description' => 'The block width as a fraction, only used inside of layoutSection blocks.',
+				'enum' => array('1/4', '1/3', '1/2', '2/3', '3/4', '1/1')
+			)
+		);
+
+		if ($definition['stretchable'] ?? true) {
+			$properties['stretched'] = array('type' => 'boolean', 'description' => 'If true the block is stretched to the full width.');
+		}
+
+		$properties['data'] = array(
+			'type' => 'object',
+			'properties' => self::agentFieldsSchema($this->fields()),
+			'additionalProperties' => false
+		);
+
+		return array(
+			'type' => 'object',
+			'description' => trim('Party component "' . ($definition['title'] ?? $this->shortName()) . '": ' . ($definition['description'] ?? '')),
+			'properties' => $properties,
+			'required' => array('type'),
+			'additionalProperties' => false
+		);
+	}
+
+	/**
 	 * Return the full field definitions.
 	 *
 	 * @return array<int, PartyField>
 	 */
 	public function fields(): array {
 		return $this->definition()['fields'] ?? array();
+	}
+
+	/**
+	 * Convert agent data into block data. Data of the saved block that is not part of
+	 * the incoming data is kept.
+	 *
+	 * @param array $data
+	 * @param array|null $savedBlock
+	 * @return array|null
+	 */
+	public function fromAgent(array $data, ?array $savedBlock = null): ?array {
+		$savedBlock = $savedBlock ?? array();
+		$tunes = $savedBlock['tunes'] ?? array();
+		$layout = array();
+
+		if (!empty($data['stretched'])) {
+			$layout['stretched'] = true;
+		}
+
+		if (!empty($data['width'])) {
+			$layout['width'] = $data['width'];
+		}
+
+		if ($layout) {
+			$tunes['layout'] = $layout;
+		} else {
+			unset($tunes['layout']);
+		}
+
+		return array(
+			'id' => $data['id'] ?? ($savedBlock['id'] ?? substr(bin2hex(random_bytes(8)), 0, 10)),
+			'type' => $this->type(),
+			'data' => array_merge(
+				$savedBlock['data'] ?? (empty($savedBlock) ? $this->defaults() : array()),
+				is_array($data['data'] ?? null) ? $data['data'] : array()
+			),
+			'tunes' => $tunes
+		);
+	}
+
+	/**
+	 * Convert block data into the representation for agents.
+	 *
+	 * @param array $block
+	 * @param ComponentCollection|null $ComponentCollection
+	 * @return array
+	 */
+	public function toAgent(array $block, ?ComponentCollection $ComponentCollection = null): array {
+		$agent = array('id' => $block['id'] ?? '', 'type' => $this->type());
+		$layout = $block['tunes']['layout'] ?? array();
+
+		if (!empty($layout['width'])) {
+			$agent['width'] = $layout['width'];
+		}
+
+		if (!empty($layout['stretched'])) {
+			$agent['stretched'] = true;
+		}
+
+		if (!empty($block['data'])) {
+			$agent['data'] = $block['data'];
+		}
+
+		return $agent;
+	}
+
+	/**
+	 * Convert field definitions into JSON schema properties.
+	 *
+	 * @param array $fields
+	 * @return array
+	 */
+	private static function agentFieldsSchema(array $fields): array {
+		$properties = array();
+
+		foreach ($fields as $field) {
+			if (self::isVirtual($field)) {
+				continue;
+			}
+
+			$description = trim(($field['label'] ?? $field['name']) . '. ' . ($field['help'] ?? ''), '. ');
+
+			$schema = match ($field['type']) {
+				'number' => array('type' => 'number'),
+				'toggle' => array('type' => 'boolean'),
+				'strings' => array('type' => 'array', 'items' => array('type' => 'string')),
+				'json' => array(),
+				'list' => array(
+					'type' => 'array',
+					'items' => array(
+						'type' => 'object',
+						'properties' => self::agentFieldsSchema($field['fields'] ?? array()),
+						'additionalProperties' => false
+					)
+				),
+				'markdown' => array('type' => 'string', 'description' => 'Markdown.'),
+				'html' => array('type' => 'string', 'description' => 'HTML.'),
+				default => array('type' => 'string')
+			};
+
+			if ($field['type'] === 'select' && !empty($field['options']) && empty($field['optionsFrom'])) {
+				$schema['enum'] = array_map('strval', array_keys($field['options']));
+			}
+
+			$schema['description'] = trim($description . ' ' . ($schema['description'] ?? ''));
+			$properties[$field['name']] = $schema;
+		}
+
+		return $properties;
 	}
 
 	/**

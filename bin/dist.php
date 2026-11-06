@@ -12,12 +12,18 @@
  *       Creates an installable zip archive and the web installer install.php in ./build.
  *       Upload both files to the web space and open https://your-domain/install.php
  *
+ *   php bin/dist.php --patch
+ *       Creates a firmware patch (tar.gz) without content and settings (config, pages, shared, cache).
+ *       Copy it to the "firmware" directory of an installation and apply it in the dashboard
+ *       (System settings > Firmware-Patch) or with "php automad/console firmware:apply".
+ *
  *   php bin/dist.php --target=/path/to/webspace
  *       Installs or updates the site directly in the given directory.
  *       Existing content and settings (config, pages, shared) are never overwritten.
  *
  * Options:
  *
+ *   --patch             create a firmware patch instead of a zip
  *   --target=DIR        install/update into DIR instead of creating a zip
  *   --out=DIR           output directory of the zip (default: ./build)
  *   --composer=CMD      composer command (default: "composer", falls back to composer.phar)
@@ -59,6 +65,7 @@ const EXCLUDE = array(
 	'automad/src/client',
 	'automad/tests',
 	'automad/.wizard-completed',
+	'automad/.setup-completed',
 	'config/accounts.php',
 	'node_modules'
 );
@@ -73,7 +80,7 @@ const USER_DATA = array('config', 'pages', 'shared', 'cache');
  */
 const REPLACE = array('automad', 'lib', 'vendor');
 
-$options = getopt('', array('target:', 'out:', 'composer:', 'skip-composer', 'help'));
+$options = getopt('', array('target:', 'out:', 'composer:', 'skip-composer', 'patch', 'help'));
 
 if (isset($options['help'])) {
 	preg_match('/\/\*(.*?)\*\//s', (string) file_get_contents(__FILE__), $matches);
@@ -419,6 +426,62 @@ touch("$staging/.no-updates");
 file_put_contents("$staging/VERSION", $version . PHP_EOL);
 
 // ---------------------------------------------------------------------------
+// Firmware patch
+
+if (isset($options['patch'])) {
+	section('Creating firmware patch ...');
+
+	$outDir = rtrim(normalize($options['out'] ?? "$source/build"), '/');
+
+	if (!is_dir($outDir)) {
+		mkdir($outDir, 0755, true);
+	}
+
+	// Content and settings are never part of a patch.
+	foreach (array('config', 'pages', 'shared', 'cache') as $dataDir) {
+		removePath("$staging/$dataDir");
+	}
+
+	file_put_contents("$staging/firmware.json", json_encode(array(
+		'version' => trim($version),
+		'created' => date('c'),
+		'items' => array_values(array_diff(scandir($staging) ?: array(), array('.', '..')))
+	), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
+
+	$name = 'politicalautomad-firmware-' . preg_replace('/[^a-z0-9.\-]+/i', '-', trim($version));
+	$name = preg_replace(array('/-+/', '/-$/'), array('-', ''), (string) $name);
+	$file = "$outDir/$name.tar.gz";
+
+	@unlink($file);
+	@unlink("$outDir/$name.tar");
+
+	$tar = trim((string) @shell_exec('command -v tar 2>/dev/null'));
+
+	if ($tar !== '') {
+		$items = array_map('escapeshellarg', array_values(array_diff(scandir($staging) ?: array(), array('.', '..'))));
+		$code = run('tar -czf ' . escapeshellarg($file) . ' ' . join(' ', $items), $staging);
+
+		if ($code !== 0) {
+			fail('tar failed.');
+		}
+	} else {
+		$archive = new PharData("$outDir/$name.tar");
+		$archive->buildFromDirectory($staging);
+		$archive->compress(Phar::GZ);
+		unset($archive);
+		@unlink("$outDir/$name.tar");
+	}
+
+	removePath($staging);
+
+	section('Done');
+	out("Created $file (" . round(filesize($file) / 1024 / 1024, 1) . ' MB)');
+	out('Copy it to the "firmware" directory of the installation and apply it in the dashboard');
+	out('(System settings > Firmware-Patch) or with: php automad/console firmware:apply');
+	exit(0);
+}
+
+// ---------------------------------------------------------------------------
 // Zip
 
 if (!$target) {
@@ -492,17 +555,18 @@ foreach (scandir($staging) ?: array() as $item) {
 	}
 
 	if (in_array($item, REPLACE, true) && is_dir($to)) {
-		$wizard = "$to/.wizard-completed";
-		$keepWizard = $item === 'automad' && is_file($wizard);
-
 		// Replace the directory as a whole in order to remove stale files.
 		$old = "$to.old-" . time();
 		$new = "$to.new-" . time();
 
 		copyPath($from, $new);
 
-		if ($keepWizard) {
-			copy($wizard, "$new/.wizard-completed");
+		if ($item === 'automad') {
+			// Keep the state of the setup wizard (.wizard-completed was renamed to .setup-completed in beta.60+).
+			if (is_file("$to/.setup-completed") || is_file("$to/.wizard-completed")) {
+				touch("$new/.setup-completed");
+				touch("$new/.wizard-completed");
+			}
 		}
 
 		rename($to, $old);

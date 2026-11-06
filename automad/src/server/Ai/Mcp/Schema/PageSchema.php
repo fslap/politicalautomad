@@ -36,6 +36,7 @@
 namespace Automad\Ai\Mcp\Schema;
 
 use Automad\Blocks\AbstractBlock;
+use Automad\Party\BlockBootstrap;
 use Automad\System\FileSystem;
 
 defined('AUTOMAD') or die('Direct access not permitted!');
@@ -752,6 +753,13 @@ class PageSchema {
 				'additionalProperties' => false
 			);
 
+			$blockRefs[] = array('$ref' => '#/$defs/' . $type);
+		}
+
+		// Party components (v2-political).
+		foreach (BlockBootstrap::blocks() as $partyBlock) {
+			$type = $partyBlock->type();
+			$blocks[$type] = $partyBlock->agentSchema();
 			$blockRefs[] = array('$ref' => '#/$defs/' . $type);
 		}
 

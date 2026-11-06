@@ -57,6 +57,12 @@ export const enum AppController {
 	updateState = 'AppController::updateState',
 }
 
+export const enum FirmwareController {
+	apply = 'FirmwareController::apply',
+	list = 'FirmwareController::list',
+	rollback = 'FirmwareController::rollback',
+}
+
 export const enum PartyBlockController {
 	preview = 'PartyBlockController::preview',
 }

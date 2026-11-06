@@ -94,7 +94,7 @@ class Blocks {
 
 			try {
 				$block = call_user_func_array(
-					'\\Automad\\Blocks\\' . ucfirst($agentBlock['type']) . '::fromAgent',
+					self::resolveObjectCallback($agentBlock['type'], 'fromAgent'),
 					array($agentBlock, $savedBlock)
 				);
 
