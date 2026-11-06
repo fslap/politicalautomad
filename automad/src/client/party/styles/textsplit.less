@@ -1,0 +1,304 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// 3er-Split with text and side menu with text.
+.am-party {
+	--accent: var(--c1, #a95a36);
+
+	.party-color--orange {
+		--accent: var(--party-bg-orange, #a95a36);
+	}
+
+	.party-color--blue {
+		--accent: var(--party-bg-blue, #2b3566);
+	}
+
+	.party-color--green {
+		--accent: var(--party-bg-green, #3e6b56);
+	}
+
+	.party-color--purple {
+		--accent: var(--party-bg-purple, #5c4370);
+	}
+
+	.party-color--gold {
+		--accent: var(--party-bg-gold, #d8b25c);
+	}
+
+	.party-color--red {
+		--accent: var(--party-bg-red, #8a3a40);
+	}
+
+	// Split ---------------------------------------------------------------------------
+	.text-split__title {
+		margin-bottom: 1rem;
+	}
+
+	.text-split__grid {
+		display: grid;
+		grid-template-columns: repeat(var(--split-columns, 3), minmax(0, 1fr));
+		gap: clamp(1rem, 2vw, 1.75rem);
+	}
+
+	.text-split__column {
+		display: flex;
+		flex-direction: column;
+		height: var(--split-max, 30rem);
+		min-height: 0;
+		overflow: hidden;
+		border: 1.5px solid var(--accent);
+		border-top-width: 6px;
+		border-radius: 10px;
+		background: color-mix(in srgb, var(--accent) 6%, #fff);
+		color: var(--party-ink, #1f2128);
+	}
+
+	.text-split__scroll {
+		display: flex;
+		flex-direction: column;
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow: auto;
+		overscroll-behavior: contain;
+		scrollbar-width: thin;
+	}
+
+	// The element stays in place while the text scrolls.
+	.text-split__media {
+		position: sticky;
+		top: 0;
+		z-index: 1;
+		flex: none;
+		padding: 1rem 1.1rem;
+		background: color-mix(in srgb, var(--accent) 14%, #fff);
+		border-bottom: 1.5px solid
+			color-mix(in srgb, var(--accent) 40%, transparent);
+
+		img {
+			display: block;
+			width: 100%;
+			max-height: 11rem;
+			object-fit: cover;
+			border-radius: 6px;
+		}
+	}
+
+	.text-split__column--bottom .text-split__media {
+		order: 2;
+		top: auto;
+		bottom: 0;
+		margin-top: auto;
+		border-bottom: 0;
+		border-top: 1.5px solid
+			color-mix(in srgb, var(--accent) 40%, transparent);
+	}
+
+	.text-split__value {
+		margin: 0;
+		color: var(--accent);
+		font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.2rem);
+		font-weight: 800;
+		line-height: 1.1;
+		letter-spacing: -0.01em;
+	}
+
+	.text-split__value-label {
+		margin: 0.2rem 0 0;
+		font-size: 0.85rem;
+		font-weight: 700;
+		opacity: 0.75;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+
+	.text-split__box > :first-child {
+		margin-top: 0;
+	}
+
+	.text-split__box > :last-child {
+		margin-bottom: 0;
+	}
+
+	.text-split__content {
+		padding: 1rem 1.1rem 1.25rem;
+
+		h3 {
+			margin: 0 0 0.5rem;
+			color: var(--accent);
+			font-size: 1.15rem;
+		}
+
+		.markdown-content {
+			font-size: 0.95rem;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.text-split__grid {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.text-split__column {
+			height: auto;
+			max-height: 34rem;
+		}
+	}
+
+	// Side menu with text --------------------------------------------------------------------
+	.side-menu-text {
+		color: var(--party-ink, #1f2128);
+	}
+
+	.side-menu-text__title {
+		margin: 0 0 0.75rem;
+		color: var(--accent);
+	}
+
+	.side-menu-text__layout {
+		display: grid;
+		grid-template-columns: minmax(8rem, 30%) minmax(0, 1fr);
+		gap: 1rem;
+		max-height: var(--smt-max, 28rem);
+		min-height: 0;
+	}
+
+	.side-menu-text--right .side-menu-text__layout {
+		grid-template-columns: minmax(0, 1fr) minmax(8rem, 30%);
+
+		.side-menu-text__menu {
+			order: 2;
+		}
+	}
+
+	.side-menu-text--top .side-menu-text__layout,
+	.side-menu-text--bottom .side-menu-text__layout {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: auto minmax(0, 1fr);
+	}
+
+	.side-menu-text--bottom .side-menu-text__layout {
+		grid-template-rows: minmax(0, 1fr) auto;
+
+		.side-menu-text__menu {
+			order: 2;
+		}
+	}
+
+	.side-menu-text__menu {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		align-self: start;
+
+		button {
+			border: 0;
+			border-left: 4px solid transparent;
+			border-radius: 0 6px 6px 0;
+			background: transparent;
+			color: inherit;
+			font: inherit;
+			font-size: 0.95rem;
+			font-weight: 700;
+			text-align: left;
+			padding: 0.45rem 0.7rem;
+			cursor: pointer;
+			transition:
+				background 0.2s ease,
+				border-color 0.2s ease;
+
+			&:hover {
+				background: color-mix(in srgb, var(--accent) 10%, transparent);
+			}
+
+			&[aria-current='true'] {
+				border-left-color: var(--accent);
+				background: color-mix(in srgb, var(--accent) 16%, #fff);
+				color: var(--accent);
+			}
+		}
+	}
+
+	.side-menu-text--sticky-bottom .side-menu-text__menu {
+		align-self: end;
+	}
+
+	.side-menu-text--top .side-menu-text__menu,
+	.side-menu-text--bottom .side-menu-text__menu {
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-self: stretch;
+
+		button {
+			border-left: 0;
+			border-bottom: 3px solid transparent;
+			border-radius: 6px 6px 0 0;
+
+			&[aria-current='true'] {
+				border-bottom-color: var(--accent);
+			}
+		}
+	}
+
+	.side-menu-text--bottom .side-menu-text__menu button {
+		border-bottom: 0;
+		border-top: 3px solid transparent;
+		border-radius: 0 0 6px 6px;
+
+		&[aria-current='true'] {
+			border-top-color: var(--accent);
+		}
+	}
+
+	.side-menu-text__text {
+		min-height: 0;
+		overflow: auto;
+		overscroll-behavior: contain;
+		padding-right: 0.5rem;
+		scrollbar-width: thin;
+	}
+
+	.side-menu-text__entry {
+		max-width: none;
+	}
+
+	// Inside of a split column: the menu is fixed on top, the text fills the column.
+	.side-menu-text--in-split {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		min-height: 0;
+		padding: 0.9rem 1rem 1rem;
+
+		.side-menu-text__title {
+			font-size: 1.15rem;
+			margin-bottom: 0.5rem;
+		}
+
+		.side-menu-text__layout {
+			flex: 1 1 auto;
+			max-height: none;
+			min-height: 0;
+		}
+
+		.markdown-content {
+			font-size: 0.95rem;
+		}
+	}
+
+	@media (max-width: 700px) {
+		.side-menu-text--left .side-menu-text__layout,
+		.side-menu-text--right .side-menu-text__layout {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-rows: auto minmax(0, 1fr);
+		}
+
+		.side-menu-text__menu {
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+	}
+}

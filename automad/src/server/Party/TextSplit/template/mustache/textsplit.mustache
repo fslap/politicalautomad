@@ -1,0 +1,27 @@
+{{#has_columns}}
+<div class="{{classes}}" style="{{style}}">
+    {{#title}}<h2 class="text-split__title">{{title}}</h2>{{/title}}
+    <div class="text-split__grid">
+        {{#columns}}
+            <section class="text-split__column {{classes}}">
+                {{#is_menu}}{{{menu_html}}}{{/is_menu}}
+                {{^is_menu}}
+                    <div class="text-split__scroll">
+                        {{#has_media}}
+                            <div class="text-split__media">
+                                {{#is_image}}<img src="{{image}}" alt="{{title}}" decoding="async">{{/is_image}}
+                                {{#is_value}}<p class="text-split__value">{{value}}</p>{{#value_label}}<p class="text-split__value-label">{{value_label}}</p>{{/value_label}}{{/is_value}}
+                                {{#is_box}}<div class="text-split__box">{{{box_html}}}</div>{{/is_box}}
+                            </div>
+                        {{/has_media}}
+                        <div class="text-split__content">
+                            {{#title}}<h3>{{title}}</h3>{{/title}}
+                            <div class="markdown-content">{{{text_html}}}</div>
+                        </div>
+                    </div>
+                {{/is_menu}}
+            </section>
+        {{/columns}}
+    </div>
+</div>
+{{/has_columns}}

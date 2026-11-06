@@ -311,10 +311,14 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 			return '';
 		}
 
-		$attr = Attr::render(
-			$block['tunes'] ?? array(),
-			array(self::BASE_CLASS, self::BASE_CLASS . '-' . $this->slug())
-		);
+		$classes = array(self::BASE_CLASS, self::BASE_CLASS . '-' . $this->slug());
+		$theme = self::theme($Automad);
+
+		if ($theme !== '') {
+			$classes[] = 'party-theme--' . $theme;
+		}
+
+		$attr = Attr::render($block['tunes'] ?? array(), $classes);
 
 		return '<div ' . $attr . ' data-am-party="' . $this->type() . '">' . $html . '</div>';
 	}
@@ -395,6 +399,32 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 	 */
 	public function slug(): string {
 		return strtolower(preg_replace('/([a-z0-9])([A-Z])/', '$1-$2', $this->shortName()) ?? '');
+	}
+
+	/**
+	 * The optional theme of the party blocks ("partyTheme" of the page or the shared data,
+	 * e.g. "orange"). The page wins, "default" on a page turns the shared theme off.
+	 *
+	 * @param Automad $Automad
+	 * @return string
+	 */
+	public static function theme(Automad $Automad): string {
+		$theme = '';
+
+		try {
+			$Page = $Automad->Context->get();
+			$theme = $Page ? trim((string) $Page->get('partyTheme')) : '';
+
+			if ($theme === '') {
+				$theme = trim($Automad->Shared->get('partyTheme'));
+			}
+		} catch (\Throwable $e) {
+			$theme = '';
+		}
+
+		$theme = strtolower($theme);
+
+		return in_array($theme, array('orange'), true) ? $theme : '';
 	}
 
 	/**

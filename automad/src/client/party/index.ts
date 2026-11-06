@@ -46,6 +46,7 @@ import {
 	initSlide,
 } from './components/Slides';
 import { initMusicPlayer } from './components/MusicPlayer';
+import { initSideMenu } from './components/SideMenu';
 import { initStainedGlass } from './components/StainedGlass';
 import { initTurnstile } from './components/Turnstile';
 import { initVideoCommentary } from './components/VideoCommentary';
@@ -69,6 +70,7 @@ const behaviours: Array<
 	['[data-party-slide]', initSlide],
 	['[data-slide-more]', initMore],
 	['[data-md-viewer]', initMarkdownViewer],
+	['[data-side-menu]', initSideMenu],
 	['[data-list-expand]', initListExpand],
 	['[data-party-roll-view]', initRollView],
 ];

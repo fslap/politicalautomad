@@ -1,0 +1,291 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// Colors of the slide elements (default) and the optional orange theme.
+// The colors come from the palette variables, the orange theme only changes the palette.
+
+.am-party {
+	--c1: var(--party-bg-orange, #a95a36);
+	--c2: var(--party-bg-blue, #2b3566);
+	--c3: var(--party-bg-green, #3e6b56);
+	--c4: var(--party-bg-purple, #5c4370);
+	--c5: var(--party-bg-gold, #d8b25c);
+	--c6: var(--party-bg-red, #8a3a40);
+
+	// Slide frame
+	.party-slide__menu,
+	.party-slide__arrow,
+	.next-arrow__link,
+	.hero-title__more {
+		color: var(--c1);
+	}
+
+	.party-corner__hatch {
+		background: repeating-linear-gradient(
+			135deg,
+			var(--c1) 0 3px,
+			transparent 3px 11px
+		);
+		opacity: 0.75;
+	}
+
+	.party-corner__label {
+		background: var(--c1);
+	}
+
+	[class*='bg'] .party-slide__menu,
+	[class*='bg'] .party-slide__arrow,
+	[class*='bg'] .hero-title__more,
+	.darklast .party-slide__menu,
+	.darklast .party-slide__arrow {
+		color: #fff;
+	}
+
+	[class*='bg'] .party-corner__hatch,
+	.darklast .party-corner__hatch {
+		background: repeating-linear-gradient(
+			135deg,
+			#fff 0 3px,
+			transparent 3px 11px
+		);
+		opacity: 0.6;
+	}
+
+	// Title: the lines alternate between ink and the accent color
+	.hero-title__text span:nth-child(even) {
+		color: var(--c1);
+	}
+
+	[class*='bg'] .hero-title__text span:nth-child(even) {
+		color: inherit;
+		opacity: 0.85;
+	}
+
+	// Document card
+	.doc-card {
+		border-color: var(--c1);
+		background: color-mix(in srgb, var(--c1) 6%, #fff);
+	}
+
+	.doc-card__title {
+		margin: -1.25rem -1.25rem 0;
+		padding: 0.6rem 1.25rem;
+		background: var(--c1);
+		color: #fff;
+	}
+
+	.doc-card__lines span {
+		background: var(--c1);
+		opacity: 0.3;
+	}
+
+	.doc-card__button,
+	.doc-card__button:visited {
+		border-color: var(--c1);
+		background: var(--c1);
+		color: #fff;
+
+		&:hover {
+			background: color-mix(in srgb, var(--c1) 80%, #000);
+		}
+	}
+
+	// Info stack
+	.info-stack__title {
+		border-bottom-color: var(--c2);
+		border-bottom-width: 3px;
+	}
+
+	.info-stack__box {
+		background: color-mix(in srgb, var(--c2) 10%, #fff);
+		border-left: 5px solid var(--c2);
+	}
+
+	// Card row: every card in another color
+	.card-row__card {
+		--card: var(--c1);
+
+		border-color: var(--card);
+		border-top-width: 6px;
+		background: color-mix(in srgb, var(--card) 7%, #fff);
+	}
+
+	.card-row__card:nth-child(6n + 2) {
+		--card: var(--c2);
+	}
+
+	.card-row__card:nth-child(6n + 3) {
+		--card: var(--c3);
+	}
+
+	.card-row__card:nth-child(6n + 4) {
+		--card: var(--c4);
+	}
+
+	.card-row__card:nth-child(6n + 5) {
+		--card: var(--c5);
+	}
+
+	.card-row__card:nth-child(6n + 6) {
+		--card: var(--c6);
+	}
+
+	.card-row__value {
+		color: var(--card);
+	}
+
+	// Roll tiles
+	.roll-tiles__tile {
+		--tile: var(--c1);
+
+		border-color: var(--tile);
+		background: var(--tile);
+		color: #fff;
+
+		img + span {
+			background: var(--tile);
+			color: #fff;
+		}
+	}
+
+	.roll-tiles__tile:nth-child(4n + 2) {
+		--tile: var(--c2);
+	}
+
+	.roll-tiles__tile:nth-child(4n + 3) {
+		--tile: var(--c3);
+	}
+
+	.roll-tiles__tile:nth-child(4n + 4) {
+		--tile: var(--c4);
+	}
+
+	// List card (Satzung)
+	.list-card__tab {
+		border-color: var(--c3);
+		background: var(--c3);
+		color: #fff;
+	}
+
+	.list-card__body {
+		border-color: var(--c3);
+		background: color-mix(in srgb, var(--c3) 6%, #fff);
+
+		li::marker {
+			color: var(--c3);
+		}
+	}
+
+	.list-card__link {
+		color: var(--c3);
+	}
+
+	// Markdown viewer
+	.md-viewer {
+		border-color: var(--c4);
+		border-top-width: 6px;
+	}
+
+	.md-viewer__modes button,
+	.md-viewer__pager button {
+		border-color: var(--c4);
+		color: var(--c4);
+	}
+
+	.md-viewer__modes button[aria-pressed='true'] {
+		background: var(--c4);
+		color: #fff;
+	}
+
+	.md-viewer__chapter h3 {
+		color: var(--c4);
+	}
+
+	// Map list in slides
+	.party-slide__expand {
+		border-color: var(--c2);
+		color: var(--c2);
+	}
+
+	// Slide decoration (boat)
+	.party-decor {
+		color: var(--c2);
+	}
+
+	// Paper slides get a light tint of the accent color
+	.party-slide--paper {
+		background: color-mix(in srgb, var(--c1) 5%, #faf8f5);
+	}
+}
+
+// ---------------------------------------------------------------------------------------
+// Orange theme (partyTheme: orange in the shared data or on a page)
+
+.am-party.party-theme--orange {
+	--party-red: #c4511c;
+	--party-red-dark: #8f3610;
+	--party-ink: #2b1a12;
+	--party-paper: #fff4ea;
+	--party-line: rgba(90, 40, 10, 0.15);
+
+	--party-bg-orange: #c4561c;
+	--party-bg-blue: #7a3519;
+	--party-bg-purple: #94452a;
+	--party-bg-red: #a8341c;
+	--party-bg-pink: #cf6f45;
+	--party-bg-green: #a6611f;
+	--party-bg-gold: #f0a955;
+	--party-bg-dark: #33201a;
+
+	// The blue waves become warm.
+	--party-water-filter: grayscale(1) sepia(1) saturate(2.6) hue-rotate(-14deg)
+		brightness(0.95);
+
+	--wp--preset--color--primary: var(--party-red);
+	--wp--preset--color--secondary: var(--party-red-dark);
+
+	color: var(--party-ink);
+
+	.party-slide,
+	.bgwhite {
+		background: #fffaf5;
+	}
+
+	.party-slide--paper {
+		background: var(--party-paper);
+	}
+
+	.markdown-content,
+	.quote-content,
+	blockquote {
+		color: inherit;
+	}
+
+	a:not([class]) {
+		color: var(--party-red-dark);
+	}
+
+	.wp-element-button,
+	input[type='submit'].wp-element-button,
+	.party-consent__load {
+		background: var(--party-red);
+	}
+
+	.music-player__platforms a.is-active {
+		color: var(--party-bg-dark);
+	}
+
+	.leaflet-container {
+		filter: sepia(0.25) saturate(1.1);
+	}
+}
+
+// The page around the blocks follows the orange theme as well.
+html:has(.party-theme--orange) body {
+	background: #fffaf5;
+	color: #2b1a12;
+}

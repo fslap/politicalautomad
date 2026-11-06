@@ -243,6 +243,9 @@
 					"$ref": "#/$defs/partySecurityConcept"
 				},
 				{
+					"$ref": "#/$defs/partySideMenuText"
+				},
+				{
 					"$ref": "#/$defs/partySkylineBreaker"
 				},
 				{
@@ -271,6 +274,9 @@
 				},
 				{
 					"$ref": "#/$defs/partyTeamBlock"
+				},
+				{
+					"$ref": "#/$defs/partyTextSplit"
 				},
 				{
 					"$ref": "#/$defs/partyVerticalSlider"
@@ -4525,6 +4531,106 @@
 			],
 			"additionalProperties": false
 		},
+		"partySideMenuText": {
+			"type": "object",
+			"description": "Party component \"Seitenmenü mit Text\": Überschriften als fixiertes Menü, daneben der Markdown-Text der gewählten Überschrift (zum Durchlesen).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partySideMenuText"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string",
+							"description": "Titel (optional)"
+						},
+						"entries": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string",
+										"description": "Überschrift (im Menü)"
+									},
+									"text": {
+										"type": "string",
+										"description": "Fließtext (Markdown) Markdown."
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Einträge"
+						},
+						"menu_side": {
+							"type": "string",
+							"enum": [
+								"left",
+								"right",
+								"top",
+								"bottom"
+							],
+							"description": "Menü"
+						},
+						"sticky": {
+							"type": "string",
+							"enum": [
+								"top",
+								"bottom",
+								""
+							],
+							"description": "Menü fixiert"
+						},
+						"max_height": {
+							"type": "string",
+							"description": "Maximale Höhe (Text scrollt darin)"
+						},
+						"color": {
+							"type": "string",
+							"enum": [
+								"",
+								"orange",
+								"blue",
+								"green",
+								"purple",
+								"gold",
+								"red"
+							],
+							"description": "Farbe"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
 		"partySkylineBreaker": {
 			"type": "object",
 			"description": "Party component \"Skyline-Trenner\": Zufällig generierte, nächtliche Skyline als Seitentrenner.",
@@ -4581,7 +4687,7 @@
 		},
 		"partySlideCards": {
 			"type": "object",
-			"description": "Party component \"Folie: Bilanz\": Folie mit Kartenreihe, hereinrollenden Häusern beim Hover und Wellenlinie (Skizze: Bilanz).",
+			"description": "Party component \"Folie: Bilanz\": Folie mit 3er-Split: Element oben oder unten fixiert mit Überschrift und Fließtext oder Seitenmenü mit Text, dazu Rollhäuser (Skizze: Bilanz).",
 			"properties": {
 				"id": {
 					"$ref": "#/$defs/blockId"
@@ -4690,43 +4796,101 @@
 							"type": "string",
 							"description": "Folie: CSS-Klassen"
 						},
-						"cards_title": {
+						"split_title": {
 							"type": "string",
-							"description": "Karten: Überschrift"
+							"description": "Split: Titel über den Spalten (optional)"
 						},
-						"cards_cards": {
+						"split_columns": {
 							"type": "array",
 							"items": {
 								"type": "object",
 								"properties": {
+									"mode": {
+										"type": "string",
+										"enum": [
+											"top",
+											"bottom",
+											"menu"
+										],
+										"description": "Aufbau"
+									},
+									"media": {
+										"type": "string",
+										"enum": [
+											"image",
+											"value",
+											"box",
+											"none"
+										],
+										"description": "Element"
+									},
 									"image": {
 										"type": "string",
 										"description": "Bild"
 									},
-									"title": {
-										"type": "string",
-										"description": "Titel"
-									},
 									"value": {
 										"type": "string",
-										"description": "Kennzahl (optional, z.B. 12.400 EUR)"
+										"description": "Kennzahl (z.B. 12.400 EUR)"
+									},
+									"value_label": {
+										"type": "string",
+										"description": "Beschriftung der Kennzahl"
+									},
+									"box": {
+										"type": "string",
+										"description": "Box (Markdown) Markdown."
+									},
+									"title": {
+										"type": "string",
+										"description": "Überschrift"
 									},
 									"text": {
 										"type": "string",
-										"description": "Text"
+										"description": "Fließtext (Markdown) Markdown."
 									},
-									"link": {
+									"entries": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"title": {
+													"type": "string",
+													"description": "Überschrift (im Menü)"
+												},
+												"text": {
+													"type": "string",
+													"description": "Fließtext (Markdown) Markdown."
+												}
+											},
+											"additionalProperties": false
+										},
+										"description": "Seitenmenü: Einträge"
+									},
+									"color": {
 										"type": "string",
-										"description": "Link"
+										"enum": [
+											"",
+											"orange",
+											"blue",
+											"green",
+											"purple",
+											"gold",
+											"red"
+										],
+										"description": "Farbe"
 									}
 								},
 								"additionalProperties": false
 							},
-							"description": "Karten: Karten"
+							"description": "Split: Spalten"
 						},
-						"cards_classes": {
+						"split_max_height": {
 							"type": "string",
-							"description": "Karten: CSS-Klassen"
+							"description": "Split: Höhe der Spalten (Text scrollt darin)"
+						},
+						"split_classes": {
+							"type": "string",
+							"description": "Split: CSS-Klassen"
 						},
 						"houses_section_id": {
 							"type": "string",
@@ -4873,44 +5037,9 @@
 							"type": "string",
 							"description": "Rollhäuser: CSS-Klassen"
 						},
-						"tiles_tiles": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"image": {
-										"type": "string",
-										"description": "Bild"
-									},
-									"label": {
-										"type": "string",
-										"description": "Beschriftung"
-									},
-									"link": {
-										"type": "string",
-										"description": "Link"
-									}
-								},
-								"additionalProperties": false
-							},
-							"description": "Rollkacheln: Kacheln"
-						},
-						"tiles_position": {
-							"type": "string",
-							"enum": [
-								"bottom-right",
-								"bottom-left",
-								"inline"
-							],
-							"description": "Rollkacheln: Position"
-						},
-						"tiles_always": {
+						"houses_show": {
 							"type": "boolean",
-							"description": "Rollkacheln: Immer sichtbar (nicht erst beim Hover)"
-						},
-						"tiles_classes": {
-							"type": "string",
-							"description": "Rollkacheln: CSS-Klassen"
+							"description": "Rollhäuser anzeigen"
 						},
 						"wave_variant": {
 							"type": "string",
@@ -6660,6 +6789,140 @@
 			],
 			"additionalProperties": false
 		},
+		"partyTextSplit": {
+			"type": "object",
+			"description": "Party component \"3er-Split mit Text\": Gleichmäßige Spalten: ein Element oben oder unten fixiert mit Überschrift und Fließtext, oder ein Seitenmenü mit Text (Skizze: Bilanz).",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyTextSplit"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"title": {
+							"type": "string",
+							"description": "Titel über den Spalten (optional)"
+						},
+						"columns": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"mode": {
+										"type": "string",
+										"enum": [
+											"top",
+											"bottom",
+											"menu"
+										],
+										"description": "Aufbau"
+									},
+									"media": {
+										"type": "string",
+										"enum": [
+											"image",
+											"value",
+											"box",
+											"none"
+										],
+										"description": "Element"
+									},
+									"image": {
+										"type": "string",
+										"description": "Bild"
+									},
+									"value": {
+										"type": "string",
+										"description": "Kennzahl (z.B. 12.400 EUR)"
+									},
+									"value_label": {
+										"type": "string",
+										"description": "Beschriftung der Kennzahl"
+									},
+									"box": {
+										"type": "string",
+										"description": "Box (Markdown) Markdown."
+									},
+									"title": {
+										"type": "string",
+										"description": "Überschrift"
+									},
+									"text": {
+										"type": "string",
+										"description": "Fließtext (Markdown) Markdown."
+									},
+									"entries": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"title": {
+													"type": "string",
+													"description": "Überschrift (im Menü)"
+												},
+												"text": {
+													"type": "string",
+													"description": "Fließtext (Markdown) Markdown."
+												}
+											},
+											"additionalProperties": false
+										},
+										"description": "Seitenmenü: Einträge"
+									},
+									"color": {
+										"type": "string",
+										"enum": [
+											"",
+											"orange",
+											"blue",
+											"green",
+											"purple",
+											"gold",
+											"red"
+										],
+										"description": "Farbe"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Spalten"
+						},
+						"max_height": {
+							"type": "string",
+							"description": "Höhe der Spalten (Text scrollt darin)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
 		"partyVerticalSlider": {
 			"type": "object",
 			"description": "Party component \"Vertikaler Slider\": Vertikal einrastende Folge von Party-Components.",
@@ -6741,6 +7004,7 @@
 											"partyScrollElement",
 											"partyScrollReference",
 											"partySecurityConcept",
+											"partySideMenuText",
 											"partySkylineBreaker",
 											"partySlideCards",
 											"partySlideDocument",
@@ -6751,6 +7015,7 @@
 											"partySplit",
 											"partyStainedGlass",
 											"partyTeamBlock",
+											"partyTextSplit",
 											"partyVideoCommentary",
 											"partyViewboxHover",
 											"partyWaterAnimation",

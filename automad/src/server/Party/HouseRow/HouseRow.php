@@ -119,9 +119,9 @@ class HouseRow extends AbstractDynamicTemplateBlock {
 				'addLabel' => 'Haus hinzufügen',
 				'itemTitle' => 'type',
 				'default' => array(
-					array('type' => 'flat', 'width' => 5, 'floors' => 5, 'windows' => 3, 'door' => true, 'color' => '', 'details' => true),
-					array('type' => 'gable', 'width' => 4, 'floors' => 3, 'windows' => 2, 'door' => true, 'color' => '', 'details' => true),
-					array('type' => 'flat', 'width' => 6, 'floors' => 7, 'windows' => 4, 'door' => true, 'color' => '', 'details' => true)
+					array('type' => 'flat', 'width' => 5, 'floors' => 5, 'windows' => 3, 'door' => true, 'color' => 'orange', 'details' => true),
+					array('type' => 'gable', 'width' => 4, 'floors' => 3, 'windows' => 2, 'door' => true, 'color' => 'green', 'details' => true),
+					array('type' => 'flat', 'width' => 6, 'floors' => 7, 'windows' => 4, 'door' => true, 'color' => 'blue', 'details' => true)
 				),
 				'fields' => array(
 					array('name' => 'type', 'type' => 'select', 'label' => 'Typ', 'default' => 'flat', 'options' => self::TYPES),

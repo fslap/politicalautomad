@@ -1,0 +1,19 @@
+{{#has_entries}}
+<div class="{{classes}}" style="{{style}}" data-side-menu>
+    {{#title}}<h3 class="side-menu-text__title">{{title}}</h3>{{/title}}
+    <div class="side-menu-text__layout">
+        <nav class="side-menu-text__menu" aria-label="{{title}}{{^title}}Kapitel{{/title}}">
+            {{#entries}}
+                <button type="button" data-smt-index="{{index}}"{{#first}} aria-current="true"{{/first}}>{{title}}</button>
+            {{/entries}}
+        </nav>
+        <div class="side-menu-text__text">
+            {{#entries}}
+                <article class="side-menu-text__entry markdown-content" data-smt-entry="{{index}}"{{^first}} hidden{{/first}}>
+                    {{{html}}}
+                </article>
+            {{/entries}}
+        </div>
+    </div>
+</div>
+{{/has_entries}}
