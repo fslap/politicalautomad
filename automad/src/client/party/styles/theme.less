@@ -39,6 +39,12 @@
 	// The content of a block never widens the layout of the theme (grid columns).
 	contain: inline-size;
 
+	// The theme stretches all images of stretched blocks (am-stretched img { min-width: 100% }),
+	// party blocks size their images themselves.
+	img {
+		min-width: 0;
+	}
+
 	// Type scale
 	h1 {
 		font-size: clamp(1.85rem, 1.25rem + 2vw, 2.6rem);

@@ -59,7 +59,7 @@ class LandscapeScene extends AbstractDynamicTemplateBlock {
 		return array_merge(WaterAnimation::sceneContext($config, 20), array(
 			'hide_mobile' => false,
 			'classes' => $this->getClasses($config)
-		));
+		), self::hoverContext($config));
 	}
 
 	protected function definition(): array {
@@ -90,6 +90,7 @@ class LandscapeScene extends AbstractDynamicTemplateBlock {
 					)
 				),
 				...WaterAnimation::sceneFields(20),
+				self::hoverField('tilt'),
 				self::classesField('svgcontainer relative')
 			)
 		);

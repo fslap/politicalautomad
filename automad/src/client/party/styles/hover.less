@@ -1,0 +1,262 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// Hover animations of breakers and scenes with images ("kippen, bewegen, …").
+// Individual transform properties (rotate, translate, scale) are used, so the hover
+// animations combine with the wave animations of the original (transform).
+.am-party {
+	.party-hover img.svg,
+	.party-hover .party-hover-item {
+		transition:
+			rotate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+			translate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+			scale 0.6s ease;
+	}
+
+	// Scenes: the graphics are full size layers, only the scene reacts to the pointer.
+	.party-hover.party-svg-scene {
+		pointer-events: auto;
+	}
+
+	// Kippen
+	.party-hover--tilt:hover {
+		img.svg:nth-child(odd),
+		.party-hover-item:nth-child(odd) {
+			rotate: -2deg;
+		}
+
+		img.svg:nth-child(even),
+		.party-hover-item:nth-child(even) {
+			rotate: 2.5deg;
+		}
+
+		.party-hover-item {
+			scale: 1.04;
+		}
+	}
+
+	.party-hover--tilt .party-hover-item:hover {
+		rotate: -8deg !important;
+		scale: 1.12 !important;
+	}
+
+	// Bewegen
+	.party-hover--move:hover {
+		img.svg:nth-child(3n + 1),
+		.party-hover-item:nth-child(3n + 1) {
+			translate: -1.5% -1%;
+		}
+
+		img.svg:nth-child(3n + 2),
+		.party-hover-item:nth-child(3n + 2) {
+			translate: 1.5% -2%;
+		}
+
+		img.svg:nth-child(3n),
+		.party-hover-item:nth-child(3n) {
+			translate: 0 -3%;
+		}
+	}
+
+	.party-hover--move .party-hover-item:hover {
+		translate: 0 -12% !important;
+	}
+
+	// Schweben
+	@keyframes party-hover-float {
+		0%,
+		100% {
+			translate: 0 0;
+		}
+
+		50% {
+			translate: 0 -3%;
+		}
+	}
+
+	.party-hover--float:hover {
+		img.svg:not([class*='water']),
+		.party-hover-item {
+			animation: party-hover-float 2.4s ease-in-out infinite;
+		}
+
+		img.svg:nth-child(even):not([class*='water']),
+		.party-hover-item:nth-child(even) {
+			animation-delay: -1.2s;
+		}
+	}
+
+	// Wackeln
+	@keyframes party-hover-wobble {
+		0%,
+		100% {
+			rotate: 0deg;
+		}
+
+		25% {
+			rotate: -3deg;
+		}
+
+		75% {
+			rotate: 3deg;
+		}
+	}
+
+	.party-hover--wobble:hover {
+		img.svg:not([class*='water']),
+		.party-hover-item {
+			animation: party-hover-wobble 0.9s ease-in-out infinite;
+		}
+
+		img.svg:nth-child(even):not([class*='water']),
+		.party-hover-item:nth-child(even) {
+			animation-delay: -0.45s;
+		}
+	}
+
+	// Zum Mauszeiger schauen (--look-x / --look-y are set by Look.ts, -1 … 1)
+	.party-hover--look {
+		img.svg {
+			transition: translate 0.25s ease-out;
+		}
+
+		.party-svg-layer:nth-child(1) img.svg {
+			translate: calc(var(--look-x, 0) * -0.6%)
+				calc(var(--look-y, 0) * -0.4%);
+		}
+
+		.party-svg-layer:nth-child(2) img.svg {
+			translate: calc(var(--look-x, 0) * -1.2%)
+				calc(var(--look-y, 0) * -0.8%);
+		}
+
+		.party-svg-layer:nth-child(n + 3) img.svg {
+			translate: calc(var(--look-x, 0) * -2%)
+				calc(var(--look-y, 0) * -1.2%);
+		}
+
+		.party-hover-item {
+			perspective: 600px;
+		}
+
+		.party-hover-item img {
+			transition:
+				transform 0.2s ease-out,
+				translate 0.2s ease-out;
+			transform: rotateY(calc(var(--look-x, 0) * 40deg * var(--depth, 1)))
+				rotateX(calc(var(--look-y, 0) * -32deg * var(--depth, 1)));
+			translate: calc(var(--look-x, 0) * 10% * var(--depth, 1))
+				calc(var(--look-y, 0) * 8% * var(--depth, 1));
+		}
+
+		.party-hover-item:hover img {
+			scale: 1.08;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.party-hover img.svg,
+		.party-hover .party-hover-item,
+		.party-hover .party-hover-item img {
+			animation: none !important;
+			rotate: none !important;
+			translate: none !important;
+			transform: none !important;
+		}
+	}
+
+	// Blick-Breaker
+	.gaze-breaker {
+		position: relative;
+		padding: clamp(0.75rem, 2vw, 1.5rem) clamp(1rem, 4vw, 3rem);
+	}
+
+	.gaze-breaker__grid {
+		display: grid;
+		grid-template-columns: repeat(var(--gaze-columns, 6), minmax(0, 1fr));
+		grid-template-rows: var(--gaze-height, 220px);
+		position: relative;
+	}
+
+	.gaze-breaker__column {
+		grid-row: 1;
+		min-width: 0;
+		pointer-events: none;
+	}
+
+	.gaze-breaker--dividers .gaze-breaker__column + .gaze-breaker__column {
+		border-left: 1px solid currentColor;
+		opacity: 0.15;
+	}
+
+	.gaze-breaker__item {
+		grid-row: 1;
+		display: flex;
+		width: 100%;
+		min-width: 0;
+		padding: 4%;
+		z-index: 1;
+
+		a {
+			display: contents;
+		}
+
+		img {
+			display: block;
+			max-height: 100%;
+			object-fit: contain;
+			border-radius: 50%;
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+		}
+	}
+
+	.gaze-breaker__item--s img {
+		width: 35%;
+	}
+
+	.gaze-breaker__item--m img {
+		width: 55%;
+	}
+
+	.gaze-breaker__item--l img {
+		width: 75%;
+	}
+
+	.gaze-breaker__item--xl img {
+		width: 95%;
+	}
+
+	.gaze-breaker__item--top {
+		align-self: start;
+	}
+
+	.gaze-breaker__item--middle {
+		align-self: center;
+	}
+
+	.gaze-breaker__item--bottom {
+		align-self: end;
+	}
+
+	.gaze-breaker__item--left {
+		justify-content: flex-start;
+	}
+
+	.gaze-breaker__item--center {
+		justify-content: center;
+	}
+
+	.gaze-breaker__item--right {
+		justify-content: flex-end;
+	}
+
+	@media (max-width: 700px) {
+		.gaze-breaker__grid {
+			grid-template-rows: calc(var(--gaze-height, 220px) * 0.6);
+		}
+	}
+}

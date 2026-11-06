@@ -55,6 +55,7 @@ final class All {
 		'EventBlock' => EventBlock\EventBlock::class,
 		'Form' => Form\Form::class,
 		'Gallery' => Gallery\Gallery::class,
+		'GazeBreaker' => GazeBreaker\GazeBreaker::class,
 		'Image' => Image\Image::class,
 		'LandscapeScene' => LandscapeScene\LandscapeScene::class,
 		'LeafletMap' => LeafletMap\LeafletMap::class,

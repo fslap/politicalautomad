@@ -69,7 +69,7 @@ class WaterAnimation extends AbstractDynamicTemplateBlock {
 		return array_merge(self::sceneContext($config, 44, 112), array(
 			'hide_mobile' => (bool) $config['hide_mobile'],
 			'classes' => $this->getClasses($config)
-		));
+		), self::hoverContext($config));
 	}
 
 	/**
@@ -205,6 +205,7 @@ class WaterAnimation extends AbstractDynamicTemplateBlock {
 					)
 				),
 				...self::sceneFields(44, 112),
+				self::hoverField('float'),
 				array('name' => 'hide_mobile', 'type' => 'toggle', 'label' => 'Auf Mobilgeräten ausblenden', 'default' => true),
 				self::classesField('svgcontainer svgwater relative')
 			)

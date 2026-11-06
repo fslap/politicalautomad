@@ -89,6 +89,53 @@ trait ComponentConfig {
 	}
 
 	/**
+	 * Hover animations of breakers and scenes with images.
+	 */
+	public static array $hoverAnimations = array(
+		'' => 'Keine',
+		'tilt' => 'Kippen',
+		'move' => 'Bewegen',
+		'float' => 'Schweben',
+		'wobble' => 'Wackeln',
+		'look' => 'Zum Mauszeiger schauen'
+	);
+
+	/**
+	 * The common field for the hover animation of images.
+	 *
+	 * @param string $default
+	 * @return array
+	 */
+	protected static function hoverField(string $default = ''): array {
+		return array(
+			'name' => 'hover_animation',
+			'type' => 'select',
+			'label' => 'Animation beim Darüberfahren (Hover)',
+			'default' => $default,
+			'options' => self::$hoverAnimations
+		);
+	}
+
+	/**
+	 * The classes and attributes of the hover animation.
+	 *
+	 * @param array $config
+	 * @return array{hover_classes: string, hover_look: bool}
+	 */
+	protected static function hoverContext(array $config): array {
+		$animation = (string) ($config['hover_animation'] ?? '');
+
+		if (!isset(self::$hoverAnimations[$animation]) || $animation === '') {
+			return array('hover_classes' => '', 'hover_look' => false);
+		}
+
+		return array(
+			'hover_classes' => "party-hover party-hover--$animation",
+			'hover_look' => $animation === 'look'
+		);
+	}
+
+	/**
 	 * The common title field.
 	 *
 	 * @param string $default
