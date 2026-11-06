@@ -1,0 +1,30 @@
+<div class="wp-block-group video-commentary video-commentary--video-{{layout}} {{classes}}" data-party-video-commentary="{{config_json}}">
+    <a id="{{section_id}}"></a>
+    {{#title}}<h1 class="wp-block-heading section-heading">{{title}}</h1>{{/title}}
+    {{#intro}}<div class="video-commentary__intro">{{{intro}}}</div>{{/intro}}
+
+    <div class="video-commentary__layout">
+        <div class="video-commentary__player">
+            <div class="video-commentary__frame">
+                {{#embed_url}}
+                    <iframe id="{{section_id}}_player" src="{{embed_url}}" title="{{title}}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+                {{/embed_url}}
+            </div>
+        </div>
+
+        {{#has_comments}}
+        <ol class="video-commentary__comments">
+            {{#comments}}
+                <li class="video-commentary__comment{{#category}} video-commentary__comment--{{category}}{{/category}}" data-time="{{seconds}}">
+                    <button type="button" class="video-commentary__time" data-seek="{{seconds}}" aria-label="Zu {{time}} springen">{{time}}</button>
+                    <div class="video-commentary__body">
+                        {{#category_label}}<span class="video-commentary__category">{{category_label}}</span>{{/category_label}}
+                        {{#title}}<h3 class="video-commentary__title">{{title}}</h3>{{/title}}
+                        <div class="video-commentary__text">{{{html}}}</div>
+                    </div>
+                </li>
+            {{/comments}}
+        </ol>
+        {{/has_comments}}
+    </div>
+</div>

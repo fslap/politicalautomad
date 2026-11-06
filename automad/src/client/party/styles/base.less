@@ -259,3 +259,18 @@
 		}
 	}
 }
+
+// Horizontal scrollers of the original stylesheet (table-cell + nowrap) report their full
+// content width as minimum width. Inside of grid based themes (like standard-lite) that
+// widens the whole page. Size containment keeps them inside of their column.
+.am-party {
+	min-width: 0;
+	max-width: 100%;
+
+	.scroll,
+	.document-scroller,
+	.case-leaflet-region__list {
+		contain: inline-size;
+		max-width: 100%;
+	}
+}

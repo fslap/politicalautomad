@@ -36,7 +36,9 @@ import './styles/index.less';
 import { initCaseMap } from './components/CaseMap';
 import { initDonate } from './components/Donate';
 import { initMap } from './components/Map';
+import { initStainedGlass } from './components/StainedGlass';
 import { initTurnstile } from './components/Turnstile';
+import { initVideoCommentary } from './components/VideoCommentary';
 
 /**
  * Behaviours of party blocks. Every behaviour is initialized once per element.
@@ -48,6 +50,8 @@ const behaviours: Array<
 	['[data-party-case-map]', initCaseMap],
 	['[data-party-donate]', initDonate],
 	['.cf-turnstile', initTurnstile],
+	['[data-party-video-commentary]', initVideoCommentary],
+	['[data-party-stained-glass]', initStainedGlass],
 ];
 
 const init = (): void => {

@@ -1,17 +1,20 @@
-<div class="wp-block-group art art-desktop-only {{classes}}">
-    {{#title}}<h1 class="wp-block-heading section-heading">{{title}}</h1>{{/title}}
-    <br><br>
+<div class="wp-block-group art art--canvas{{#mobile_art_image}} art--has-mobile{{/mobile_art_image}} {{classes}}">
     {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
-
-    {{#artworks}}
-        <img src="{{image}}" class="{{classes}}" alt="{{description}}">
-    {{/artworks}}
-</div>
-
-{{#mobile_art_image}}
-<div class="wp-block-group art art-mobile-only {{classes}}">
     {{#title}}<h1 class="wp-block-heading section-heading">{{title}}</h1>{{/title}}
-    <br><br>
-    <img src="{{mobile_art_image}}" class="mobile-art-image" alt="{{title}}">
+
+    <div class="art__canvas art__canvas--{{align}}" style="{{style}}">
+        <div class="art__columns">
+            {{#columns}}
+                <div class="art__column">
+                    {{#items}}
+                        <img src="{{image}}" class="art__item {{classes}}" style="{{style}}" alt="{{description}}" decoding="async">
+                    {{/items}}
+                </div>
+            {{/columns}}
+        </div>
+    </div>
+
+    {{#mobile_art_image}}
+        <img src="{{mobile_art_image}}" class="art__mobile" alt="{{title}}" loading="lazy">
+    {{/mobile_art_image}}
 </div>
-{{/mobile_art_image}}

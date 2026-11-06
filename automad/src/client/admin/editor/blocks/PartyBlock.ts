@@ -43,7 +43,9 @@ import {
 	debounce,
 	EventName,
 	FieldTag,
+	FileCollectionController,
 	getPageURL,
+	htmlSpecialChars,
 	PartyBlockController,
 	query,
 	requestApi,
@@ -78,7 +80,8 @@ export interface PartyField {
 		| 'strings'
 		| 'json'
 		| 'list'
-		| 'map';
+		| 'map'
+		| 'file';
 	label?: string;
 	default?: any;
 	placeholder?: string;
@@ -89,6 +92,7 @@ export interface PartyField {
 	bind?: PartyMapBinding;
 	object?: string;
 	optionsFrom?: { field: string; value: string; label?: string };
+	addLabel?: string;
 }
 
 /**
@@ -729,6 +733,12 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 				return;
 			}
 
+			if (field.type === 'file') {
+				this.renderFile(field, target, container, onChange);
+
+				return;
+			}
+
 			const tag = fieldTag(field.type);
 			const wrapper = create(
 				'div',
@@ -884,6 +894,116 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 	}
 
 	/**
+	 * Render a file field with a picker that lists the files of the current page and the shared files.
+	 *
+	 * @param field
+	 * @param target
+	 * @param container
+	 * @param onChange
+	 */
+	private renderFile(
+		field: PartyField,
+		target: KeyValueMap,
+		container: HTMLElement,
+		onChange: () => void
+	): void {
+		const id = uniqueId();
+		const wrapper = create(
+			'div',
+			[CSS.field, CSS.editorBlockPartyField],
+			{},
+			container
+		);
+
+		create(
+			'label',
+			[CSS.fieldLabel],
+			{ for: id },
+			create('div', [], {}, wrapper)
+		).textContent = field.label || field.name;
+
+		const row = create('div', [CSS.flex, CSS.flexGap], {}, wrapper);
+		const input = create(
+			'input',
+			[CSS.input],
+			{ id, type: 'text', placeholder: field.placeholder || '' },
+			row
+		) as HTMLInputElement;
+
+		input.value = `${target[field.name] ?? ''}`;
+
+		const button = create(
+			'button',
+			[CSS.button],
+			{ type: 'button' },
+			row,
+			'<i class="bi bi-folder2-open"></i><span>Datei wählen</span>'
+		);
+
+		if (field.help) {
+			create('small', [CSS.textMuted], {}, wrapper).textContent = field.help;
+		}
+
+		const update = () => {
+			target[field.name] = input.value.trim();
+			onChange();
+			this.changed();
+		};
+
+		this.listen(input, 'input change', debounce(update, 100));
+
+		this.listen(button, 'click', async (event: Event) => {
+			event.preventDefault();
+
+			const { modal, body } = createGenericModal(field.label || 'Datei wählen');
+			const list = create('div', [CSS.flex, CSS.flexColumn, CSS.flexGap], {}, body);
+			const sources = [
+				{ title: 'Dateien dieser Seite', url: getPageURL() || '' },
+				{ title: 'Globale Dateien (shared)', url: '' },
+			].filter(
+				(source, index, all) =>
+					index === all.findIndex((other) => other.url === source.url)
+			);
+
+			for (const source of sources) {
+				const { data } = await requestApi(FileCollectionController.list, {
+					url: source.url,
+				});
+
+				const files: KeyValueMap[] = data?.files ?? [];
+
+				create('strong', [], {}, list).textContent = source.title;
+
+				if (!files.length) {
+					create('small', [CSS.textMuted], {}, list).textContent =
+						'Keine Dateien. Dateien lädst du im Reiter „Files“ der Seite bzw. unter „Global Data and Files“ hoch.';
+				}
+
+				files.forEach((file) => {
+					const item = create(
+						'button',
+						[CSS.button],
+						{ type: 'button', style: 'justify-content: flex-start;' },
+						list,
+						`<i class="bi bi-file-earmark"></i><span></span>`
+					);
+
+					item.querySelector('span').textContent = file.basename;
+
+					this.listen(item, 'click', () => {
+						// Files of the page are referenced relative to the page, shared files absolutely.
+						input.value = source.url ? file.basename : file.url;
+						update();
+						modal.close();
+					});
+				});
+			}
+
+			setTimeout(() => modal.open());
+		});
+	}
+
+	/**
 	 * Render a select field.
 	 *
 	 * @param field
@@ -1030,7 +1150,7 @@ export abstract class PartyBlock extends BaseBlock<KeyValueMap> {
 			[CSS.button],
 			{ type: 'button' },
 			header,
-			'<i class="bi bi-plus-lg"></i><span>Eintrag hinzufügen</span>'
+			`<i class="bi bi-plus-lg"></i><span>${htmlSpecialChars(field.addLabel || 'Eintrag hinzufügen')}</span>`
 		);
 
 		const items = create(

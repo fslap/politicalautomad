@@ -12,30 +12,31 @@
 
     {{#has_inner_container}}<div class="inner-container">{{/has_inner_container}}
 
-    <div class="split-container{{#split_hover_border}} split-hover-border{{/split_hover_border}}">
-        <div class="split-left">
-            {{#left_is_leaflet}}
-                <div class="leaflet-map" style="height: {{left_map_height}};" data-party-map="{{left_map_json}}"></div>
-            {{/left_is_leaflet}}
-            {{#left_is_image}}
-                {{#left_image}}<img src="{{left_image}}" class="split-image" alt="{{title}}">{{/left_image}}
-            {{/left_is_image}}
-            {{#left_is_markdown}}
-                <div class="markdown-content">{{{left_html_content}}}</div>
-            {{/left_is_markdown}}
-        </div>
-
-        <div class="split-right">
-            {{#right_is_leaflet}}
-                <div class="leaflet-map" style="height: {{right_map_height}};" data-party-map="{{right_map_json}}"></div>
-            {{/right_is_leaflet}}
-            {{#right_is_image}}
-                {{#right_image}}<img src="{{right_image}}" class="split-image" alt="{{title}}">{{/right_image}}
-            {{/right_is_image}}
-            {{#right_is_markdown}}
-                <div class="markdown-content">{{{right_html_content}}}</div>
-            {{/right_is_markdown}}
-        </div>
+    <div class="split-container {{container_classes}}" style="{{container_style}}">
+        {{#panes}}
+            <div class="split-pane {{position}}{{#is_auto}} split-pane--auto{{/is_auto}} {{classes}}" style="{{style}}">
+                {{#title}}<h3 class="wp-block-heading split-pane__title">{{title}}</h3>{{/title}}
+                {{#is_leaflet}}
+                    <div class="leaflet-map" style="height: {{map_height}};" data-party-map="{{map_json}}"></div>
+                {{/is_leaflet}}
+                {{#is_image}}
+                    {{#image}}<img src="{{image}}" class="split-image" alt="{{image_alt}}" loading="lazy">{{/image}}
+                {{/is_image}}
+                {{#is_markdown}}
+                    <div class="markdown-content">{{{html_content}}}</div>
+                {{/is_markdown}}
+                {{#is_html}}
+                    <div class="split-pane__html">{{{html}}}</div>
+                {{/is_html}}
+                {{#is_video}}
+                    {{#video_embed}}
+                        <div class="split-pane__video">
+                            <iframe src="{{video_embed}}" title="{{title}}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+                        </div>
+                    {{/video_embed}}
+                {{/is_video}}
+            </div>
+        {{/panes}}
     </div>
 
     {{#has_inner_container}}</div>{{/has_inner_container}}

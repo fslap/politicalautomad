@@ -582,13 +582,30 @@ abstract class AbstractDynamicTemplateBlock extends AbstractDynamicBlock {
 	 * @param string $value
 	 * @return array{desktop: string, mobile: string}
 	 */
-	protected function splitImages(string $value): array {
+	protected function splitImages(string $value, string $mobile = ''): array {
 		$images = array_values(array_filter(array_map('trim', explode(',', $value))));
 		$desktop = $images[0] ?? '';
+		$mobile = trim($mobile);
 
 		return array(
 			'desktop' => $desktop,
-			'mobile' => $images[1] ?? $desktop
+			// A separate mobile image field wins over the older "desktop,mobile" notation.
+			'mobile' => $mobile !== '' ? $mobile : ($images[1] ?? $desktop)
+		);
+	}
+
+	/**
+	 * Return the field definitions of a desktop image and an optional mobile image,
+	 * both with the image picker of the dashboard.
+	 *
+	 * @param string $name the name of the desktop field, the mobile field gets the suffix "_mobile"
+	 * @param string $label
+	 * @return array
+	 */
+	protected static function imagePairFields(string $name, string $label): array {
+		return array(
+			array('name' => $name, 'type' => 'image', 'label' => "$label (Desktop)"),
+			array('name' => "{$name}_mobile", 'type' => 'image', 'label' => "$label (Mobil, optional)", 'help' => 'Wird auf kleinen Bildschirmen statt des Desktop-Bildes angezeigt.')
 		);
 	}
 

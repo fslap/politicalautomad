@@ -55,7 +55,7 @@ class SecurityConcept extends AbstractDynamicTemplateBlock {
 	}
 
 	public function context(array $config): array {
-		$images = $this->splitImages((string) $config['main_image']);
+		$images = $this->splitImages((string) $config['main_image'], (string) ($config['main_image_mobile'] ?? ''));
 
 		return array(
 			'section_id' => $config['section_id'],
@@ -81,7 +81,7 @@ class SecurityConcept extends AbstractDynamicTemplateBlock {
 				self::titleField('Sicherheit'),
 				array('name' => 'subtitle', 'type' => 'text', 'label' => 'Untertitel'),
 				array('name' => 'subtitle_emphasis', 'type' => 'text', 'label' => 'Untertitel (kursiv)'),
-				array('name' => 'main_image', 'type' => 'text', 'label' => 'Bild (desktop[,mobil])', 'help' => 'Desktop-Bild, optional mit Komma getrennt ein Mobil-Bild: desktop.jpg,mobile.jpg'),
+				...self::imagePairFields('main_image', 'Bild'),
 				array('name' => 'feature_prefix', 'type' => 'text', 'label' => 'Aufzählungszeichen', 'default' => '-'),
 				array('name' => 'features', 'type' => 'strings', 'label' => 'Punkte (einer pro Zeile)', 'default' => array('Punkt 1', 'Punkt 2')),
 				self::classesField('inner-container')

@@ -55,7 +55,7 @@ class Quote extends AbstractDynamicTemplateBlock {
 	}
 
 	public function context(array $config): array {
-		$images = $this->splitImages((string) $config['section_image']);
+		$images = $this->splitImages((string) $config['section_image'], (string) ($config['section_image_mobile'] ?? ''));
 
 		return array(
 			'section_id' => $config['section_id'],
@@ -77,7 +77,7 @@ class Quote extends AbstractDynamicTemplateBlock {
 			'fields' => array(
 				self::sectionIdField(),
 				self::titleField(),
-				array('name' => 'section_image', 'type' => 'text', 'label' => 'Section-Bild (desktop[,mobil])', 'help' => 'Desktop-Bild, optional mit Komma getrennt ein Mobil-Bild: desktop.jpg,mobile.jpg'),
+				...self::imagePairFields('section_image', 'Section-Bild'),
 				array('name' => 'quote_text', 'type' => 'textarea', 'label' => 'Zitat', 'default' => 'Zitat'),
 				array('name' => 'quote_author', 'type' => 'text', 'label' => 'Autor'),
 				self::classesField('inner-container')

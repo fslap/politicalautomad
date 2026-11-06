@@ -12,26 +12,25 @@
 
     {% if has_inner_container %}<div class="inner-container">{% endif %}
 
-    <div class="split-container{% if split_hover_border %} split-hover-border{% endif %}">
-        <div class="split-left">
-            {% if left_is_leaflet %}
-                <div class="leaflet-map" style="height: {{ left_map_height }};" data-party-map="{{ left_map_json }}"></div>
-            {% elseif left_is_image and left_image %}
-                <img src="{{ left_image }}" class="split-image" alt="{{ title }}">
-            {% elseif left_is_markdown %}
-                <div class="markdown-content">{{ left_html_content|raw }}</div>
-            {% endif %}
-        </div>
-
-        <div class="split-right">
-            {% if right_is_leaflet %}
-                <div class="leaflet-map" style="height: {{ right_map_height }};" data-party-map="{{ right_map_json }}"></div>
-            {% elseif right_is_image and right_image %}
-                <img src="{{ right_image }}" class="split-image" alt="{{ title }}">
-            {% elseif right_is_markdown %}
-                <div class="markdown-content">{{ right_html_content|raw }}</div>
-            {% endif %}
-        </div>
+    <div class="split-container {{ container_classes }}" style="{{ container_style }}">
+        {% for pane in panes %}
+            <div class="split-pane {{ pane.position }}{% if pane.is_auto %} split-pane--auto{% endif %} {{ pane.classes }}" style="{{ pane.style }}">
+                {% if pane.title %}<h3 class="wp-block-heading split-pane__title">{{ pane.title }}</h3>{% endif %}
+                {% if pane.is_leaflet %}
+                    <div class="leaflet-map" style="height: {{ pane.map_height }};" data-party-map="{{ pane.map_json }}"></div>
+                {% elseif pane.is_image and pane.image %}
+                    <img src="{{ pane.image }}" class="split-image" alt="{{ pane.image_alt }}" loading="lazy">
+                {% elseif pane.is_markdown %}
+                    <div class="markdown-content">{{ pane.html_content|raw }}</div>
+                {% elseif pane.is_html %}
+                    <div class="split-pane__html">{{ pane.html|raw }}</div>
+                {% elseif pane.is_video and pane.video_embed %}
+                    <div class="split-pane__video">
+                        <iframe src="{{ pane.video_embed }}" title="{{ pane.title }}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
     </div>
 
     {% if has_inner_container %}</div>{% endif %}

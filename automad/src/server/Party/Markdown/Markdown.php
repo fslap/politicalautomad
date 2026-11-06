@@ -64,7 +64,7 @@ class Markdown extends AbstractDynamicTemplateBlock {
 			$this->parser->setSafeMode(true);
 		}
 
-		$images = $this->splitImages((string) $config['section_image']);
+		$images = $this->splitImages((string) $config['section_image'], (string) ($config['section_image_mobile'] ?? ''));
 
 		return array(
 			'section_id' => $config['section_id'],
@@ -85,7 +85,7 @@ class Markdown extends AbstractDynamicTemplateBlock {
 			'fields' => array(
 				self::sectionIdField(),
 				self::titleField(),
-				array('name' => 'section_image', 'type' => 'text', 'label' => 'Section-Bild (desktop[,mobil])', 'help' => 'Desktop-Bild, optional mit Komma getrennt ein Mobil-Bild: desktop.jpg,mobile.jpg'),
+				...self::imagePairFields('section_image', 'Section-Bild'),
 				array('name' => 'markdown_content', 'type' => 'markdown', 'label' => 'Markdown-Inhalt', 'default' => ''),
 				self::classesField('inner-container')
 			)

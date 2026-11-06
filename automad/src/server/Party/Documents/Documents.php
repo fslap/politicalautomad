@@ -83,7 +83,7 @@ class Documents extends AbstractDynamicTemplateBlock {
 					'default' => array(array('title' => 'Satzung', 'file' => '', 'preview' => '', 'description' => '')),
 					'fields' => array(
 						array('name' => 'title', 'type' => 'text', 'label' => 'Titel'),
-						array('name' => 'file', 'type' => 'url', 'label' => 'Datei / Link'),
+						array('name' => 'file', 'type' => 'file', 'label' => 'Datei (z.B. PDF) oder Link'),
 						array('name' => 'preview', 'type' => 'image', 'label' => 'Vorschaubild'),
 						array('name' => 'description', 'type' => 'text', 'label' => 'Kurzbeschreibung')
 					)

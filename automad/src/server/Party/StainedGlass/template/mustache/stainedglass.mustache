@@ -1,0 +1,24 @@
+<div class="stained-glass stained-glass--text-{{text_position}} stained-glass--player-{{player_size}} {{classes}}" style="{{style}}" data-party-stained-glass="{{config_json}}">
+    <a id="{{section_id}}"></a>
+    <div class="stained-glass__window">{{{svg}}}</div>
+
+    {{#has_video}}
+        <div class="stained-glass__player">
+            <div class="stained-glass__frame">
+                <iframe src="{{embed_url}}" title="Musik" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <button type="button" class="stained-glass__sound" hidden>
+                <span aria-hidden="true">🔊</span> Ton an
+            </button>
+        </div>
+    {{/has_video}}
+
+    {{#has_bullets}}
+        <div class="stained-glass__content">
+            {{#title}}<h2 class="stained-glass__title">{{title}}</h2>{{/title}}
+            <ul class="stained-glass__bullets">
+                {{#bullets}}<li>{{text}}</li>{{/bullets}}
+            </ul>
+        </div>
+    {{/has_bullets}}
+</div>

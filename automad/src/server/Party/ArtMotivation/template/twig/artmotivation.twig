@@ -1,19 +1,20 @@
-<div class="wp-block-group art art-desktop-only {{ classes }}">
-    <h1 class="wp-block-heading">{{ title }}</h1>
-    <br><br>
+<div class="wp-block-group art art--canvas{% if mobile_art_image %} art--has-mobile{% endif %} {{ classes }}">
     {% if section_id %}<a id="{{ section_id }}"></a>{% endif %}
-    
-    {% for artwork in artworks %}
-        <img src="{{ artwork.image }}" 
-             class="{{ artwork.classes }}" 
-             alt="{{ artwork.description }}">
-    {% endfor %}
-</div>
+    {% if title %}<h1 class="wp-block-heading section-heading">{{ title }}</h1>{% endif %}
 
-{% if mobile_art_image %}
-<div class="wp-block-group art art-mobile-only {{ classes }}">
-    <h1 class="wp-block-heading">{{ title }}</h1>
-    <br><br>
-    <img src="{{ mobile_art_image }}" class="mobile-art-image" alt="{{ title }}">
+    <div class="art__canvas art__canvas--{{ align }}" style="{{ style }}">
+        <div class="art__columns">
+            {% for column in columns %}
+                <div class="art__column">
+                    {% for item in column.items %}
+                        <img src="{{ item.image }}" class="art__item {{ item.classes }}" style="{{ item.style }}" alt="{{ item.description }}" decoding="async">
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if mobile_art_image %}
+        <img src="{{ mobile_art_image }}" class="art__mobile" alt="{{ title }}" loading="lazy">
+    {% endif %}
 </div>
-{% endif %}
