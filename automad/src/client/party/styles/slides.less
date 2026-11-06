@@ -40,6 +40,7 @@
 	.party-slide__body {
 		position: relative;
 		z-index: 2;
+		order: 2;
 		flex: 1 1 auto;
 		display: flex;
 		flex-direction: column;
@@ -1232,6 +1233,49 @@
 
 		.party-slide__scene--first .party-slide__houses {
 			width: 70%;
+		}
+	}
+}
+
+// Small screens: scenes below the content instead of behind it, no broken words.
+.am-party {
+	.hero-title__text span {
+		overflow-wrap: normal;
+		word-break: normal;
+		hyphens: manual;
+	}
+
+	.md-viewer__modes {
+		flex-wrap: wrap;
+	}
+
+	@media (max-width: 800px) {
+		.hero-title__text {
+			font-size: clamp(1.7rem, 8.5vw, 2.6rem);
+		}
+
+		.party-slide--first .party-slide__body {
+			padding-bottom: 0;
+		}
+
+		.party-slide__scene,
+		.party-slide__scene--first,
+		.party-slide__scene--city {
+			position: relative;
+			inset: auto;
+			z-index: 1;
+			order: 3;
+			height: 200px;
+			margin-top: 1rem;
+		}
+
+		.party-slide__scene--first .party-slide__houses {
+			width: 75%;
+			height: 75%;
+		}
+
+		.party-slide--viewer .party-slide__scene {
+			height: 180px;
 		}
 	}
 }
