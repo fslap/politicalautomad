@@ -5,7 +5,7 @@
     <div class="party-gallery__grid" style="--party-gallery-columns: {{columns}};">
         {{#images}}
             <figure class="wp-block-image party-gallery__item">
-                <img src="{{src}}" alt="{{alt}}" loading="lazy">
+                <img src="{{src}}" alt="{{alt}}" decoding="async">
                 {{#caption}}<figcaption>{{caption}}</figcaption>{{/caption}}
             </figure>
         {{/images}}

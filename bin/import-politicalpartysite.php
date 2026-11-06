@@ -338,7 +338,10 @@ function convertLayers(array $lines, bool $animation): array {
 		$layers[count($layers) - 1]['svgs'][] = array(
 			'file' => cleanFile($file),
 			'position' => $position ?: 'pos1',
-			'animation' => $animation ? $third : ''
+			// water1 … water8 are animations, other values (landscape) are descriptions.
+			'animation' => $third,
+			// The boat of the original floats above the waves, it is moved onto them.
+			'shift' => $animation && cleanFile($file) === 'sailing.svg' ? 17 : 0
 		);
 	}
 
@@ -370,7 +373,8 @@ function convertMap(array $values, string $prefix, string $content, array &$repo
 	$map = array(
 		'center' => (string) ($values["{$prefix}map_center"] ?? '51.0,10.0'),
 		'zoom' => (int) ($values["{$prefix}map_zoom"] ?? 6),
-		'height' => preg_match('/^\d+(\.\d+)?(px|vh|rem|em|%)$/', $height) ? $height : '520px',
+		// "full" fills the height of the pane next to the map.
+		'height' => preg_match('/^(full|\d+(\.\d+)?(px|vh|rem|em|%))$/', $height) ? $height : '520px',
 		'markers' => array(),
 		'geojson' => $geojson
 	);

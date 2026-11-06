@@ -1,23 +1,26 @@
-<div class="wp-block-group widthcontainer {{classes}}">
+<div class="wp-block-group party-concept {{classes}}">
     {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
 
-    {{#mobile_image}}
-        <img class="half cell mobile-image-1000" src="{{mobile_image}}" alt="{{title}}">
-    {{/mobile_image}}
-    {{#desktop_image}}
-        <img class="half cell desktop-image-1000" src="{{desktop_image}}" alt="{{title}}">
-    {{/desktop_image}}
+    <div class="party-concept__grid{{^image}} party-concept__grid--text{{/image}}">
+        {{#image}}
+            <figure class="party-concept__media">
+                <picture>
+                    {{#mobile_image}}<source media="(max-width: 800px)" srcset="{{mobile_image}}">{{/mobile_image}}
+                    <img src="{{image}}" alt="{{title}}" decoding="async">
+                </picture>
+            </figure>
+        {{/image}}
 
-    <div class="half mid cell">
-        <h1 class="wp-block-heading">{{title}}</h1>
-        <br>
-        <h2 class="wp-block-heading bgwhite"><b>{{subtitle}}</b></h2>
-        <br>
-        <h2 class="wp-block-heading"><i>{{subtitle_emphasis}}</i></h2>
-        <br>
+        <div class="party-concept__body">
+            {{#title}}<h2 class="wp-block-heading party-concept__title">{{title}}</h2>{{/title}}
+            {{#subtitle_html}}<p class="party-concept__subtitle"><span>{{{subtitle_html}}}</span></p>{{/subtitle_html}}
+            {{#subtitle_emphasis_html}}<p class="party-concept__emphasis">{{{subtitle_emphasis_html}}}</p>{{/subtitle_emphasis_html}}
 
-        {{#features}}
-            <h4 class="wp-block-heading">{{feature_prefix}} {{.}}</h4>
-        {{/features}}
+            {{#has_features}}
+                <ul class="party-concept__features" data-prefix="{{feature_prefix}}">
+                    {{#features}}<li>{{.}}</li>{{/features}}
+                </ul>
+            {{/has_features}}
+        </div>
     </div>
 </div>

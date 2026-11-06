@@ -80,10 +80,12 @@ class Form extends AbstractDynamicTemplateBlock {
 				'type' => $type,
 				'required' => !empty($field['required']),
 				'required_attr' => !empty($field['required']) ? 'required' : '',
-				'options' => array_values((array) ($field['options'] ?? array())),
+				'options' => $options = array_values(array_filter(array_map('strval', (array) ($field['options'] ?? array())), fn ($option) => trim($option) !== '')),
 				'is_textarea' => $type === 'textarea',
 				'is_select' => $type === 'select',
-				'is_checkbox' => $type === 'checkbox',
+				// A checkbox with options is a group of checkboxes (multiple choice).
+				'is_checkbox' => $type === 'checkbox' && empty($options),
+				'is_checkbox_group' => $type === 'checkbox' && !empty($options),
 				'is_input' => !in_array($type, array('textarea', 'select', 'checkbox'), true)
 			);
 		}
@@ -179,6 +181,12 @@ class Form extends AbstractDynamicTemplateBlock {
 
 		foreach ($fields as $field) {
 			$value = $_POST[$field['name']] ?? '';
+
+			if (is_array($value)) {
+				// Checkbox groups: only the offered options are accepted.
+				$value = join(', ', array_values(array_intersect($field['options'] ?? array(), array_map('strval', $value))));
+			}
+
 			$value = is_string($value) ? trim($value) : '';
 
 			if ($field['required'] && $value === '') {

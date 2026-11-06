@@ -1,9 +1,11 @@
-<div class="wp-block-group party-svg-scene {{ classes }}" style="height: {{ height }};">
-    {% for layer in layers %}
-        <div class="party-svg-layer {{ layer.position }}">
-            {% for svg in layer.svgs %}
-                <img src="{{ svg.file }}" class="absolute {{ svg.position }} svg {{ svg.animation }}" alt="" loading="lazy">
-            {% endfor %}
-        </div>
-    {% endfor %}
+<div class="wp-block-group party-svg-scene {{ classes }}{% if hide_mobile %} party-hide-mobile{% endif %}" style="{{ scene_style }}">
+    <div class="party-svg-canvas" style="{{ canvas_style }}">
+        {% for layer in layers %}
+            <div class="party-svg-layer {{ layer.position }}">
+                {% for svg in layer.svgs %}
+                    <img src="{{ svg.file }}" class="svg {{ svg.animation_class }}" style="z-index: {{ svg.z }}; {{ svg.shift }}" alt="" title="{{ svg.title }}" decoding="async">
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
 </div>

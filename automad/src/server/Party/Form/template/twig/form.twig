@@ -22,7 +22,20 @@
 
         {% for field in fields %}
             <div class="wp-block-group form-field">
-                {% if field.is_checkbox %}
+                {% if field.is_checkbox_group %}
+                    <span id="{{ field.id }}_label" class="wp-block-label">
+                        {{ field.label }}
+                        {% if field.required %}<span class="required">*</span>{% endif %}
+                    </span>
+                    <div class="party-form__options" role="group" aria-labelledby="{{ field.id }}_label">
+                        {% for option in field.options %}
+                            <label class="party-form__checkbox">
+                                <input type="checkbox" name="{{ field.name }}[]" value="{{ option }}">
+                                <span>{{ option }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                {% elseif field.is_checkbox %}
                     <label class="wp-block-label party-form__checkbox">
                         <input type="checkbox" name="{{ field.name }}" id="{{ field.id }}" value="ja" {{ field.required_attr }}>
                         <span>{{ field.label }}{% if field.required %} <span class="required">*</span>{% endif %}</span>

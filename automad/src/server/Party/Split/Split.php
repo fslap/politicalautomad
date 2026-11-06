@@ -212,6 +212,7 @@ class Split extends AbstractDynamicTemplateBlock {
 			'classes' => trim((string) ($pane['classes'] ?? '')),
 			'style' => isset(self::WIDTHS[$width]) && $width !== 'auto' ? "--split-width: $width%;" : '',
 			'is_auto' => !isset(self::WIDTHS[$width]) || $width === 'auto',
+			'type' => preg_replace('/[^a-z]/', '', $type),
 			'is_markdown' => $type === 'markdown',
 			'is_image' => $type === 'image',
 			'is_leaflet' => $type === 'leaflet',
@@ -222,7 +223,10 @@ class Split extends AbstractDynamicTemplateBlock {
 			'image' => (string) ($pane['image'] ?? ''),
 			'image_alt' => (string) ($pane['image_alt'] ?? ''),
 			'video_embed' => $type === 'video' ? self::youtubeEmbedUrl((string) ($pane['video'] ?? '')) : '',
-			'map_height' => preg_replace('/[^a-zA-Z0-9.%()+\-\s]/', '', (string) ($map['height'] ?? '320px')),
+			'map_full' => in_array(strtolower(trim((string) ($map['height'] ?? ''))), array('full', '100%', 'auto'), true),
+			'map_height' => in_array(strtolower(trim((string) ($map['height'] ?? ''))), array('full', '100%', 'auto'), true)
+				? '100%'
+				: preg_replace('/[^a-zA-Z0-9.%()+\-\s]/', '', (string) ($map['height'] ?? '320px')),
 			'map_json' => $type === 'leaflet' ? $this->json(array(
 				'center' => \Automad\Party\LeafletMap\LeafletMap::parseCenter(is_array($center) ? join(',', $center) : (string) $center),
 				'zoom' => (int) ($map['zoom'] ?? 6),

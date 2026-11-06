@@ -14,13 +14,13 @@
 
     <div class="split-container {{container_classes}}" style="{{container_style}}">
         {{#panes}}
-            <div class="split-pane {{position}}{{#is_auto}} split-pane--auto{{/is_auto}} {{classes}}" style="{{style}}">
+            <div class="split-pane split-pane--{{type}} {{position}}{{#is_auto}} split-pane--auto{{/is_auto}}{{#map_full}} split-pane--map-full{{/map_full}} {{classes}}" style="{{style}}">
                 {{#title}}<h3 class="wp-block-heading split-pane__title">{{title}}</h3>{{/title}}
                 {{#is_leaflet}}
                     <div class="leaflet-map" style="height: {{map_height}};" data-party-map="{{map_json}}"></div>
                 {{/is_leaflet}}
                 {{#is_image}}
-                    {{#image}}<img src="{{image}}" class="split-image" alt="{{image_alt}}" loading="lazy">{{/image}}
+                    {{#image}}<img src="{{image}}" class="split-image" alt="{{image_alt}}" decoding="async">{{/image}}
                 {{/is_image}}
                 {{#is_markdown}}
                     <div class="markdown-content">{{{html_content}}}</div>

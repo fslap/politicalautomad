@@ -36,6 +36,7 @@
 namespace Automad\Party\LandscapeScene;
 
 use Automad\Blocks\AbstractDynamicTemplateBlock;
+use Automad\Party\WaterAnimation\WaterAnimation;
 use Automad\Party\Traits\ComponentConfig;
 
 defined('AUTOMAD') or die('Direct access not permitted!');
@@ -55,11 +56,10 @@ class LandscapeScene extends AbstractDynamicTemplateBlock {
 	}
 
 	public function context(array $config): array {
-		return array(
-			'layers' => \Automad\Party\WaterAnimation\WaterAnimation::normalizeLayers($config['layers']),
-			'height' => preg_replace('/[^a-zA-Z0-9.%()+\-\s]/', '', (string) $config['height']),
+		return array_merge(WaterAnimation::sceneContext($config, 20), array(
+			'hide_mobile' => false,
 			'classes' => $this->getClasses($config)
-		);
+		));
 	}
 
 	protected function definition(): array {
@@ -74,7 +74,7 @@ class LandscapeScene extends AbstractDynamicTemplateBlock {
 					'label' => 'Ebenen',
 					'itemTitle' => 'position',
 					'fields' => array(
-						array('name' => 'position', 'type' => 'select', 'label' => 'Ebenen-Position', 'default' => 'svgoffsetleft', 'options' => array('svgoffsetleft' => 'Links', 'svgoffsetmid' => 'Mitte', 'svgoffsetright' => 'Rechts', 'svgoffsettop' => 'Oben', 'svgoffsetbottom' => 'Unten')),
+						array('name' => 'position', 'type' => 'select', 'label' => 'Versatz der Ebene', 'default' => 'svgoffsetleft', 'options' => WaterAnimation::LAYER_OFFSETS),
 						array(
 							'name' => 'svgs',
 							'type' => 'list',
@@ -82,13 +82,14 @@ class LandscapeScene extends AbstractDynamicTemplateBlock {
 							'itemTitle' => 'file',
 							'fields' => array(
 								array('name' => 'file', 'type' => 'image', 'label' => 'SVG / Bild'),
-								array('name' => 'position', 'type' => 'text', 'label' => 'Position (pos1 … pos16)', 'default' => 'pos1'),
-								array('name' => 'animation', 'type' => 'text', 'label' => 'Beschreibung / Animation')
+								array('name' => 'position', 'type' => 'text', 'label' => 'Stapelreihenfolge (pos1 … pos15, höher liegt oben)', 'default' => 'pos1'),
+								array('name' => 'shift', 'type' => 'number', 'label' => 'Versatz nach unten (% der Zeichenfläche, negativ = nach oben)', 'default' => 0),
+								array('name' => 'animation', 'type' => 'text', 'label' => 'Beschreibung oder Animation (water1 … water8)')
 							)
 						)
 					)
 				),
-				array('name' => 'height', 'type' => 'text', 'label' => 'Höhe', 'default' => '480px'),
+				...WaterAnimation::sceneFields(20),
 				self::classesField('svgcontainer relative')
 			)
 		);

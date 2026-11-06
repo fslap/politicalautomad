@@ -4,7 +4,7 @@
   <div class="team-block__grid">
     {{#members}}
     <div class="team-block__member">
-      {{#image}}<img src="{{image}}" alt="{{name}}" class="team-block__photo" loading="lazy">{{/image}}
+      {{#image}}<img src="{{image}}" alt="{{name}}" class="team-block__photo" decoding="async">{{/image}}
       <h3>{{name}}</h3>
       {{#role}}<p class="team-block__role">{{role}}</p>{{/role}}
       {{#bio}}<p class="team-block__bio">{{bio}}</p>{{/bio}}

@@ -24,7 +24,7 @@
         {{#fields}}
             <div class="wp-block-group form-field">
                 {{^is_checkbox}}
-                <label for="{{id}}" class="wp-block-label">
+                <label for="{{id}}" id="{{id}}_label" class="wp-block-label">
                     {{label}}
                     {{#required}}<span class="required">*</span>{{/required}}
                 </label>
@@ -42,6 +42,17 @@
                         {{/options}}
                     </select>
                 {{/is_select}}
+
+                {{#is_checkbox_group}}
+                    <div class="party-form__options" role="group" aria-labelledby="{{id}}_label">
+                        {{#options}}
+                            <label class="party-form__checkbox">
+                                <input type="checkbox" name="{{name}}[]" value="{{.}}">
+                                <span>{{.}}</span>
+                            </label>
+                        {{/options}}
+                    </div>
+                {{/is_checkbox_group}}
 
                 {{#is_checkbox}}
                     <label class="wp-block-label party-form__checkbox">

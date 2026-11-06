@@ -1,0 +1,553 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// Theme of the party blocks: a calmer type scale, a muted palette and the layouts of the
+// concept, split and music player sections. Loaded last, overrides the original stylesheets.
+
+.am-party {
+	// Palette: muted, earthy tones with enough contrast for white text.
+	--party-red: #a8343f;
+	--party-red-dark: #7c2530;
+	--party-ink: #1f2128;
+	--party-muted: #5d6070;
+	--party-paper: #f6f4f0;
+	--party-line: rgba(31, 33, 40, 0.12);
+	--party-radius: 10px;
+
+	--party-bg-orange: #a95a36;
+	--party-bg-blue: #2b3566;
+	--party-bg-purple: #5c4370;
+	--party-bg-red: #8a3a40;
+	--party-bg-pink: #a2506a;
+	--party-bg-green: #3e6b56;
+	--party-bg-gold: #d8b25c;
+	--party-bg-dark: #24252b;
+
+	--party-water-filter: saturate(0.55) brightness(1.08);
+
+	--wp--preset--color--primary: var(--party-red);
+	--wp--preset--color--secondary: var(--party-red-dark);
+	--wp--preset--color--tertiary: var(--party-bg-dark);
+
+	font-size: 1rem;
+	line-height: 1.65;
+	color: var(--party-ink);
+
+	// Type scale
+	h1 {
+		font-size: clamp(1.85rem, 1.25rem + 2vw, 2.6rem);
+		line-height: 1.12;
+		letter-spacing: -0.01em;
+	}
+
+	h2 {
+		font-size: clamp(1.45rem, 1.15rem + 1vw, 1.9rem);
+		line-height: 1.2;
+	}
+
+	h3 {
+		font-size: 1.3rem;
+		line-height: 1.3;
+	}
+
+	h4 {
+		font-size: 1.12rem;
+		line-height: 1.35;
+	}
+
+	h5,
+	h6 {
+		font-size: 1rem;
+		line-height: 1.4;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-weight: 800;
+		margin: 0 0 0.6em;
+	}
+
+	p,
+	li {
+		font-size: 1rem;
+	}
+
+	a:hover {
+		color: inherit;
+		opacity: 0.8;
+	}
+
+	// Colored sections
+	.bgorange {
+		background: var(--party-bg-orange);
+		color: #fff;
+	}
+
+	.bgblue {
+		background: var(--party-bg-blue);
+		color: #fff;
+	}
+
+	.bgpurple {
+		background: var(--party-bg-purple);
+		color: #fff;
+	}
+
+	.bgred,
+	.bgextrared {
+		background: var(--party-bg-red);
+		color: #fff;
+	}
+
+	.bgpink {
+		background: var(--party-bg-pink);
+		color: #fff;
+	}
+
+	.bgcoolgreen {
+		background: var(--party-bg-green);
+		color: #fff;
+	}
+
+	.bggold {
+		background: var(--party-bg-gold);
+		color: var(--party-ink);
+	}
+
+	.bgwhite {
+		background: #fff;
+		color: var(--party-ink);
+	}
+
+	.wp-block-group[class*='bg'],
+	.wp-block-group.widthcontainer,
+	.wp-block-group.darklast {
+		padding: clamp(1.75rem, 4vw, 3.5rem) clamp(1.25rem, 5vw, 4rem);
+	}
+
+	// Markdown cards of the original were huge (19pt) and boxed.
+	.markdown-content,
+	.markdown-content p,
+	.markdown-content li {
+		text-align: left;
+	}
+
+	.markdown-content {
+		font-size: 1rem;
+		line-height: 1.7;
+		color: inherit;
+		background: none;
+		border: 0;
+		padding: 0;
+		margin: 0;
+		text-align: left;
+		max-width: 72ch;
+
+		h1 {
+			font-size: 1.6rem;
+		}
+
+		h2 {
+			font-size: 1.4rem;
+		}
+
+		h3 {
+			font-size: 1.2rem;
+			margin-top: 1.4em;
+		}
+
+		h4,
+		h5,
+		h6 {
+			font-size: 1.05rem;
+			margin-top: 1.2em;
+		}
+
+		> :first-child {
+			margin-top: 0;
+		}
+
+		p,
+		ul,
+		ol,
+		table {
+			margin: 0 0 1em;
+		}
+
+		ul,
+		ol {
+			padding-left: 1.3em;
+		}
+
+		ul li {
+			list-style: disc;
+		}
+
+		ol li {
+			list-style: decimal;
+		}
+
+		li {
+			margin: 0.25em 0;
+		}
+
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			font-size: 0.92rem;
+		}
+
+		th,
+		td {
+			border-bottom: 1px solid var(--party-line);
+			padding: 0.45em 0.6em;
+			text-align: left;
+			vertical-align: top;
+		}
+
+		img {
+			border-radius: 6px;
+		}
+	}
+
+	// Quotes
+	.quote-content,
+	blockquote {
+		font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem);
+		line-height: 1.5;
+		font-style: italic;
+		border-left: 4px solid currentColor;
+		padding: 0.2em 0 0.2em 1em;
+		margin: 0;
+		max-width: 60ch;
+	}
+
+	// Concept sections (image | text)
+	.party-concept {
+		padding: clamp(1.75rem, 4vw, 3.5rem) clamp(1.25rem, 5vw, 4rem);
+	}
+
+	.party-concept__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		gap: clamp(1.5rem, 4vw, 4rem);
+		align-items: center;
+
+		&.party-concept__grid--text {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	.party-concept__media {
+		margin: 0;
+
+		img {
+			display: block;
+			width: 100%;
+			max-height: 70vh;
+			object-fit: contain;
+		}
+	}
+
+	.party-concept__title {
+		margin-bottom: 0.5em;
+	}
+
+	.party-concept__subtitle {
+		margin: 0 0 0.75em;
+		font-size: 1.2rem;
+		font-weight: 800;
+		line-height: 1.35;
+
+		span {
+			background: rgba(255, 255, 255, 0.92);
+			color: var(--party-ink);
+			box-decoration-break: clone;
+			-webkit-box-decoration-break: clone;
+			padding: 0.08em 0.35em;
+		}
+	}
+
+	.party-concept__emphasis {
+		margin: 0 0 1.25em;
+		font-size: 1.1rem;
+		font-style: italic;
+		font-weight: 700;
+		opacity: 0.95;
+	}
+
+	.party-concept__features {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.45em;
+
+		li {
+			list-style: none;
+			position: relative;
+			padding-left: 1.4em;
+			font-weight: 600;
+			line-height: 1.45;
+		}
+
+		li::before {
+			content: '';
+			position: absolute;
+			left: 0.2em;
+			top: 0.6em;
+			width: 0.45em;
+			height: 0.45em;
+			border-radius: 50%;
+			background: currentColor;
+			opacity: 0.75;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.party-concept__grid {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.party-concept__media img {
+			max-height: 50vh;
+		}
+	}
+
+	// Split sections
+	.split-container.split-container--flex {
+		gap: clamp(1.25rem, 3vw, 3rem);
+	}
+
+	.split-pane {
+		min-width: 0;
+	}
+
+	.split-container.split-container--flex > .split-pane--markdown,
+	.split-container.split-container--flex > .split-pane--html {
+		background: rgba(255, 255, 255, 0.6);
+		border: 1px solid var(--party-line);
+		border-radius: var(--party-radius);
+		padding: clamp(1.1rem, 2.5vw, 2rem);
+	}
+
+	[class*='bg'] .split-container.split-container--flex > .split-pane--markdown,
+	[class*='bg'] .split-container.split-container--flex > .split-pane--html {
+		background: rgba(255, 255, 255, 0.08);
+		border-color: rgba(255, 255, 255, 0.18);
+	}
+
+	.split-pane .leaflet-map {
+		width: 100%;
+		border-radius: var(--party-radius);
+		overflow: hidden;
+		min-height: 320px;
+	}
+
+	.split-container.split-container--flex > .split-pane--map-full {
+		align-self: stretch;
+		display: flex;
+		flex-direction: column;
+
+		.leaflet-map {
+			flex: 1 1 auto;
+			height: auto !important;
+			min-height: 420px;
+		}
+	}
+
+	.split-pane__video {
+		border-radius: var(--party-radius);
+		overflow: hidden;
+	}
+
+	// Music player
+	.darklast {
+		background: var(--party-bg-dark);
+		color: #f2f2f4;
+		width: auto;
+		margin: 0;
+		text-align: left;
+		border-radius: 0;
+	}
+
+	.music-player {
+		h1 {
+			margin-bottom: 0.4em;
+		}
+	}
+
+	.music-player__platforms {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		margin: 1.25rem 0 1.25rem;
+
+		a,
+		a:visited {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4em;
+			padding: 0.5em 1.1em;
+			border-radius: 999px;
+			border: 1px solid rgba(255, 255, 255, 0.25);
+			background: rgba(255, 255, 255, 0.06);
+			color: inherit;
+			font-weight: 700;
+			font-size: 0.95rem;
+			text-decoration: none;
+			line-height: 1.2;
+			outline: none;
+			transition:
+				background 0.2s ease,
+				border-color 0.2s ease;
+		}
+
+		a::before {
+			content: '';
+			width: 0.6em;
+			height: 0.6em;
+			border-radius: 50%;
+			background: var(--platform-color, #9aa0aa);
+		}
+
+		a.spotify {
+			--platform-color: #3fbf6a;
+		}
+
+		a.youtube {
+			--platform-color: #e0574a;
+		}
+
+		a.tidal {
+			--platform-color: #e8e8e8;
+		}
+
+		a.apple {
+			--platform-color: #f06b8a;
+		}
+
+		a.deezer {
+			--platform-color: #a77bf3;
+		}
+
+		a.soundcloud {
+			--platform-color: #f08a3c;
+		}
+
+		a:hover {
+			opacity: 1;
+			background: rgba(255, 255, 255, 0.14);
+		}
+
+		a.is-active {
+			background: #f2f2f4;
+			border-color: #f2f2f4;
+			color: var(--party-bg-dark);
+		}
+	}
+
+	.music-player__tracks {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+		gap: 0.4rem 0.75rem;
+		margin: 0 0 1.5rem;
+		padding: 0;
+		counter-reset: track;
+		list-style: none;
+
+		&[hidden] {
+			display: none;
+		}
+
+		li {
+			list-style: none;
+			counter-increment: track;
+			margin: 0;
+			min-width: 0;
+		}
+
+		a,
+		a:visited {
+			display: flex;
+			gap: 0.6em;
+			align-items: baseline;
+			padding: 0.45em 0.7em;
+			border-radius: 8px;
+			color: inherit;
+			text-decoration: none;
+			font-size: 0.95rem;
+			line-height: 1.35;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		a::before {
+			content: counter(track, decimal-leading-zero);
+			font-variant-numeric: tabular-nums;
+			opacity: 0.5;
+			font-size: 0.85em;
+			flex: none;
+		}
+
+		a:hover {
+			opacity: 1;
+			background: rgba(255, 255, 255, 0.08);
+		}
+
+		a.is-active {
+			background: rgba(255, 255, 255, 0.16);
+			font-weight: 700;
+		}
+	}
+
+	.music-player .music-iframe {
+		display: block;
+		width: 100% !important;
+		max-width: 960px;
+		aspect-ratio: 16 / 9;
+		height: auto !important;
+		min-height: 152px;
+		border: 0;
+		border-radius: var(--party-radius) !important;
+		background: #000;
+	}
+
+	// Forms
+	.party-form__options {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr));
+		gap: 0.4rem 1rem;
+		margin-top: 0.35rem;
+	}
+
+	.party-form__options .party-form__checkbox {
+		align-items: center;
+	}
+
+	input[type='text'],
+	input[type='email'],
+	input[type='tel'],
+	input[type='date'],
+	input[type='number'],
+	select,
+	textarea {
+		font: inherit;
+		font-size: 1rem;
+		border-radius: 8px;
+	}
+}
+
+// Readable widths for text heavy sections inside of wide pages.
+.am-party-markdown .wp-block-group > .inner-container,
+.am-party-markdown .markdown-content {
+	max-width: 72ch;
+}

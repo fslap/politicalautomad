@@ -14,12 +14,12 @@
 
     <div class="split-container {{ container_classes }}" style="{{ container_style }}">
         {% for pane in panes %}
-            <div class="split-pane {{ pane.position }}{% if pane.is_auto %} split-pane--auto{% endif %} {{ pane.classes }}" style="{{ pane.style }}">
+            <div class="split-pane split-pane--{{ pane.type }} {{ pane.position }}{% if pane.is_auto %} split-pane--auto{% endif %}{% if pane.map_full %} split-pane--map-full{% endif %} {{ pane.classes }}" style="{{ pane.style }}">
                 {% if pane.title %}<h3 class="wp-block-heading split-pane__title">{{ pane.title }}</h3>{% endif %}
                 {% if pane.is_leaflet %}
                     <div class="leaflet-map" style="height: {{ pane.map_height }};" data-party-map="{{ pane.map_json }}"></div>
                 {% elseif pane.is_image and pane.image %}
-                    <img src="{{ pane.image }}" class="split-image" alt="{{ pane.image_alt }}" loading="lazy">
+                    <img src="{{ pane.image }}" class="split-image" alt="{{ pane.image_alt }}" decoding="async">
                 {% elseif pane.is_markdown %}
                     <div class="markdown-content">{{ pane.html_content|raw }}</div>
                 {% elseif pane.is_html %}

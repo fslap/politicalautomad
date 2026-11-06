@@ -56,19 +56,37 @@ class SecurityConcept extends AbstractDynamicTemplateBlock {
 
 	public function context(array $config): array {
 		$images = $this->splitImages((string) $config['main_image'], (string) ($config['main_image_mobile'] ?? ''));
+		$features = array_values(array_filter(array_map(
+			fn ($feature) => trim((string) $feature),
+			is_array($config['features']) ? $config['features'] : preg_split('/\r?\n/', (string) $config['features'])
+		), fn ($feature) => $feature !== ''));
 
 		return array(
 			'section_id' => $config['section_id'],
 			'title' => $config['title'],
-			'subtitle' => $config['subtitle'],
-			'subtitle_emphasis' => $config['subtitle_emphasis'],
+			'subtitle_html' => self::lineBreaks((string) $config['subtitle']),
+			'subtitle_emphasis_html' => self::lineBreaks((string) $config['subtitle_emphasis']),
 			'desktop_image' => $images['desktop'],
 			'mobile_image' => $images['mobile'],
-			'feature_prefix' => $config['feature_prefix'],
-			'features' => $config['features'],
+			'image' => $images['desktop'] ?: $images['mobile'],
+			'feature_prefix' => trim((string) $config['feature_prefix']),
+			'features' => $features,
+			'has_features' => !empty($features),
 			'classes' => $this->getClasses($config),
 			'has_inner_container' => $this->hasInnerContainer($config)
 		);
+	}
+
+	/**
+	 * Escape a text and keep line breaks (<br> of the original data or new lines).
+	 *
+	 * @param string $text
+	 * @return string
+	 */
+	public static function lineBreaks(string $text): string {
+		$parts = preg_split('#<br\s*/?>|\r?\n#i', $text) ?: array();
+
+		return join('<br>', array_map(fn ($part) => htmlspecialchars(trim($part), ENT_QUOTES), $parts));
 	}
 
 	protected function definition(): array {
@@ -79,7 +97,7 @@ class SecurityConcept extends AbstractDynamicTemplateBlock {
 			'fields' => array(
 				self::sectionIdField(),
 				self::titleField('Sicherheit'),
-				array('name' => 'subtitle', 'type' => 'text', 'label' => 'Untertitel'),
+				array('name' => 'subtitle', 'type' => 'textarea', 'label' => 'Untertitel'),
 				array('name' => 'subtitle_emphasis', 'type' => 'text', 'label' => 'Untertitel (kursiv)'),
 				...self::imagePairFields('main_image', 'Bild'),
 				array('name' => 'feature_prefix', 'type' => 'text', 'label' => 'Aufzählungszeichen', 'default' => '-'),

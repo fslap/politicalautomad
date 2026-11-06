@@ -82,69 +82,192 @@
 		}
 	}
 
-	// SVG scenes (water animation and landscape)
+	// SVG scenes (water animation and landscape). All graphics share one drawing area,
+	// the scene shows its bottom part. posN of the original only sets the stacking order.
 	.party-svg-scene {
 		position: relative;
 		overflow: hidden;
 		width: 100%;
-		padding: 0;
+		max-width: none;
+		margin: 0;
+		padding: 0 !important;
+		background: none;
+		line-height: 0;
+	}
+
+	.party-svg-canvas {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
 	}
 
 	.party-svg-layer {
 		position: absolute;
-		inset: 0;
-	}
-
-	.svgoffsetleft {
+		top: 0;
+		bottom: 0;
 		left: 0;
+		width: 100%;
 	}
 
-	.svgoffsetmid {
-		left: 15%;
+	.party-svg-layer.svgoffsetl55 {
+		left: -6%;
 	}
 
-	.svgoffsetright {
-		left: 30%;
+	.party-svg-layer.svgoffsetleft,
+	.party-svg-layer.svgoffsetl5 {
+		left: -3%;
 	}
 
-	.svgoffsettop {
-		top: -10%;
+	.party-svg-layer.svgoffsetright {
+		left: 5%;
 	}
 
-	.svgoffsetbottom {
-		top: 10%;
+	.party-svg-layer.svgoffsetr55 {
+		left: 10%;
+	}
+
+	// The waves of the original share one blue. Depth: the back layers are lighter.
+	.party-svg-scene.svgwater {
+		// Only the waves, opacity on a layer would create a stacking context (z-index).
+		.party-svg-layer:nth-child(1) img[class*='water'] {
+			opacity: 0.45;
+		}
+
+		.party-svg-layer:nth-child(2) img[class*='water'] {
+			opacity: 0.7;
+		}
+
+		img.svg {
+			filter: var(--party-water-filter, none);
+		}
 	}
 
 	.party-svg-scene img.svg {
-		bottom: 0;
-		max-width: 60%;
-		height: auto;
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		max-width: none;
+		max-height: none;
+		object-fit: contain;
+		object-position: center bottom;
 		pointer-events: none;
 	}
 
-	each(range(16), {
-		.party-svg-scene img.pos@{value} {
-			left: ((@value - 1) * 6.25%);
-		}
-	});
-
-	@keyframes party-wave {
+	// Wave animations of the original stylesheet (charisma.css).
+	@keyframes party-wave1 {
 		0%,
 		100% {
-			transform: translateX(0) translateY(0);
+			transform: translateY(0);
 		}
-
 		50% {
-			transform: translateX(-3%) translateY(4%);
+			transform: translateY(0.3%);
 		}
 	}
 
-	each(range(8), {
-		.party-svg-scene img.water@{value} {
-			animation: party-wave (4s + @value * 0.7s) ease-in-out infinite;
-			animation-delay: (-0.6s * @value);
+	@keyframes party-wave2 {
+		0%,
+		100% {
+			transform: translateY(0);
 		}
-	});
+		50% {
+			transform: translateY(0.2%);
+		}
+	}
+
+	@keyframes party-wave3 {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(0.7%);
+		}
+	}
+
+	@keyframes party-wave4 {
+		0%,
+		100% {
+			transform: translateY(0.3%);
+		}
+		50% {
+			transform: translateY(0.7%);
+		}
+	}
+
+	@keyframes party-wave5 {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(0.5%);
+		}
+	}
+
+	@keyframes party-wave6 {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(0.4%);
+		}
+	}
+
+	@keyframes party-wave7 {
+		0%,
+		100% {
+			transform: translateY(0.6%);
+		}
+		50% {
+			transform: translateY(0.8%);
+		}
+	}
+
+	@keyframes party-wave8 {
+		0%,
+		100% {
+			transform: translateY(0.3%);
+		}
+		50% {
+			transform: translateY(0.5%);
+		}
+	}
+
+	.party-svg-scene img.water1 {
+		animation: party-wave1 3.7s cubic-bezier(0.68, -0.25, 0.265, 1.25) 0.3s infinite;
+	}
+
+	.party-svg-scene img.water2 {
+		animation: party-wave2 3.6s ease-out 0.4s infinite;
+	}
+
+	.party-svg-scene img.water3 {
+		animation: party-wave3 4.2s cubic-bezier(0.175, 0.885, 0.32, 1.675) 1.7s infinite;
+	}
+
+	.party-svg-scene img.water4 {
+		animation: party-wave4 2.1s ease-in infinite;
+	}
+
+	.party-svg-scene img.water5 {
+		top: 1.5%;
+		animation: party-wave5 3.9s cubic-bezier(0.4, 0, 0.6, 1) 2.1s infinite;
+	}
+
+	.party-svg-scene img.water6 {
+		animation: party-wave6 2.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.7s infinite;
+	}
+
+	.party-svg-scene img.water7 {
+		animation: party-wave7 3.3s ease-in-out 1.4s infinite;
+	}
+
+	.party-svg-scene img.water8 {
+		animation: party-wave8 4.5s ease-in-out infinite;
+	}
 
 	@media (max-width: 781px) {
 		.party-hide-mobile {
