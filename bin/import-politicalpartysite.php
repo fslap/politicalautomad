@@ -24,11 +24,12 @@
  *
  * Usage:
  *
- *   php bin/import-politicalpartysite.php <index.php|index.artox|dir> <output> [--music=<dir>] [--shared=<shared/data>]
+ *   php bin/import-politicalpartysite.php <index.php|index.artox|dir> <output> [--music=<dir>] [--shared=<shared/data>] [--example]
  *
  *   --music   directory with the track lists of the music players (economy.json, matching.json),
  *             e.g. fslap.de/cascade/inc of the original site
  *   --shared  current shared/data of the installation (the site name is merged into it)
+ *   --example add an example YouTube video with time code comments
  */
 
 if (PHP_SAPI !== 'cli') {
@@ -41,6 +42,8 @@ $options = array();
 foreach (array_slice($argv, 1) as $arg) {
 	if (preg_match('/^--(music|shared)=(.*)$/', $arg, $match)) {
 		$options[$match[1]] = $match[2];
+	} elseif ($arg === '--example') {
+		$options['example'] = true;
 	} else {
 		$args[] = $arg;
 	}
@@ -903,8 +906,8 @@ foreach ($blocks as $block) {
 	}
 }
 
-// An example of a YouTube video with time code comments.
-$blocks = insertAfter($blocks, block('VideoCommentary', array(
+// An example of a YouTube video with time code comments (only with --example).
+$blocks = empty($options['example']) ? $blocks : insertAfter($blocks, block('VideoCommentary', array(
 	'section_id' => 'video',
 	'title' => 'Video: FSLAP',
 	'video' => 'https://www.youtube.com/watch?v=YC23GCc79_U',
@@ -920,7 +923,9 @@ $blocks = insertAfter($blocks, block('VideoCommentary', array(
 	'pause_on_leave' => true,
 	'classes' => 'domcontainer relative widthcontainer'
 )), fn ($existing) => ($existing['data']['section_id'] ?? '') === 'principles');
-$report[] = '+   VideoCommentary  video                  Beispiel-YouTube-Video (nach "Unsere Grundwerte")';
+if (!empty($options['example'])) {
+	$report[] = '+   VideoCommentary  video                  Beispiel-YouTube-Video (nach "Unsere Grundwerte")';
+}
 
 $now = date('c');
 $page = array(

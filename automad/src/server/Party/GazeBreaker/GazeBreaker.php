@@ -41,8 +41,7 @@ use Automad\Party\Traits\ComponentConfig;
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
- * A breaker band that is split into equal columns. Small images (e.g. faces) are placed
- * at selectable positions across the columns and look at the visitor (follow the pointer).
+ * Breaker aus Manga-Panels (z.B. Augenpartien) mit unterschiedlicher Länge, schrägen Schnitten und Bildausschnitt pro Panel.
  *
  * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2026 by Florian Leon Steenbuck - https://kil.ls
@@ -51,81 +50,143 @@ defined('AUTOMAD') or die('Direct access not permitted!');
 class GazeBreaker extends AbstractDynamicTemplateBlock {
 	use ComponentConfig;
 
-	const VERTICAL = array('top' => 'Oben', 'middle' => 'Mitte', 'bottom' => 'Unten');
-	const HORIZONTAL = array('left' => 'Links', 'center' => 'Mitte', 'right' => 'Rechts');
-	const SIZES = array('s' => 'Klein (35 %)', 'm' => 'Mittel (55 %)', 'l' => 'Groß (75 %)', 'xl' => 'Spaltenbreit (95 %)');
+	/**
+	 * Lengths of panels (relative widths).
+	 */
+	const LENGTHS = array(
+		'1' => 'Schmal (1)',
+		'2' => 'Normal (2)',
+		'3' => 'Lang (3)',
+		'4' => 'Sehr lang (4)',
+		'6' => 'Breitbild (6)'
+	);
 
 	public function __construct() {
 		parent::__construct(__DIR__, 'gazebreaker');
 	}
 
 	public function context(array $config): array {
-		$columns = max(1, min(12, (int) $config['columns'] ?: 6));
-		$items = array();
+		$rows = max(1, min(3, (int) $config['rows'] ?: 1));
+		$slant = (string) $config['slant'];
+		$all = array_values(array_filter(is_array($config['items']) ? $config['items'] : array(), 'is_array'));
+		$items = array_values(array_filter($all, fn ($item) => !empty($item['image'])));
 
-		foreach (is_array($config['items']) ? $config['items'] : array() as $index => $item) {
-			if (!is_array($item) || empty($item['image'])) {
-				continue;
+		// Without images empty panels show the layout (e.g. in the editor preview).
+		if (!$items) {
+			$items = $all ?: array_map(fn ($length) => array('length' => $length), array(2, 1, 3, 1, 2, 4, 1));
+		}
+
+		// Distribute the panels over the rows by their length.
+		$total = array_sum(array_map(fn ($item) => self::length($item), $items));
+		$perRow = $total / $rows;
+		$out = array(array());
+		$sum = 0;
+
+		foreach ($items as $index => $item) {
+			$length = self::length($item);
+
+			if ($sum >= $perRow * count($out) - 0.001 && count($out) < $rows) {
+				$out[] = array();
 			}
 
-			$column = (int) ($item['column'] ?? 0);
-			$column = $column >= 1 && $column <= $columns ? $column : ($index % $columns) + 1;
-			$vertical = isset(self::VERTICAL[$item['vertical'] ?? '']) ? $item['vertical'] : 'middle';
-			$horizontal = isset(self::HORIZONTAL[$item['horizontal'] ?? '']) ? $item['horizontal'] : 'center';
-			$size = isset(self::SIZES[$item['size'] ?? '']) ? $item['size'] : 'm';
+			$sum += $length;
+			$angle = $slant === 'alt' ? ($index % 2 ? -6 : 6) : (int) $slant;
+			$fx = max(0, min(100, (int) ($item['focus_x'] ?? 50)));
+			$fy = max(0, min(100, (int) ($item['focus_y'] ?? 35)));
+			$zoom = max(1, min(3, (float) ($item['zoom'] ?? 1)));
 
-			$items[] = array(
-				'image' => (string) $item['image'],
+			$out[count($out) - 1][] = array(
+				'image' => (string) ($item['image'] ?? ''),
 				'alt' => (string) ($item['alt'] ?? ''),
-				'link' => (string) ($item['link'] ?? ''),
-				'style' => "grid-column: $column;",
-				'classes' => "gaze-breaker__item--$vertical gaze-breaker__item--$horizontal gaze-breaker__item--$size",
-				// Every item looks a bit differently (depth of the movement).
-				'depth' => 0.6 + (($index * 37) % 9) / 10
+				'caption' => trim((string) ($item['caption'] ?? '')),
+				'link' => trim((string) ($item['link'] ?? '')),
+				'style' => "--length: $length; --skew: {$angle}deg; --fx: $fx%; --fy: $fy%; --zoom: $zoom;"
 			);
 		}
 
-		$height = trim((string) preg_replace('/[^a-zA-Z0-9.%()+\-\s]/', '', (string) $config['height'])) ?: '220px';
+		$height = trim((string) preg_replace('/[^a-zA-Z0-9.%()+\-\s]/', '', (string) $config['height'])) ?: '160px';
+		$gutter = in_array($config['gutter'], array('s', 'm', 'l'), true) ? $config['gutter'] : 'm';
+		$frame = in_array($config['frame'], array('ink', 'thin', 'none'), true) ? $config['frame'] : 'ink';
+		$background = in_array($config['background'], array('paper', 'ink', 'none'), true) ? $config['background'] : 'paper';
+		$animation = in_array($config['hover_animation'], array('zoom', 'tilt', 'move', 'float', 'wobble'), true) ? $config['hover_animation'] : '';
 
-		return array_merge(array(
+		return array(
 			'section_id' => $config['section_id'],
-			'items' => $items,
-			'columns' => array_map(fn ($column) => array('style' => "grid-column: $column;"), range(1, $columns)),
-			'style' => "--gaze-columns: $columns; --gaze-height: $height;",
-			'dividers' => (bool) $config['dividers'],
-			'classes' => $this->getClasses($config)
-		), self::hoverContext($config));
+			'has_rows' => true,
+			'rows' => array_map(fn ($panels) => array('panels' => $panels), $out),
+			'style' => "--panel-height: $height;",
+			'classes' => trim(
+				"panel-strip panel-strip--gutter-$gutter panel-strip--frame-$frame panel-strip--bg-$background"
+				. ($slant !== '0' ? ' panel-strip--slanted' : '')
+				. ((bool) $config['grayscale'] ? ' panel-strip--grayscale' : '')
+				. ($animation !== '' ? " party-hover party-hover--$animation" : '')
+				. ' ' . $this->getClasses($config)
+			)
+		);
+	}
+
+	/**
+	 * The fields of the element (also used by slides with a prefix).
+	 *
+	 * @return array
+	 */
+	public static function elementFields(): array {
+		return array(
+			array('name' => 'section_id', 'type' => 'text', 'label' => 'Section-ID (Anker)', 'default' => ''),
+			array(
+				'name' => 'items',
+				'type' => 'list',
+				'label' => 'Panels (von links nach rechts)',
+				'addLabel' => 'Panel hinzufügen',
+				'itemTitle' => 'alt',
+				'default' => array(),
+				'fields' => array(
+					array('name' => 'image', 'type' => 'image', 'label' => 'Bild'),
+					array('name' => 'alt', 'type' => 'text', 'label' => 'Beschreibung (Alt-Text)'),
+					array('name' => 'length', 'type' => 'select', 'label' => 'Länge des Panels', 'default' => '2', 'options' => self::LENGTHS),
+					array('name' => 'focus_y', 'type' => 'select', 'label' => 'Bildausschnitt vertikal', 'default' => '35', 'options' => array('0' => 'Oben', '20' => 'Oberes Drittel', '35' => 'Augenhöhe', '50' => 'Mitte', '75' => 'Unteres Drittel', '100' => 'Unten')),
+					array('name' => 'focus_x', 'type' => 'select', 'label' => 'Bildausschnitt horizontal', 'default' => '50', 'options' => array('0' => 'Links', '25' => 'Links-Mitte', '50' => 'Mitte', '75' => 'Rechts-Mitte', '100' => 'Rechts')),
+					array('name' => 'zoom', 'type' => 'select', 'label' => 'Zoom', 'default' => '1', 'options' => array('1' => '100 %', '1.25' => '125 %', '1.5' => '150 %', '2' => '200 %', '2.5' => '250 %', '3' => '300 %')),
+					array('name' => 'caption', 'type' => 'text', 'label' => 'Sprechblase / Text (optional)'),
+					array('name' => 'link', 'type' => 'url', 'label' => 'Link (optional)')
+				)
+			),
+			array('name' => 'rows', 'type' => 'select', 'label' => 'Reihen', 'default' => '1', 'options' => array('1' => '1 Reihe', '2' => '2 Reihen', '3' => '3 Reihen')),
+			array('name' => 'height', 'type' => 'text', 'label' => 'Höhe einer Reihe', 'default' => '160px'),
+			array('name' => 'slant', 'type' => 'select', 'label' => 'Schnitte', 'default' => '6', 'options' => array('0' => 'Gerade', '4' => 'Leicht schräg', '6' => 'Schräg (Manga)', '10' => 'Stark schräg', 'alt' => 'Abwechselnd schräg')),
+			array('name' => 'gutter', 'type' => 'select', 'label' => 'Zwischenraum', 'default' => 'm', 'options' => array('s' => 'Schmal', 'm' => 'Mittel', 'l' => 'Breit')),
+			array('name' => 'frame', 'type' => 'select', 'label' => 'Rahmen', 'default' => 'ink', 'options' => array('ink' => 'Schwarz (Tusche)', 'thin' => 'Dünn', 'none' => 'Ohne')),
+			array('name' => 'background', 'type' => 'select', 'label' => 'Hintergrund', 'default' => 'paper', 'options' => array('paper' => 'Papier (weiß)', 'ink' => 'Schwarz', 'none' => 'Transparent')),
+			array('name' => 'grayscale', 'type' => 'toggle', 'label' => 'Schwarz-Weiß (Manga)', 'default' => false),
+			array(
+				'name' => 'hover_animation',
+				'type' => 'select',
+				'label' => 'Animation beim Darüberfahren (Hover)',
+				'default' => 'zoom',
+				'options' => array('' => 'Keine', 'zoom' => 'Heranzoomen', 'tilt' => 'Kippen', 'move' => 'Bewegen', 'float' => 'Schweben', 'wobble' => 'Wackeln')
+			),
+			array('name' => 'classes', 'type' => 'text', 'label' => 'CSS-Klassen', 'default' => '')
+		);
 	}
 
 	protected function definition(): array {
 		return array(
-			'title' => 'Blick-Breaker',
-			'icon' => 'eye',
-			'description' => 'Band aus gleich breiten Spalten mit kleinen Bildern, die den Besucher ansehen.',
-			'fields' => array(
-				self::sectionIdField(''),
-				array('name' => 'columns', 'type' => 'number', 'label' => 'Anzahl Spalten (gleichmäßig aufgeteilt)', 'default' => 6),
-				array('name' => 'height', 'type' => 'text', 'label' => 'Höhe des Bands', 'default' => '220px'),
-				array('name' => 'dividers', 'type' => 'toggle', 'label' => 'Trennlinien zwischen den Spalten', 'default' => true),
-				array(
-					'name' => 'items',
-					'type' => 'list',
-					'label' => 'Bilder',
-					'addLabel' => 'Bild hinzufügen',
-					'itemTitle' => 'alt',
-					'fields' => array(
-						array('name' => 'image', 'type' => 'image', 'label' => 'Bild'),
-						array('name' => 'alt', 'type' => 'text', 'label' => 'Beschreibung (Alt-Text)'),
-						array('name' => 'column', 'type' => 'number', 'label' => 'Spalte (1 = links)', 'default' => 1),
-						array('name' => 'vertical', 'type' => 'select', 'label' => 'Position vertikal', 'default' => 'middle', 'options' => self::VERTICAL),
-						array('name' => 'horizontal', 'type' => 'select', 'label' => 'Position horizontal', 'default' => 'center', 'options' => self::HORIZONTAL),
-						array('name' => 'size', 'type' => 'select', 'label' => 'Größe', 'default' => 'm', 'options' => self::SIZES),
-						array('name' => 'link', 'type' => 'url', 'label' => 'Link (optional)')
-					)
-				),
-				self::hoverField('look'),
-				self::classesField('')
-			)
+			'title' => 'Panel-Streifen (Manga)',
+			'icon' => 'grid-1x2',
+			'description' => 'Breaker aus Manga-Panels (z.B. Augenpartien) mit unterschiedlicher Länge, schrägen Schnitten und Bildausschnitt pro Panel.',
+			'fields' => self::elementFields()
 		);
+	}
+
+	/**
+	 * The length of a panel.
+	 *
+	 * @param array $item
+	 * @return int
+	 */
+	private static function length(array $item): int {
+		$length = (int) ($item['length'] ?? 2);
+
+		return isset(self::LENGTHS[(string) $length]) ? $length : 2;
 	}
 }

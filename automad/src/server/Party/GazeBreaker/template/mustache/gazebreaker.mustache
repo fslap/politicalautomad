@@ -1,13 +1,17 @@
-<div class="gaze-breaker {{classes}} {{hover_classes}}{{#dividers}} gaze-breaker--dividers{{/dividers}}" style="{{style}}"{{#hover_look}} data-party-look{{/hover_look}}>
+{{#has_rows}}
+<div class="{{classes}}" style="{{style}}">
     {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
-    <div class="gaze-breaker__grid">
-        {{#columns}}<span class="gaze-breaker__column" style="{{style}}" aria-hidden="true"></span>{{/columns}}
-        {{#items}}
-            <div class="gaze-breaker__item party-hover-item {{classes}}" style="{{style}} --depth: {{depth}};">
-                {{#link}}<a href="{{link}}">{{/link}}
-                    <img src="{{image}}" alt="{{alt}}" decoding="async">
-                {{#link}}</a>{{/link}}
-            </div>
-        {{/items}}
-    </div>
+    {{#rows}}
+        <div class="panel-strip__row">
+            {{#panels}}
+                <figure class="panel-strip__panel party-hover-item" style="{{style}}">
+                    {{#link}}<a href="{{link}}">{{/link}}
+                        {{#image}}<img src="{{image}}" alt="{{alt}}" decoding="async">{{/image}}{{^image}}<span class="panel-strip__empty" aria-hidden="true"></span>{{/image}}
+                        {{#caption}}<figcaption>{{caption}}</figcaption>{{/caption}}
+                    {{#link}}</a>{{/link}}
+                </figure>
+            {{/panels}}
+        </div>
+    {{/rows}}
 </div>
+{{/has_rows}}

@@ -2585,7 +2585,7 @@
 		},
 		"partyGazeBreaker": {
 			"type": "object",
-			"description": "Party component \"Blick-Breaker\": Band aus gleich breiten Spalten mit kleinen Bildern, die den Besucher ansehen.",
+			"description": "Party component \"Panel-Streifen (Manga)\": Breaker aus Manga-Panels (z.B. Augenpartien) mit unterschiedlicher Länge, schrägen Schnitten und Bildausschnitt pro Panel.",
 			"properties": {
 				"id": {
 					"$ref": "#/$defs/blockId"
@@ -2616,18 +2616,6 @@
 							"type": "string",
 							"description": "Section-ID (Anker)"
 						},
-						"columns": {
-							"type": "number",
-							"description": "Anzahl Spalten (gleichmäßig aufgeteilt)"
-						},
-						"height": {
-							"type": "string",
-							"description": "Höhe des Bands"
-						},
-						"dividers": {
-							"type": "boolean",
-							"description": "Trennlinien zwischen den Spalten"
-						},
 						"items": {
 							"type": "array",
 							"items": {
@@ -2641,37 +2629,55 @@
 										"type": "string",
 										"description": "Beschreibung (Alt-Text)"
 									},
-									"column": {
-										"type": "number",
-										"description": "Spalte (1 = links)"
-									},
-									"vertical": {
+									"length": {
 										"type": "string",
 										"enum": [
-											"top",
-											"middle",
-											"bottom"
+											"1",
+											"2",
+											"3",
+											"4",
+											"6"
 										],
-										"description": "Position vertikal"
+										"description": "Länge des Panels"
 									},
-									"horizontal": {
+									"focus_y": {
 										"type": "string",
 										"enum": [
-											"left",
-											"center",
-											"right"
+											"0",
+											"20",
+											"35",
+											"50",
+											"75",
+											"100"
 										],
-										"description": "Position horizontal"
+										"description": "Bildausschnitt vertikal"
 									},
-									"size": {
+									"focus_x": {
 										"type": "string",
 										"enum": [
-											"s",
-											"m",
-											"l",
-											"xl"
+											"0",
+											"25",
+											"50",
+											"75",
+											"100"
 										],
-										"description": "Größe"
+										"description": "Bildausschnitt horizontal"
+									},
+									"zoom": {
+										"type": "string",
+										"enum": [
+											"1",
+											"1.25",
+											"1.5",
+											"2",
+											"2.5",
+											"3"
+										],
+										"description": "Zoom"
+									},
+									"caption": {
+										"type": "string",
+										"description": "Sprechblase / Text (optional)"
 									},
 									"link": {
 										"type": "string",
@@ -2680,23 +2686,78 @@
 								},
 								"additionalProperties": false
 							},
-							"description": "Bilder"
+							"description": "Panels (von links nach rechts)"
+						},
+						"rows": {
+							"type": "string",
+							"enum": [
+								"1",
+								"2",
+								"3"
+							],
+							"description": "Reihen"
+						},
+						"height": {
+							"type": "string",
+							"description": "Höhe einer Reihe"
+						},
+						"slant": {
+							"type": "string",
+							"enum": [
+								"0",
+								"4",
+								"6",
+								"10",
+								"alt"
+							],
+							"description": "Schnitte"
+						},
+						"gutter": {
+							"type": "string",
+							"enum": [
+								"s",
+								"m",
+								"l"
+							],
+							"description": "Zwischenraum"
+						},
+						"frame": {
+							"type": "string",
+							"enum": [
+								"ink",
+								"thin",
+								"none"
+							],
+							"description": "Rahmen"
+						},
+						"background": {
+							"type": "string",
+							"enum": [
+								"paper",
+								"ink",
+								"none"
+							],
+							"description": "Hintergrund"
+						},
+						"grayscale": {
+							"type": "boolean",
+							"description": "Schwarz-Weiß (Manga)"
 						},
 						"hover_animation": {
 							"type": "string",
 							"enum": [
 								"",
+								"zoom",
 								"tilt",
 								"move",
 								"float",
-								"wobble",
-								"look"
+								"wobble"
 							],
 							"description": "Animation beim Darüberfahren (Hover)"
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen"
 						}
 					},
 					"additionalProperties": false
