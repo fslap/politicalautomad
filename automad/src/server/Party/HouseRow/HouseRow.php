@@ -223,7 +223,8 @@ class HouseRow extends AbstractDynamicTemplateBlock {
 			[$body, $extra] = self::house($type, $w, $h, $floors, $windows, $door, $details);
 			$top = max($top, $h + $extra);
 
-			$title = $label !== '' ? '<title>' . htmlspecialchars($label) . '</title>' : '';
+			// <title> with an attribute: Automad only adds the page title when no plain <title> tag exists.
+			$title = $label !== '' ? '<title class="house__label">' . htmlspecialchars($label) . '</title>' : '';
 			$group = '<g class="house party-hover-item' . ($color !== '' ? " house--$color" : '') . '" style="--i: ' . $index . ';" transform="translate(' . $x . ' 0)">' . $title . $body . '</g>';
 
 			if ($link !== '') {
