@@ -63,6 +63,7 @@ function page(string $title, string $body, ?string $refresh = null): void {
 				.btn { display: inline-block; padding: .7rem 1.3rem; background: #bd2f3e; color: #fff; border-radius: 6px; text-decoration: none; font-weight: 600; border: 0; cursor: pointer; font-size: 1rem; }
 				.bar { height: 10px; background: #eee; border-radius: 5px; overflow: hidden; } .bar > div { height: 100%; background: #bd2f3e; }
 				code { background: #f1f1f1; padding: .1rem .3rem; border-radius: 3px; }
+				input { width: 100%; max-width: 24rem; padding: .45rem .6rem; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; box-sizing: border-box; }
 			</style>
 		</head>
 		<body><main><h1>{$title}</h1>{$body}</main></body>
@@ -106,8 +107,148 @@ function removeDir(string $path): void {
 	@rmdir($path);
 }
 
+/**
+ * A user account in the same serialized form as Automad\Auth\User.
+ */
+final class InstallerAccount {
+	public function __construct(
+		private string $name,
+		private string $email,
+		private string $passwordHash
+	) {
+	}
+
+	public function __serialize(): array {
+		return array(
+			'name' => $this->name,
+			'email' => $this->email,
+			'passwordHash' => $this->passwordHash,
+			'totpSecret' => ''
+		);
+	}
+}
+
+/**
+ * Generate the contents of config/accounts.php, exactly like Automad's UserCollection does
+ * (serialized users with the class name replaced by the placeholder of SerializedFile).
+ *
+ * @param InstallerAccount[] $accounts
+ * @return string
+ */
+function accountsPhp(array $accounts): string {
+	$class = InstallerAccount::class;
+	$serialized = str_replace('O:' . strlen($class) . ':"' . $class . '"', 'O:*:"~"', serialize($accounts));
+
+	return "<?php\ndefined('AUTOMAD') or die();\nreturn " . var_export($serialized, true) . ";\n";
+}
+
+/**
+ * Render the form of the accounts.php generator.
+ *
+ * @param string $error
+ * @param array $values
+ * @return string
+ */
+function accountsForm(string $error = '', array $values = array()): string {
+	$rows = '';
+
+	for ($i = 0; $i < 3; $i++) {
+		$name = e((string) ($values['name'][$i] ?? ''));
+		$email = e((string) ($values['email'][$i] ?? ''));
+		$required = $i === 0 ? ' required' : '';
+		$rows .= '<fieldset style="border: 1px solid #eee; border-radius: 6px; margin: 0 0 1rem; padding: .75rem 1rem;">'
+			. '<legend>Benutzer ' . ($i + 1) . ($i === 0 ? '' : ' (optional)') . '</legend>'
+			. "<p><label>Benutzername<br><input name=\"name[]\" value=\"$name\" autocomplete=\"off\" pattern=\"[a-z0-9][a-z0-9_\\-]+[a-z0-9]\"$required></label></p>"
+			. "<p><label>E-Mail<br><input type=\"email\" name=\"email[]\" value=\"$email\" autocomplete=\"off\"></label></p>"
+			. "<p><label>Passwort<br><input type=\"password\" name=\"password[]\" autocomplete=\"new-password\"$required></label></p>"
+			. "<p><label>Passwort wiederholen<br><input type=\"password\" name=\"password2[]\" autocomplete=\"new-password\"$required></label></p>"
+			. '</fieldset>';
+	}
+
+	return ($error ? '<p class="err">' . $error . '</p>' : '')
+		. '<p>Erzeugt eine <code>accounts.php</code> mit verschlüsselten Passwörtern (Hash) und lädt sie direkt herunter. '
+		. 'Auf dem Server wird dabei nichts gespeichert.</p>'
+		. '<p>Lade die Datei anschließend per FTP in den Ordner <code>config/</code> hoch.</p>'
+		. '<form method="post" action="?action=accounts">' . $rows
+		. '<p><small>Benutzername: Kleinbuchstaben, Ziffern, <code>-</code> und <code>_</code>, mindestens 3 Zeichen.</small></p>'
+		. '<p><button class="btn" type="submit">accounts.php herunterladen</button> &nbsp; <a href="?">Zurück</a></p></form>';
+}
+
 $installed = is_file("$dir/config/accounts.php");
 $action = $_GET['action'] ?? '';
+
+// ---------------------------------------------------------------------------
+// accounts.php generator (download only, nothing is written on the server)
+
+if ($action === 'accounts') {
+	if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+		page('accounts.php erzeugen', accountsForm());
+	}
+
+	$values = array();
+
+	foreach (array('name', 'email', 'password', 'password2') as $key) {
+		$values[$key] = array_values(array_map('strval', array_filter((array) ($_POST[$key] ?? array()), 'is_string')));
+	}
+
+	$accounts = array();
+	$seen = array();
+	$error = '';
+
+	for ($i = 0; $i < 3; $i++) {
+		$name = trim($values['name'][$i] ?? '');
+		$email = strtolower(trim($values['email'][$i] ?? ''));
+		$password = $values['password'][$i] ?? '';
+		$password2 = $values['password2'][$i] ?? '';
+
+		if ($name === '' && $password === '' && $email === '') {
+			continue;
+		}
+
+		$label = 'Benutzer ' . ($i + 1) . ': ';
+
+		if (!preg_match('/^[a-z0-9][a-z0-9_\-]+[a-z0-9]$/s', $name)) {
+			$error = $label . 'Ungültiger Benutzername.';
+		} elseif ($email !== '' && !preg_match('/^[a-zA-Z0-9]+[\w_\.\-\+]*@[\w_\.\-]+\.[a-zA-Z]+$/', $email)) {
+			$error = $label . 'Ungültige E-Mail-Adresse.';
+		} elseif ($password === '') {
+			$error = $label . 'Bitte ein Passwort eingeben.';
+		} elseif ($password !== $password2) {
+			$error = $label . 'Die Passwörter stimmen nicht überein.';
+		} elseif (isset($seen[$name]) || ($email !== '' && isset($seen[$email]))) {
+			$error = $label . 'Benutzername oder E-Mail ist doppelt.';
+		}
+
+		if ($error) {
+			break;
+		}
+
+		$seen[$name] = true;
+
+		if ($email !== '') {
+			$seen[$email] = true;
+		}
+
+		$accounts[] = new InstallerAccount($name, $email, password_hash($password, PASSWORD_DEFAULT));
+	}
+
+	if (!$error && !$accounts) {
+		$error = 'Bitte mindestens einen Benutzer angeben.';
+	}
+
+	if ($error) {
+		page('accounts.php erzeugen', accountsForm(e($error), $values));
+	}
+
+	$php = accountsPhp($accounts);
+
+	header('Content-Type: application/octet-stream');
+	header('Content-Disposition: attachment; filename="accounts.php"');
+	header('Content-Length: ' . strlen($php));
+	header('X-Content-Type-Options: nosniff');
+	echo $php;
+	exit;
+}
 
 // ---------------------------------------------------------------------------
 // Finish
@@ -142,6 +283,7 @@ if ($installed) {
 		'<p class="warn">In diesem Ordner gibt es bereits Benutzerkonten (<code>config/accounts.php</code>). '
 		. 'Der Web-Installer läuft aus Sicherheitsgründen nur bei Neuinstallationen.</p>'
 		. '<p>Updates bitte per SSH mit <code>php bin/dist.php --target=…</code> einspielen und <code>' . e($self) . '</code> löschen.</p>'
+		. '<p><a href="?action=accounts">accounts.php erzeugen (Download)</a></p>'
 	);
 }
 
@@ -280,6 +422,7 @@ if ($action === 'extract' && !$fatal) {
 		'Dateien entpackt',
 		"<p class=\"ok\">Alle $total Dateien wurden erfolgreich entpackt.</p>"
 		. '<p>Im letzten Schritt werden das Archiv und der Installer gelöscht.</p>'
+		. '<p>Benutzerkonto vorher anlegen? <a href="?action=accounts">accounts.php erzeugen</a> und nach <code>config/</code> hochladen.</p>'
 		. '<p><a class="btn" href="?action=finish">Installation abschließen</a></p>'
 	);
 }
@@ -306,4 +449,5 @@ page(
 	'<p>Installationsordner: <code>' . e($dir) . '</code></p>'
 	. "<table>$rows</table>"
 	. $button
+	. '<p><a href="?action=accounts">accounts.php erzeugen (Download, wird nicht gespeichert)</a></p>'
 );
