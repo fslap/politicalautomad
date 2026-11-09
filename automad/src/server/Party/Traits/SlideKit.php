@@ -257,14 +257,15 @@ trait SlideKit {
 		$ratio = ($config['slide_ratio'] ?? '16-9') === 'auto' ? 'auto' : '16-9';
 		$title = trim((string) ($config['slide_title'] ?? ''));
 		$nav = !isset($config['slide_nav']) || (bool) $config['slide_nav'];
+		$menu = $nav && !empty($config['slide_menu']);
 		$sectionId = trim((string) ($config['section_id'] ?? ''));
 
 		$top = $sectionId !== '' ? '<a id="' . htmlspecialchars($sectionId) . '"></a>' : '';
 
 		if ($nav) {
 			$top .= '<div class="party-slide__nav party-slide__nav--top">'
-				. '<button type="button" class="party-slide__menu" data-slide-menu aria-label="Folien-Übersicht" aria-expanded="false">'
-				. '<span></span><span></span><span></span></button>'
+				. ($menu ? '<button type="button" class="party-slide__menu" data-slide-menu aria-label="Folien-Übersicht" aria-expanded="false">'
+					. '<span></span><span></span><span></span></button>' : '')
 				. '<button type="button" class="party-slide__arrow party-slide__arrow--up" data-slide-prev aria-label="Vorherige Folie">' . self::chevrons('up') . '</button>'
 				. '</div>';
 		}
@@ -301,7 +302,8 @@ trait SlideKit {
 			array('name' => 'slide_title', 'type' => 'text', 'label' => 'Folie: Name im Folien-Menü', 'default' => $title),
 			array('name' => 'slide_background', 'type' => 'select', 'label' => 'Folie: Hintergrund', 'default' => $background, 'options' => self::$slideBackgrounds),
 			array('name' => 'slide_ratio', 'type' => 'select', 'label' => 'Folie: Format', 'default' => '16-9', 'options' => array('16-9' => '16:9 (Bildschirmfüllend)', 'auto' => 'Automatische Höhe')),
-			array('name' => 'slide_nav', 'type' => 'toggle', 'label' => 'Folie: Menü und Pfeile anzeigen', 'default' => true),
+			array('name' => 'slide_nav', 'type' => 'toggle', 'label' => 'Folie: Pfeile anzeigen', 'default' => true),
+			array('name' => 'slide_menu', 'type' => 'toggle', 'label' => 'Folie: Menü-Button (Folien-Übersicht) anzeigen', 'default' => false),
 			...self::cornerFields('slide_', 'Folie', $corner),
 			...self::decorFields('slide_', 'Folie'),
 			array('name' => 'classes', 'type' => 'text', 'label' => 'Folie: CSS-Klassen', 'default' => '')

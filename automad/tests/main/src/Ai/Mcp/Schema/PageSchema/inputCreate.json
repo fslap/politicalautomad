@@ -4751,7 +4751,11 @@
 						},
 						"slide_nav": {
 							"type": "boolean",
-							"description": "Folie: Menü und Pfeile anzeigen"
+							"description": "Folie: Pfeile anzeigen"
+						},
+						"slide_menu": {
+							"type": "boolean",
+							"description": "Folie: Menü-Button (Folien-Übersicht) anzeigen"
 						},
 						"slide_corner": {
 							"type": "string",
@@ -5161,7 +5165,11 @@
 						},
 						"slide_nav": {
 							"type": "boolean",
-							"description": "Folie: Menü und Pfeile anzeigen"
+							"description": "Folie: Pfeile anzeigen"
+						},
+						"slide_menu": {
+							"type": "boolean",
+							"description": "Folie: Menü-Button (Folien-Übersicht) anzeigen"
 						},
 						"slide_corner": {
 							"type": "string",
@@ -5326,7 +5334,11 @@
 						},
 						"slide_nav": {
 							"type": "boolean",
-							"description": "Folie: Menü und Pfeile anzeigen"
+							"description": "Folie: Pfeile anzeigen"
+						},
+						"slide_menu": {
+							"type": "boolean",
+							"description": "Folie: Menü-Button (Folien-Übersicht) anzeigen"
 						},
 						"slide_corner": {
 							"type": "string",
@@ -5664,7 +5676,11 @@
 						},
 						"slide_nav": {
 							"type": "boolean",
-							"description": "Folie: Menü und Pfeile anzeigen"
+							"description": "Folie: Pfeile anzeigen"
+						},
+						"slide_menu": {
+							"type": "boolean",
+							"description": "Folie: Menü-Button (Folien-Übersicht) anzeigen"
 						},
 						"slide_corner": {
 							"type": "string",
@@ -5908,7 +5924,11 @@
 						},
 						"slide_nav": {
 							"type": "boolean",
-							"description": "Folie: Menü und Pfeile anzeigen"
+							"description": "Folie: Pfeile anzeigen"
+						},
+						"slide_menu": {
+							"type": "boolean",
+							"description": "Folie: Menü-Button (Folien-Übersicht) anzeigen"
 						},
 						"slide_corner": {
 							"type": "string",
@@ -6194,7 +6214,11 @@
 						},
 						"slide_nav": {
 							"type": "boolean",
-							"description": "Folie: Menü und Pfeile anzeigen"
+							"description": "Folie: Pfeile anzeigen"
+						},
+						"slide_menu": {
+							"type": "boolean",
+							"description": "Folie: Menü-Button (Folien-Übersicht) anzeigen"
 						},
 						"slide_corner": {
 							"type": "string",
