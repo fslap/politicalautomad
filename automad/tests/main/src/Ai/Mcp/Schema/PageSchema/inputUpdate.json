@@ -6656,7 +6656,7 @@
 		},
 		"partyStainedGlass": {
 			"type": "object",
-			"description": "Party component \"Kirchenfenster mit Musik\": Generiertes, buntes Bleiglasfenster als SVG-Hintergrund mit Stichpunkten. Ein YouTube-Song startet beim Erreichen der Section und stoppt beim Verlassen.",
+			"description": "Party component \"Glasfenster mit Musik\": Generiertes, buntes Bleiglasfenster (Art déco, Wabe, Bullauge, Bogen) mit politischen Symbolen als SVG-Hintergrund mit Forderungen. Ein YouTube-Song startet beim Erreichen der Section und stoppt beim Verlassen.",
 			"properties": {
 				"id": {
 					"$ref": "#/$defs/blockId"
@@ -6691,12 +6691,37 @@
 							"type": "string",
 							"description": "Überschrift über den Stichpunkten (optional)"
 						},
+						"intro": {
+							"type": "string",
+							"description": "Einleitung über den Forderungen (optional)"
+						},
 						"bullets": {
 							"type": "array",
 							"items": {
 								"type": "string"
 							},
-							"description": "Stichpunkte (einer pro Zeile)"
+							"description": "Forderungen / Stichpunkte (eine pro Zeile). „Forderung: Erklärung“ zeigt die Forderung fett und die Erklärung darunter"
+						},
+						"columns": {
+							"type": "string",
+							"enum": [
+								"auto",
+								"1",
+								"2",
+								"3"
+							],
+							"description": "Spalten der Forderungen"
+						},
+						"bullet_style": {
+							"type": "string",
+							"enum": [
+								"star",
+								"number",
+								"check",
+								"arrow",
+								"symbol"
+							],
+							"description": "Aufzählungszeichen"
 						},
 						"text_position": {
 							"type": "string",
@@ -6738,6 +6763,17 @@
 							"type": "number",
 							"description": "Lautstärke (0–100)"
 						},
+						"window": {
+							"type": "string",
+							"enum": [
+								"deco",
+								"hex",
+								"round",
+								"portal",
+								"arch"
+							],
+							"description": "Form des Mittelfensters"
+						},
 						"palette": {
 							"type": "string",
 							"enum": [
@@ -6755,7 +6791,7 @@
 							"description": "Muster-Seed. Jeder Text erzeugt ein anderes Fenster, derselbe Text immer dasselbe. „auto“ nutzt die Section-ID"
 						},
 						"artifacts": {
-							"description": "Symbole (an/aus). Welche Symbole im Fenster vorkommen, z.B. {\"dove\": true, \"coins\": false}"
+							"description": "Symbole (an/aus). Welche Symbole im Fenster vorkommen, z.B. {\"fist\": true, \"coins\": false}. Mögliche Symbole: fist, megaphone, ballot, handshake, scales, key, book, bird, feather, heart, eye, star, sun, moon, flame, lightning, leaf, tree, sprout, mountain, wave, globe, house, gear, coins, bike, train, note"
 						},
 						"height": {
 							"type": "string",

@@ -11,7 +11,7 @@ namespace Automad\Party\StainedGlass;
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
- * Generates a colorful church window (stained glass) as SVG.
+ * Generates a colorful stained glass window as SVG (no religious symbols).
  *
  * The composition follows classic stained glass windows: a mosaic of glass panes with lead
  * lines, a framed border, a pointed (gothic) arch in the center with a light brick pattern,
@@ -26,7 +26,11 @@ final class StainedGlassGenerator {
 	/**
 	 * The available artifacts (symbols) in a 100 × 100 box.
 	 */
-	const ARTIFACTS = array('dove', 'star', 'sun', 'moon', 'coins', 'scales', 'book', 'chalice', 'heart', 'key', 'crown', 'eye', 'flame', 'leaf', 'hands');
+	const ARTIFACTS = array(
+		'bird', 'star', 'sun', 'moon', 'coins', 'scales', 'book', 'heart', 'key', 'eye', 'flame', 'leaf',
+		'fist', 'megaphone', 'ballot', 'handshake', 'tree', 'gear', 'lightning', 'bike', 'house', 'globe',
+		'feather', 'note', 'mountain', 'wave', 'train', 'sprout'
+	);
 	/**
 	 * The color palettes: glass colors, light colors for the center window, gold and lead.
 	 */
@@ -68,12 +72,24 @@ final class StainedGlassGenerator {
 			'lead' => '#151515'
 		)
 	);
+
+	/**
+	 * Shapes of the center window.
+	 */
+	const WINDOWS = array('deco', 'hex', 'round', 'portal', 'arch');
 	private array $artifacts;
 	private float $h;
 	private array $palette;
 	private array $parts = array();
 
 	private \Random\Randomizer $rng;
+
+	/**
+	 * Symbols that were already used.
+	 *
+	 * @var string[]
+	 */
+	private array $used = array();
 	private float $w;
 
 	/**
@@ -83,6 +99,11 @@ final class StainedGlassGenerator {
 	 * @param float $width
 	 * @param float $height
 	 */
+	/**
+	 * The shape of the center window.
+	 */
+	private string $window = 'deco';
+
 	public function __construct(string|int $seed, string $palette = 'classic', array $artifacts = array(), float $width = 1600, float $height = 1000) {
 		$this->rng = new \Random\Randomizer(new \Random\Engine\Mt19937(is_int($seed) ? $seed : crc32((string) $seed)));
 		$this->palette = self::PALETTES[$palette] ?? self::PALETTES['classic'];
@@ -98,6 +119,7 @@ final class StainedGlassGenerator {
 	 */
 	public function svg(): string {
 		$this->parts = array();
+		$this->used = array();
 		$w = $this->w;
 		$h = $this->h;
 		$lead = $this->palette['lead'];
@@ -118,9 +140,9 @@ final class StainedGlassGenerator {
 		}
 
 		// The center window.
-		$this->gothicWindow($w * 0.5, $h * 0.08, $w * 0.4, $h * 0.86);
+		$this->centerWindow($w * 0.5, $h * 0.07, $w * 0.5, $h * 0.88);
 
-		// Small cross / star tiles at the top.
+		// Small tiles with symbols at the top.
 		foreach (array(0.36, 0.64) as $x) {
 			$this->tile($w * $x, $h * 0.07, 54, $this->pickArtifact(array('star', 'flame', 'leaf')));
 		}
@@ -140,6 +162,18 @@ final class StainedGlassGenerator {
 	}
 
 	/**
+	 * Set the shape of the center window.
+	 *
+	 * @param string $shape
+	 * @return self
+	 */
+	public function withWindow(string $shape): self {
+		$this->window = in_array($shape, self::WINDOWS, true) ? $shape : 'deco';
+
+		return $this;
+	}
+
+	/**
 	 * Draw an artifact centered at a point.
 	 *
 	 * @param string $name
@@ -155,21 +189,34 @@ final class StainedGlassGenerator {
 		$accent = $this->glass();
 
 		$shapes = match ($name) {
-			'dove' => "<path d='M12 58 C30 40 48 42 58 50 C66 34 80 26 94 28 C84 36 80 44 78 52 C86 54 92 60 94 66 C76 66 62 70 50 78 C40 84 26 84 16 76 C26 74 32 70 34 66 C26 66 18 63 12 58 Z' fill='$light'/><circle cx='80' cy='35' r='3' fill='$lead'/><path d='M92 30 L100 32 L92 36 Z' fill='$gold'/>",
+			'bird' => "<path d='M6 44 C30 40 40 46 48 54 C56 40 72 30 96 26 C80 40 70 52 64 62 C76 64 86 70 94 82 C76 78 62 76 52 72 C44 80 30 84 14 82 C26 76 34 68 38 62 C28 56 16 52 6 44 Z' fill='$light'/><circle cx='56' cy='56' r='3' fill='$lead'/>",
 			'star' => "<path d='M50 6 L61 38 L95 38 L67 58 L78 92 L50 72 L22 92 L33 58 L5 38 L39 38 Z' fill='$gold'/>",
 			'sun' => "<circle cx='50' cy='50' r='22' fill='$gold'/>" . join('', array_map(fn ($i) => sprintf("<path d='M50 4 L56 22 L44 22 Z' fill='%s' transform='rotate(%d 50 50)'/>", $gold, $i * 30), range(0, 11))),
 			'moon' => "<path d='M62 10 A40 40 0 1 0 90 72 A32 32 0 1 1 62 10 Z' fill='$light'/>",
 			'coins' => "<circle cx='40' cy='58' r='22' fill='$gold'/><circle cx='40' cy='58' r='14' fill='none' stroke='$lead' stroke-width='3'/><circle cx='64' cy='38' r='18' fill='$gold'/><circle cx='64' cy='38' r='11' fill='none' stroke='$lead' stroke-width='3'/>",
 			'scales' => "<rect x='47' y='16' width='6' height='70' fill='$gold'/><rect x='16' y='24' width='68' height='6' fill='$gold'/><path d='M10 56 L22 30 L34 56 Z M66 56 L78 30 L90 56 Z' fill='$light'/><rect x='34' y='84' width='32' height='8' fill='$gold'/>",
 			'book' => "<path d='M8 22 C24 16 40 18 50 26 C60 18 76 16 92 22 L92 82 C76 76 60 78 50 86 C40 78 24 76 8 82 Z' fill='$light'/><path d='M50 26 L50 86' stroke='$lead' stroke-width='4'/><path d='M18 36 H40 M18 48 H40 M60 36 H82 M60 48 H82' stroke='$accent' stroke-width='4'/>",
-			'chalice' => "<path d='M22 14 H78 C78 42 66 56 50 58 C34 56 22 42 22 14 Z' fill='$gold'/><rect x='46' y='56' width='8' height='22' fill='$gold'/><path d='M28 92 C30 80 70 80 72 92 Z' fill='$gold'/><circle cx='50' cy='32' r='7' fill='$accent'/>",
 			'heart' => "<path d='M50 88 C14 62 6 40 18 24 C30 10 46 16 50 30 C54 16 70 10 82 24 C94 40 86 62 50 88 Z' fill='#d81b3a'/>",
 			'key' => "<circle cx='28' cy='50' r='18' fill='none' stroke='$gold' stroke-width='9'/><rect x='44' y='46' width='48' height='9' fill='$gold'/><rect x='72' y='54' width='8' height='14' fill='$gold'/><rect x='84' y='54' width='8' height='10' fill='$gold'/>",
-			'crown' => "<path d='M10 76 L16 30 L34 52 L50 20 L66 52 L84 30 L90 76 Z' fill='$gold'/><rect x='10' y='76' width='80' height='10' fill='$gold'/><circle cx='50' cy='62' r='6' fill='$accent'/>",
 			'eye' => "<path d='M6 50 C26 22 74 22 94 50 C74 78 26 78 6 50 Z' fill='$light'/><circle cx='50' cy='50' r='16' fill='$accent'/><circle cx='50' cy='50' r='7' fill='$lead'/>",
 			'flame' => "<path d='M50 6 C62 26 82 36 76 64 C72 84 58 94 50 94 C42 94 26 86 24 64 C22 46 38 40 40 24 C46 34 48 40 50 6 Z' fill='#f57c00'/><path d='M50 46 C58 58 64 66 60 78 C58 86 52 88 50 88 C46 88 40 84 40 76 C40 66 48 62 50 46 Z' fill='$gold'/>",
 			'leaf' => "<path d='M14 86 C14 40 44 12 90 12 C90 58 62 88 14 86 Z' fill='#43a047'/><path d='M18 82 L76 24' stroke='$light' stroke-width='4'/>",
-			'hands' => "<path d='M50 12 C42 18 36 40 34 58 L30 88 H48 L50 60 Z' fill='#f2c9a0'/><path d='M50 12 C58 18 64 40 66 58 L70 88 H52 L50 60 Z' fill='#e8b88a'/><path d='M28 86 H72 V96 H28 Z' fill='#c1272d'/>",
+			'fist' => "<rect x='36' y='70' width='28' height='26' fill='$accent'/><rect x='26' y='24' width='14' height='30' rx='6' fill='$light'/><rect x='38' y='18' width='14' height='34' rx='6' fill='$light'/><rect x='50' y='18' width='14' height='34' rx='6' fill='$light'/><rect x='62' y='22' width='14' height='32' rx='6' fill='$light'/><path d='M26 46 H78 V64 C78 70 72 74 66 74 H36 C30 74 26 70 26 64 Z' fill='$light'/><path d='M20 42 C30 40 40 46 44 56 L36 62 C30 56 24 52 20 52 Z' fill='$light'/>",
+			'megaphone' => "<path d='M12 40 H32 L78 16 V84 L32 60 H12 Z' fill='$gold'/><rect x='30' y='60' width='12' height='26' fill='$light'/><path d='M86 34 Q96 50 86 66' fill='none' stroke='$gold' stroke-width='5'/>",
+			'ballot' => "<path d='M36 8 H64 V46 H36 Z' fill='#fff'/><path d='M41 26 L48 33 L59 18' fill='none' stroke='$accent' stroke-width='5'/><rect x='14' y='44' width='72' height='46' fill='$light'/><rect x='30' y='42' width='40' height='6' fill='$lead'/><rect x='38' y='62' width='24' height='10' fill='$gold'/>",
+			'handshake' => "<path d='M4 42 L30 34 L50 44 L70 34 L96 42 V62 L72 72 L50 64 L28 72 L4 62 Z' fill='#f2c9a0'/><path d='M30 34 L52 52 L72 38 M40 58 L50 66 M50 54 L60 62' fill='none' stroke='$lead' stroke-width='3'/><rect x='0' y='38' width='12' height='28' fill='$accent'/><rect x='88' y='38' width='12' height='28' fill='$accent'/>",
+			'tree' => "<rect x='44' y='60' width='12' height='32' fill='#8d5a2b'/><circle cx='50' cy='38' r='28' fill='#43a047'/><circle cx='32' cy='54' r='16' fill='#2e7d32'/><circle cx='68' cy='54' r='16' fill='#2e7d32'/>",
+			'gear' => join('', array_map(fn ($i) => sprintf("<rect x='43' y='4' width='14' height='20' fill='%s' transform='rotate(%d 50 50)'/>", $gold, $i * 45), range(0, 7))) . "<circle cx='50' cy='50' r='30' fill='$gold'/><circle cx='50' cy='50' r='12' fill='$light'/>",
+			'lightning' => "<path d='M58 4 L22 56 H46 L38 96 L80 38 H54 Z' fill='$gold'/>",
+			'bike' => "<circle cx='24' cy='66' r='18' fill='none' stroke='$light' stroke-width='6'/><circle cx='76' cy='66' r='18' fill='none' stroke='$light' stroke-width='6'/><path d='M24 66 L42 36 H66 L76 66 M42 36 L54 66 H24 M62 26 H72 M38 30 H48' fill='none' stroke='$gold' stroke-width='6'/>",
+			'house' => "<path d='M8 50 L50 12 L92 50 Z' fill='$accent'/><rect x='18' y='50' width='64' height='42' fill='$light'/><rect x='42' y='64' width='16' height='28' fill='$gold'/><rect x='24' y='58' width='12' height='12' fill='$gold'/><rect x='64' y='58' width='12' height='12' fill='$gold'/>",
+			'globe' => "<circle cx='50' cy='50' r='40' fill='#1e88e5'/><path d='M50 10 C30 30 30 70 50 90 C70 70 70 30 50 10 Z M10 50 H90 M18 30 H82 M18 70 H82' fill='none' stroke='$light' stroke-width='4'/><path d='M30 30 C40 36 44 44 38 52 C30 56 26 46 30 30 Z M60 56 C70 52 78 58 74 70 C66 74 58 66 60 56 Z' fill='#43a047'/>",
+			'feather' => "<path d='M86 8 C42 14 20 50 18 92 C42 72 72 52 86 8 Z' fill='$light'/><path d='M18 92 L72 26' stroke='$accent' stroke-width='4'/>",
+			'note' => "<ellipse cx='30' cy='78' rx='16' ry='12' fill='$gold'/><ellipse cx='74' cy='68' rx='16' ry='12' fill='$gold'/><path d='M44 78 V22 L88 12 V68' fill='none' stroke='$gold' stroke-width='7'/>",
+			'mountain' => "<path d='M2 90 L36 28 L54 58 L68 40 L98 90 Z' fill='$accent'/><path d='M36 28 L45 44 L27 44 Z M68 40 L74 50 L62 50 Z' fill='#fff'/>",
+			'wave' => "<path d='M4 58 C20 38 36 38 50 58 C64 78 80 78 96 58 V94 H4 Z' fill='#1e88e5'/><path d='M4 44 C20 24 36 24 50 44 C64 64 80 64 96 44' fill='none' stroke='$light' stroke-width='6'/>",
+			'train' => "<rect x='14' y='18' width='72' height='56' rx='10' fill='$accent'/><rect x='22' y='28' width='24' height='18' fill='$light'/><rect x='54' y='28' width='24' height='18' fill='$light'/><circle cx='30' cy='80' r='8' fill='$lead'/><circle cx='70' cy='80' r='8' fill='$lead'/><path d='M8 94 H92' stroke='$gold' stroke-width='5'/>",
+			'sprout' => "<path d='M50 90 V50' stroke='#2e7d32' stroke-width='6'/><path d='M50 58 C30 58 16 44 14 22 C36 22 48 36 50 58 Z' fill='#66bb6a'/><path d='M50 48 C66 48 82 36 86 16 C64 16 52 30 50 48 Z' fill='#43a047'/><rect x='28' y='86' width='44' height='8' fill='#8d5a2b'/>",
 			default => ''
 		};
 
@@ -185,6 +232,101 @@ final class StainedGlassGenerator {
 			$lead,
 			$shapes
 		);
+	}
+
+	/**
+	 * The center window (the bullet points sit on top of it). Its shape and the pattern
+	 * inside depend on the window type.
+	 *
+	 * @param float $cx
+	 * @param float $top
+	 * @param float $w
+	 * @param float $h
+	 */
+	private function centerWindow(float $cx, float $top, float $w, float $h): void {
+		$lead = $this->palette['lead'];
+		$gold = $this->palette['gold'];
+		$x1 = $cx - $w / 2;
+		$x2 = $cx + $w / 2;
+		$bottom = $top + $h;
+		$cy = $top + $h / 2;
+		$r = fn (float $v) => round($v, 1);
+
+		$path = match ($this->window) {
+			'round' => sprintf('M %s %s A %s %s 0 1 1 %s %s A %s %s 0 1 1 %s %s Z', $r($cx - min($w, $h) / 2), $r($cy), $r(min($w, $h) / 2), $r(min($w, $h) / 2), $r($cx + min($w, $h) / 2), $r($cy), $r(min($w, $h) / 2), $r(min($w, $h) / 2), $r($cx - min($w, $h) / 2), $r($cy)),
+			'hex' => sprintf('M %s %s L %s %s L %s %s L %s %s L %s %s L %s %s Z', $r($x1), $r($cy), $r($x1 + $w * 0.22), $r($top), $r($x2 - $w * 0.22), $r($top), $r($x2), $r($cy), $r($x2 - $w * 0.22), $r($bottom), $r($x1 + $w * 0.22), $r($bottom)),
+			'portal' => sprintf('M %1$s %2$s L %1$s %3$s A %4$s %4$s 0 0 1 %5$s %3$s L %5$s %2$s Z', $r($x1), $r($bottom), $r($top + $w / 2), $r($w / 2), $r($x2)),
+			'arch' => sprintf('M %1$s %2$s L %1$s %3$s Q %1$s %4$s %5$s %4$s Q %6$s %4$s %6$s %3$s L %6$s %2$s Z', $r($x1), $r($bottom), $r($top + $w * 0.62), $r($top), $r($cx), $r($x2)),
+			// Art deco: stepped top, the middle step is the highest.
+			default => sprintf(
+				'M %s %s V %s H %s V %s H %s V %s H %s V %s H %s V %s H %s V %s Z',
+				$r($x1),
+				$r($bottom),
+				$r($top + $h * 0.16),
+				$r($x1 + $w * 0.14),
+				$r($top + $h * 0.07),
+				$r($x1 + $w * 0.3),
+				$r($top),
+				$r($x2 - $w * 0.3),
+				$r($top + $h * 0.07),
+				$r($x2 - $w * 0.14),
+				$r($top + $h * 0.16),
+				$r($x2),
+				$r($bottom)
+			)
+		};
+
+		$id = 'sg-window-' . $this->rng->getInt(1000, 9999);
+		$this->parts[] = sprintf('<clipPath id="%s"><path d="%s"/></clipPath>', $id, $path);
+
+		$inner = match ($this->window) {
+			'round' => $this->ringPattern($cx, $cy, min($w, $h) / 2),
+			'hex' => $this->honeycombPattern($x1, $top, $w, $h),
+			'deco' => $this->fanPattern($cx, $bottom, $w, $h),
+			default => $this->panePattern($x1, $top, $w, $h)
+		};
+
+		$this->parts[] = sprintf('<g clip-path="url(#%s)">%s</g>', $id, $inner);
+		$this->parts[] = sprintf('<path d="%s" fill="none" stroke="%s" stroke-width="26"/>', $path, $lead);
+		$this->parts[] = sprintf('<path d="%s" fill="none" stroke="%s" stroke-width="10"/>', $path, $gold);
+	}
+
+	/**
+	 * Light rays fanning out from the bottom (art deco).
+	 *
+	 * @param float $cx
+	 * @param float $bottom
+	 * @param float $w
+	 * @param float $h
+	 * @return string
+	 */
+	private function fanPattern(float $cx, float $bottom, float $w, float $h): string {
+		$out = '';
+		$count = 22;
+		$length = sqrt($w * $w / 4 + $h * $h) * 1.1;
+
+		for ($i = 0; $i < $count; $i++) {
+			$a1 = M_PI + M_PI * $i / $count;
+			$a2 = M_PI + M_PI * ($i + 1) / $count;
+			$out .= sprintf(
+				'<polygon points="%s,%s %s,%s %s,%s" fill="%s" stroke="%s" stroke-width="5"/>',
+				round($cx, 1),
+				round($bottom, 1),
+				round($cx + cos($a1) * $length, 1),
+				round($bottom + sin($a1) * $length, 1),
+				round($cx + cos($a2) * $length, 1),
+				round($bottom + sin($a2) * $length, 1),
+				$this->rng->getInt(0, 7) === 0 ? $this->glass() : $this->light(),
+				$this->palette['lead']
+			);
+		}
+
+		// Arcs across the rays.
+		foreach (array(0.35, 0.6, 0.85) as $f) {
+			$out .= sprintf('<circle cx="%s" cy="%s" r="%s" fill="none" stroke="%s" stroke-width="6"/>', round($cx, 1), round($bottom, 1), round($h * $f, 1), $this->palette['lead']);
+		}
+
+		return $out;
 	}
 
 	/**
@@ -245,72 +387,39 @@ final class StainedGlassGenerator {
 	}
 
 	/**
-	 * The pointed arch window in the center with a light brick pattern.
+	 * A honeycomb of small hexagons (hex window).
 	 *
-	 * @param float $cx
-	 * @param float $top
+	 * @param float $x
+	 * @param float $y
 	 * @param float $w
 	 * @param float $h
+	 * @return string
 	 */
-	private function gothicWindow(float $cx, float $top, float $w, float $h): void {
-		$lead = $this->palette['lead'];
-		$x1 = $cx - $w / 2;
-		$x2 = $cx + $w / 2;
-		$bottom = $top + $h;
-		$springLine = $top + $w * 0.62;
-		$arch = sprintf(
-			'M %1$s %2$s L %1$s %3$s Q %1$s %4$s %5$s %4$s Q %6$s %4$s %6$s %3$s L %6$s %2$s Z',
-			round($x1, 1),
-			round($bottom, 1),
-			round($springLine, 1),
-			round($top, 1),
-			round($cx, 1),
-			round($x2, 1)
-		);
+	private function honeycombPattern(float $x, float $y, float $w, float $h): string {
+		$out = '';
+		$size = $w / 10;
+		$dx = $size * 1.5;
+		$dy = $size * sqrt(3);
+		$col = 0;
 
-		$id = 'sg-arch-' . $this->rng->getInt(1000, 9999);
-		$this->parts[] = sprintf('<clipPath id="%s"><path d="%s"/></clipPath>', $id, $arch);
+		for ($px = $x - $size; $px < $x + $w + $size; $px += $dx) {
+			$offset = $col % 2 ? $dy / 2 : 0;
 
-		// Light brick pattern inside of the arch.
-		$bricks = '';
-		$bh = $w / 9;
-		$bw = $w / 4;
-		$row = 0;
+			for ($py = $y - $dy + $offset; $py < $y + $h + $dy; $py += $dy) {
+				$points = array();
 
-		for ($y = $top; $y < $bottom; $y += $bh) {
-			$offset = $row % 2 ? -$bw / 2 : 0;
+				for ($k = 0; $k < 6; $k++) {
+					$a = M_PI / 3 * $k;
+					$points[] = round($px + cos($a) * $size, 1) . ',' . round($py + sin($a) * $size, 1);
+				}
 
-			for ($x = $x1 + $offset; $x < $x2; $x += $bw) {
-				$bricks .= sprintf(
-					'<rect x="%s" y="%s" width="%s" height="%s" fill="%s" stroke="%s" stroke-width="5"/>',
-					round($x, 1),
-					round($y, 1),
-					round($bw, 1),
-					round($bh, 1),
-					$this->rng->getInt(0, 5) === 0 ? $this->glass() : $this->light(),
-					$lead
-				);
+				$out .= sprintf('<polygon points="%s" fill="%s" stroke="%s" stroke-width="5"/>', join(' ', $points), $this->rng->getInt(0, 6) === 0 ? $this->glass() : $this->light(), $this->palette['lead']);
 			}
 
-			$row++;
+			$col++;
 		}
 
-		$this->parts[] = sprintf('<g clip-path="url(#%s)">%s</g>', $id, $bricks);
-
-		// Golden tracery: frame, center line and a small rose.
-		$gold = $this->palette['gold'];
-		$this->parts[] = sprintf('<path d="%s" fill="none" stroke="%s" stroke-width="26"/>', $arch, $lead);
-		$this->parts[] = sprintf('<path d="%s" fill="none" stroke="%s" stroke-width="10"/>', $arch, $gold);
-		$this->parts[] = sprintf(
-			'<line x1="%1$s" y1="%2$s" x2="%1$s" y2="%3$s" stroke="%4$s" stroke-width="14"/><line x1="%1$s" y1="%2$s" x2="%1$s" y2="%3$s" stroke="%5$s" stroke-width="5"/>',
-			round($cx, 1),
-			round($springLine + $w * 0.1, 1),
-			round($bottom, 1),
-			$lead,
-			$gold
-		);
-
-		$this->rose($cx, $top + $w * 0.3, $w * 0.16, 12);
+		return $out;
 	}
 
 	/**
@@ -411,6 +520,42 @@ final class StainedGlassGenerator {
 	}
 
 	/**
+	 * Panes in rows (portal and arch windows).
+	 *
+	 * @param float $x
+	 * @param float $y
+	 * @param float $w
+	 * @param float $h
+	 * @return string
+	 */
+	private function panePattern(float $x, float $y, float $w, float $h): string {
+		$out = '';
+		$bh = $w / 9;
+		$bw = $w / 4;
+		$row = 0;
+
+		for ($py = $y; $py < $y + $h; $py += $bh) {
+			$offset = $row % 2 ? -$bw / 2 : 0;
+
+			for ($px = $x + $offset; $px < $x + $w; $px += $bw) {
+				$out .= sprintf(
+					'<rect x="%s" y="%s" width="%s" height="%s" fill="%s" stroke="%s" stroke-width="5"/>',
+					round($px, 1),
+					round($py, 1),
+					round($bw, 1),
+					round($bh, 1),
+					$this->rng->getInt(0, 6) === 0 ? $this->glass() : $this->light(),
+					$this->palette['lead']
+				);
+			}
+
+			$row++;
+		}
+
+		return $out;
+	}
+
+	/**
 	 * Pick a random artifact.
 	 *
 	 * @param array $preferred
@@ -418,8 +563,12 @@ final class StainedGlassGenerator {
 	 */
 	private function pickArtifact(array $preferred = array()): string {
 		$pool = array_values(array_intersect($preferred, $this->artifacts)) ?: $this->artifacts;
+		// Symbols are only repeated when all symbols of the pool were used.
+		$unused = array_values(array_diff($pool, $this->used)) ?: $pool;
+		$artifact = $unused[$this->rng->getInt(0, count($unused) - 1)];
+		$this->used[] = $artifact;
 
-		return $pool[$this->rng->getInt(0, count($pool) - 1)];
+		return $artifact;
 	}
 
 	/**
@@ -460,6 +609,30 @@ final class StainedGlassGenerator {
 
 			$this->polygon(array(array($cx, $cy), $p1, $p2), $i % 2 ? $gold : $this->light(), 4, 0.85);
 		}
+	}
+
+	/**
+	 * Concentric rings with spokes (round window).
+	 *
+	 * @param float $cx
+	 * @param float $cy
+	 * @param float $radius
+	 * @return string
+	 */
+	private function ringPattern(float $cx, float $cy, float $radius): string {
+		$out = '';
+		$rings = 5;
+
+		for ($i = $rings; $i >= 1; $i--) {
+			$out .= sprintf('<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="6"/>', round($cx, 1), round($cy, 1), round($radius * $i / $rings, 1), $i === $rings ? $this->glass() : $this->light(), $this->palette['lead']);
+		}
+
+		for ($i = 0; $i < 16; $i++) {
+			$a = 2 * M_PI * $i / 16;
+			$out .= sprintf('<line x1="%s" y1="%s" x2="%s" y2="%s" stroke="%s" stroke-width="5"/>', round($cx + cos($a) * $radius * 0.2, 1), round($cy + sin($a) * $radius * 0.2, 1), round($cx + cos($a) * $radius, 1), round($cy + sin($a) * $radius, 1), $this->palette['lead']);
+		}
+
+		return $out;
 	}
 
 	/**

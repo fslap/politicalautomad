@@ -16,9 +16,10 @@
     {{#has_bullets}}
         <div class="stained-glass__content">
             {{#title}}<h2 class="stained-glass__title">{{title}}</h2>{{/title}}
-            <ul class="stained-glass__bullets">
-                {{#bullets}}<li>{{text}}</li>{{/bullets}}
-            </ul>
+            {{#intro}}<p class="stained-glass__intro">{{intro}}</p>{{/intro}}
+            <{{list_tag}} class="{{list_classes}}">
+                {{#bullets}}<li>{{#lead}}<strong>{{lead}}</strong>{{/lead}}{{#text}}<span>{{text}}</span>{{/text}}</li>{{/bullets}}
+            </{{list_tag}}>
         </div>
     {{/has_bullets}}
 </div>
