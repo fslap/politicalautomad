@@ -1,0 +1,10 @@
+{{#has_tags}}
+<div class="{{classes}}" aria-label="Tags">
+    <div class="tag-overlay__inner">
+        {{#tags}}
+            {{#link}}<a class="{{classes}}" style="{{style}}" href="{{link}}">{{text}}</a>{{/link}}
+            {{^link}}<span class="{{classes}}" style="{{style}}">{{text}}</span>{{/link}}
+        {{/tags}}
+    </div>
+</div>
+{{/has_tags}}

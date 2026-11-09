@@ -89,6 +89,7 @@ final class All {
 		'SlideViewer' => SlideViewer\SlideViewer::class,
 		'Split' => Split\Split::class,
 		'StainedGlass' => StainedGlass\StainedGlass::class,
+		'TagOverlay' => TagOverlay\TagOverlay::class,
 		'TeamBlock' => TeamBlock\TeamBlock::class,
 		'TextSplit' => TextSplit\TextSplit::class,
 		'VerticalSlider' => VerticalSlider\VerticalSlider::class,

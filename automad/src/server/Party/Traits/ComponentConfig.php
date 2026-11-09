@@ -46,6 +46,17 @@ defined('AUTOMAD') or die('Direct access not permitted!');
  */
 trait ComponentConfig {
 	/**
+	 * Hover animations of breakers and scenes with images.
+	 */
+	public static array $hoverAnimations = array(
+		'' => 'Keine',
+		'tilt' => 'Kippen',
+		'move' => 'Bewegen',
+		'float' => 'Schweben',
+		'wobble' => 'Wackeln',
+		'look' => 'Zum Mauszeiger schauen'
+	);
+	/**
 	 * The common field for additional CSS classes that are used inside the component template.
 	 *
 	 * @param string $default
@@ -58,7 +69,7 @@ trait ComponentConfig {
 			'label' => 'CSS-Klassen',
 			'default' => $default,
 			'placeholder' => 'inner-container bgorange',
-			'help' => 'Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down'
+			'help' => 'Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down'
 		);
 	}
 	protected function getClasses(array $config): string {
@@ -70,50 +81,6 @@ trait ComponentConfig {
 
 		return strpos($classes, 'inner-container') !== false ||
 			strpos($classes, 'bg') === 0;
-	}
-
-	/**
-	 * The common field for the anchor id of a section.
-	 *
-	 * @param string $default
-	 * @return array
-	 */
-	protected static function sectionIdField(string $default = ''): array {
-		return array(
-			'name' => 'section_id',
-			'type' => 'text',
-			'label' => 'Section-ID (Anker)',
-			'default' => $default,
-			'placeholder' => 'z.B. themen'
-		);
-	}
-
-	/**
-	 * Hover animations of breakers and scenes with images.
-	 */
-	public static array $hoverAnimations = array(
-		'' => 'Keine',
-		'tilt' => 'Kippen',
-		'move' => 'Bewegen',
-		'float' => 'Schweben',
-		'wobble' => 'Wackeln',
-		'look' => 'Zum Mauszeiger schauen'
-	);
-
-	/**
-	 * The common field for the hover animation of images.
-	 *
-	 * @param string $default
-	 * @return array
-	 */
-	protected static function hoverField(string $default = ''): array {
-		return array(
-			'name' => 'hover_animation',
-			'type' => 'select',
-			'label' => 'Animation beim Darüberfahren (Hover)',
-			'default' => $default,
-			'options' => self::$hoverAnimations
-		);
 	}
 
 	/**
@@ -132,6 +99,38 @@ trait ComponentConfig {
 		return array(
 			'hover_classes' => "party-hover party-hover--$animation",
 			'hover_look' => $animation === 'look'
+		);
+	}
+
+	/**
+	 * The common field for the hover animation of images.
+	 *
+	 * @param string $default
+	 * @return array
+	 */
+	protected static function hoverField(string $default = ''): array {
+		return array(
+			'name' => 'hover_animation',
+			'type' => 'select',
+			'label' => 'Animation beim Darüberfahren (Hover)',
+			'default' => $default,
+			'options' => self::$hoverAnimations
+		);
+	}
+
+	/**
+	 * The common field for the anchor id of a section.
+	 *
+	 * @param string $default
+	 * @return array
+	 */
+	protected static function sectionIdField(string $default = ''): array {
+		return array(
+			'name' => 'section_id',
+			'type' => 'text',
+			'label' => 'Section-ID (Anker)',
+			'default' => $default,
+			'placeholder' => 'z.B. themen'
 		);
 	}
 

@@ -20,6 +20,22 @@
 		&:not(.party-consent--loaded) > iframe {
 			visibility: hidden;
 		}
+
+		// Until the consent the lander lies in the same grid cell as the iframe, so the
+		// container grows with the text on narrow screens instead of cutting it off.
+		&:not(.party-consent--loaded) {
+			display: grid;
+
+			> iframe,
+			> .party-consent__lander {
+				grid-area: 1 / 1;
+			}
+
+			> .party-consent__lander {
+				position: relative;
+				inset: auto;
+			}
+		}
 	}
 
 	.party-consent__lander {
@@ -29,7 +45,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
+		justify-content: safe center;
 		gap: 0.75rem;
 		padding: clamp(1rem, 3vw, 2rem);
 		overflow: auto;
@@ -122,6 +138,22 @@
 
 		> iframe {
 			height: 100%;
+		}
+
+		&:not(.party-consent--loaded) {
+			height: auto;
+			min-height: 100%;
+		}
+	}
+
+	// Phones: frames with a fixed aspect ratio grow with the lander text until the consent.
+	@media (max-width: 700px) {
+		.video-commentary__frame,
+		.split-pane__video,
+		.stained-glass__frame {
+			&:has(.party-consent:not(.party-consent--loaded)) {
+				aspect-ratio: auto;
+			}
 		}
 	}
 }

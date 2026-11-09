@@ -273,6 +273,9 @@
 					"$ref": "#/$defs/partyStainedGlass"
 				},
 				{
+					"$ref": "#/$defs/partyTagOverlay"
+				},
+				{
 					"$ref": "#/$defs/partyTeamBlock"
 				},
 				{
@@ -1736,7 +1739,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -2015,7 +2018,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -2061,7 +2064,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -2199,7 +2202,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -2276,7 +2279,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -2364,7 +2367,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -2502,7 +2505,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -2578,7 +2581,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -3208,7 +3211,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -3485,7 +3488,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -3584,7 +3587,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -3711,7 +3714,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -3838,7 +3841,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -3953,7 +3956,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -4082,7 +4085,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -4148,7 +4151,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -4228,7 +4231,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -4359,7 +4362,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -4443,7 +4446,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -4520,7 +4523,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -4674,7 +4677,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -4733,7 +4736,8 @@
 								"bgcoolgreen",
 								"bggold",
 								"bgred",
-								"darklast"
+								"darklast",
+								"bgmilitary"
 							],
 							"description": "Folie: Hintergrund"
 						},
@@ -5142,7 +5146,8 @@
 								"bgcoolgreen",
 								"bggold",
 								"bgred",
-								"darklast"
+								"darklast",
+								"bgmilitary"
 							],
 							"description": "Folie: Hintergrund"
 						},
@@ -5306,7 +5311,8 @@
 								"bgcoolgreen",
 								"bggold",
 								"bgred",
-								"darklast"
+								"darklast",
+								"bgmilitary"
 							],
 							"description": "Folie: Hintergrund"
 						},
@@ -5643,7 +5649,8 @@
 								"bgcoolgreen",
 								"bggold",
 								"bgred",
-								"darklast"
+								"darklast",
+								"bgmilitary"
 							],
 							"description": "Folie: Hintergrund"
 						},
@@ -5886,7 +5893,8 @@
 								"bgcoolgreen",
 								"bggold",
 								"bgred",
-								"darklast"
+								"darklast",
+								"bgmilitary"
 							],
 							"description": "Folie: Hintergrund"
 						},
@@ -6171,7 +6179,8 @@
 								"bgcoolgreen",
 								"bggold",
 								"bgred",
-								"darklast"
+								"darklast",
+								"bgmilitary"
 							],
 							"description": "Folie: Hintergrund"
 						},
@@ -6582,7 +6591,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -6738,7 +6747,139 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyTagOverlay": {
+			"type": "object",
+			"description": "Party component \"Overlay-Tags\": Schräge, zusammengeschriebene Tags (ohne #), die über einer Section schweben – zum Taggen von Sections im Graffiti-, Sticker- oder Stempel-Stil.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyTagOverlay"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"tags": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Tags (einer pro Zeile, Leerzeichen werden zusammengeschrieben)"
+						},
+						"case": {
+							"type": "string",
+							"enum": [
+								"camel",
+								"keep",
+								"upper",
+								"lower"
+							],
+							"description": "Schreibweise"
+						},
+						"style": {
+							"type": "string",
+							"enum": [
+								"graffiti",
+								"sticker",
+								"stamp",
+								"tape"
+							],
+							"description": "Stil"
+						},
+						"placement": {
+							"type": "string",
+							"enum": [
+								"boundary",
+								"next",
+								"prev",
+								"inline"
+							],
+							"description": "Schweben über"
+						},
+						"align": {
+							"type": "string",
+							"enum": [
+								"scatter",
+								"left",
+								"center",
+								"right"
+							],
+							"description": "Verteilung"
+						},
+						"size": {
+							"type": "string",
+							"enum": [
+								"s",
+								"m",
+								"l",
+								"xl"
+							],
+							"description": "Größe"
+						},
+						"tilt": {
+							"type": "string",
+							"enum": [
+								"mixed",
+								"up",
+								"down",
+								"none"
+							],
+							"description": "Schräglage"
+						},
+						"color": {
+							"type": "string",
+							"enum": [
+								"",
+								"orange",
+								"blue",
+								"green",
+								"purple",
+								"gold",
+								"red",
+								"ink",
+								"white"
+							],
+							"description": "Farbe"
+						},
+						"animate": {
+							"type": "boolean",
+							"description": "Leicht schweben (Animation)"
+						},
+						"link_base": {
+							"type": "string",
+							"description": "Link je Tag (optional, z.B. #{tag} oder /suche?q={tag})"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen"
 						}
 					},
 					"additionalProperties": false
@@ -6814,7 +6955,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -7050,6 +7191,7 @@
 											"partySlideViewer",
 											"partySplit",
 											"partyStainedGlass",
+											"partyTagOverlay",
 											"partyTeamBlock",
 											"partyTextSplit",
 											"partyVideoCommentary",
@@ -7078,7 +7220,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -7191,7 +7333,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -7283,7 +7425,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -7506,7 +7648,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -7656,7 +7798,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -7706,7 +7848,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -7752,7 +7894,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -7810,7 +7952,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -7864,7 +8006,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -7910,7 +8052,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -7960,7 +8102,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -8002,7 +8144,7 @@
 					"properties": {
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false
@@ -8048,7 +8190,7 @@
 						},
 						"classes": {
 							"type": "string",
-							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, overlay-up, overlay-down"
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
 						}
 					},
 					"additionalProperties": false

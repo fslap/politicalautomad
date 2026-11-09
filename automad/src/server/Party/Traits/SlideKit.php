@@ -69,7 +69,8 @@ trait SlideKit {
 		'bgcoolgreen' => 'Grün',
 		'bggold' => 'Ocker',
 		'bgred' => 'Rot',
-		'darklast' => 'Dunkel'
+		'darklast' => 'Dunkel',
+		'bgmilitary' => 'Tarnmuster (Militär)'
 	);
 
 	/**

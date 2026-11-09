@@ -813,13 +813,13 @@ const MILITARY_LOCATIONS = array(
 );
 
 /**
- * Build a case map (CaseLeafletRegion) from the circles of the military map: one marker
- * per location in the center of its circle, grouped into regions.
+ * Build a simple Leaflet map (LeafletMap) from the circles of the military map: one marker
+ * per location in the center of its circle, the circles as GeoJSON.
  *
  * @param array $split the data of the military split section
  * @return array|null
  */
-function militaryCaseMap(array $split): ?array {
+function militaryMap(array $split): ?array {
 	$map = null;
 
 	foreach ($split['panes'] ?? array() as $pane) {
@@ -835,8 +835,6 @@ function militaryCaseMap(array $split): ?array {
 	}
 
 	$markers = array();
-	$items = array();
-	$groups = array();
 
 	foreach ($features as $index => &$feature) {
 		$ring = $feature['geometry']['coordinates'][0] ?? array();
@@ -865,41 +863,49 @@ function militaryCaseMap(array $split): ?array {
 
 		$feature['properties'] = array('name' => $name, 'region' => $region);
 		$markers[] = array('id' => $id, 'title' => $name, 'description' => $description, 'lat' => round($lat, 5), 'lng' => round($lng, 5), 'region' => $region, 'zoom' => 8);
-		$items[] = array('marker_id' => $id, 'title' => $name, 'description' => $description, 'region' => $region, 'links' => array());
-		$groups[$region][] = $id;
 	}
 
 	unset($feature);
 
-	$order = array_flip(array('Nord', 'Mitte', 'Süd', 'Weitere'));
-	uksort($groups, fn ($a, $b) => ($order[$a] ?? 9) <=> ($order[$b] ?? 9));
-
 	return array(
-		'section_id' => 'military_cases',
+		'section_id' => 'military_locations',
 		'title' => $split['title'] ?? 'Standorte Heer-/Feldtruppen',
 		'map_center' => $map['center'] ?? '51.692,9.89',
 		'map_zoom' => (int) ($map['zoom'] ?? 6),
 		'map_height' => '560px',
 		'tile_url' => $map['tile_url'] ?? 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-		'region_priority' => true,
-		'default_region' => '',
-		'markers' => $markers,
-		'items' => $items,
-		'groups' => array_map(fn ($name, $ids) => array('name' => $name, 'marker_ids' => $ids), array_keys($groups), $groups),
+		'markers' => array_map(fn ($marker) => array(
+			'id' => $marker['id'],
+			'title' => $marker['title'],
+			'description' => $marker['description'] . ' Region: ' . $marker['region'] . '.',
+			'lat' => $marker['lat'],
+			'lng' => $marker['lng']
+		), $markers),
 		'geojson_content' => array('type' => 'FeatureCollection', 'features' => $features),
-		'status_icon_base' => '',
-		'classes' => 'domcontainer relative widthcontainer'
+		'classes' => 'domcontainer relative widthcontainer bgmilitary'
 	);
 }
 
-// The military map of politicalpartysite (nightly) as case map below the water animation.
+// Military sections get the camouflage background (bgmilitary).
+foreach ($blocks as &$block) {
+	$sectionId = (string) ($block['data']['section_id'] ?? '');
+	$title = (string) ($block['data']['title'] ?? '');
+
+	if ($sectionId === 'military_map' || str_contains($title, 'Geheimdienst')) {
+		$block['data']['classes'] = trim(preg_replace('/\bbg[a-z]+\b/', '', (string) ($block['data']['classes'] ?? '')) . ' bgmilitary');
+	}
+}
+
+unset($block);
+
+// The military map of politicalpartysite (nightly) as a simple Leaflet map below the water animation.
 foreach ($blocks as $block) {
 	if ($block['type'] === 'partySplit' && ($block['data']['section_id'] ?? '') === 'military_map') {
-		$caseMap = militaryCaseMap($block['data']);
+		$locations = militaryMap($block['data']);
 
-		if ($caseMap) {
-			$blocks = insertAfter($blocks, block('CaseLeafletRegion', $caseMap), fn ($existing) => $existing['type'] === 'partyWaterAnimation');
-			$report[] = '+   CaseLeafletRegion military_cases       ' . count($caseMap['markers']) . ' Standorte in ' . count($caseMap['groups']) . ' Regionen (unter der Wasser-Animation)';
+		if ($locations) {
+			$blocks = insertAfter($blocks, block('LeafletMap', $locations), fn ($existing) => $existing['type'] === 'partyWaterAnimation');
+			$report[] = '+   LeafletMap       military_locations     ' . count($locations['markers']) . ' Standorte mit Kreisen (unter der Wasser-Animation)';
 		}
 
 		break;
