@@ -239,7 +239,7 @@ class Config {
 			// Video
 			'avi, flv, mov, mp4, mpeg, webm, ' .
 			// Other
-			'css, js, md, pdf'
+			'css, js, json, md, pdf'
 		);
 
 		// PAGE

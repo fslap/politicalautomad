@@ -4493,17 +4493,21 @@
 							},
 							"description": "Einträge"
 						},
+						"source_file": {
+							"type": "string",
+							"description": "JSON-Datei auswählen. Hochgeladene JSON-Datei der Seite oder aus shared. Hat Vorrang vor dem Pfad darunter"
+						},
 						"source_path": {
 							"type": "string",
-							"description": "Alternativ: JSON-Datei. Pfad relativ zum Automad-Verzeichnis. Wird nur verwendet, wenn keine Einträge gepflegt sind"
+							"description": "Alternativ: Pfad oder URL der JSON-Datei. Pfad relativ zum Automad-Verzeichnis, absoluter Pfad auf dem Server (z.B. /home/webpages/…/data.json) oder URL (https://…/data.json, 1 Stunde gecacht). Wird nur verwendet, wenn keine Einträge gepflegt sind"
 						},
 						"source_key": {
 							"type": "string",
-							"description": "JSON-Schlüssel (optional, z.B. de)"
+							"description": "JSON-Schlüssel (optional, z.B. de oder de.topics)"
 						},
 						"match": {
 							"type": "string",
-							"description": "Filter (Index, ID oder Thema)"
+							"description": "Filter (Thema/Gruppe, Index, ID oder Titel). Ein Gruppentitel wie „Freiheit und Selbstbestimmung“ zeigt alle Einträge dieser Gruppe"
 						},
 						"classes": {
 							"type": "string",
