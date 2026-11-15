@@ -121,3 +121,47 @@
 .document-item:hover .document-overlay {
 	transform: translateY(0);
 }
+
+/* Block styling of the original site (charisma.css) */
+.scroll .scroll-content .block.scrollnav {
+	min-width: initial;
+	padding: 1% 2%;
+	background: rgba(189, 64, 10, 0.1);
+	border-radius: 5px;
+}
+
+.scroll .scroll-content .block h6 {
+	margin: 0 0 0.5em 0;
+	color: #bd2f3e;
+}
+
+.scroll .scroll-content .block p {
+	margin: 0;
+	font-size: 0.9em;
+}
+
+/* Scroll reference: the headline stays, only the cards scroll */
+.scroll-reference .scroll-reference__scroller {
+	width: 100%;
+}
+
+.scroll-reference .scroll .scroll-content .scroll-reference__card,
+.scroll-reference .scroll-reference__card h6,
+.scroll-reference .scroll-reference__card p {
+	background: transparent;
+}
+
+.party-theme--orange .scroll .scroll-content .block h6 {
+	color: var(--party-bg-orange, #c4561c);
+}
+
+/* 1% padding of a table cell refers to the whole scroll width, use a fixed padding */
+.scroll .scroll-content .block {
+	padding: 0.5rem 1rem;
+}
+
+@media (max-width: 700px) {
+	.scroll .scroll-content .block {
+		min-width: 75vw;
+	}
+}
