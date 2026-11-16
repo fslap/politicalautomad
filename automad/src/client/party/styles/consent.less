@@ -146,6 +146,37 @@
 		}
 	}
 
+	// Turnstile and other scripts: the widget is only shown after the consent.
+	.party-consent--element {
+		min-height: 0;
+
+		&:not(.party-consent--loaded) > .cf-turnstile {
+			display: none;
+		}
+
+		> .party-consent__lander {
+			border-radius: 6px;
+		}
+	}
+
+	// Phones: a compact lander.
+	@media (max-width: 700px) {
+		.party-consent__lander {
+			gap: 0.5rem;
+			padding: 0.75rem;
+			font-size: 0.8rem;
+			line-height: 1.4;
+		}
+
+		.party-consent__text {
+			padding: 0.5rem 0.65rem;
+		}
+
+		.party-consent__load {
+			padding: 0.45em 1.1em;
+		}
+	}
+
 	// Phones: frames with a fixed aspect ratio grow with the lander text until the consent.
 	@media (max-width: 700px) {
 		.video-commentary__frame,

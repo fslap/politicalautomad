@@ -32,12 +32,18 @@
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
 
+import { requestElementConsent } from './Consent';
+
 const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
 
 /**
- * Load the Cloudflare Turnstile script once a widget is present on the page.
+ * Load the Cloudflare Turnstile script after the visitor agreed (DSGVO lander).
+ *
+ * @param element
  */
-export const initTurnstile = (): void => {
+export const initTurnstile = async (element: HTMLElement): Promise<void> => {
+	await requestElementConsent(element, TURNSTILE_SRC);
+
 	if (document.querySelector(`script[src^="${TURNSTILE_SRC}"]`)) {
 		return;
 	}

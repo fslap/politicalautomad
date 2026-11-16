@@ -65,6 +65,13 @@ const providers: Provider[] = [
 		hosts: ['soundcloud.com'],
 	},
 	{
+		key: 'cloudflare',
+		domain: 'challenges.cloudflare.com',
+		company: 'Cloudflare, Inc.',
+		date: '',
+		hosts: ['cloudflare.com'],
+	},
+	{
 		key: 'vimeo',
 		domain: 'vimeo.com',
 		company: 'Vimeo.com, Inc.',
@@ -186,6 +193,31 @@ const wrap = (iframe: HTMLIFrameElement): HTMLElement => {
 };
 
 /**
+ * The HTML of the lander, the texts follow the original cascade lander.
+ *
+ * @param provider
+ * @param id
+ * @param date
+ * @param selection
+ * @return the HTML
+ */
+const landerHtml = (
+	provider: Provider,
+	id: string,
+	date: string,
+	selection: string = ''
+): string => `
+		<p class="party-consent__text">Erlaube die Weitergabe von persönlichen Daten nach EU Recht über die Domain <a href="https://${escape(provider.domain)}" target="_blank" rel="noopener">${escape(provider.domain)}</a>${' an ' + escape(provider.company) + date + ' und die Anzeige der Inhalte dieser Domain.'}</p>
+		${selection}
+		<label class="party-consent__check" for="${id}">
+			<input type="checkbox" id="${id}" required>
+			<span>Ich stimme zu</span>
+		</label>
+		<button type="submit" class="party-consent__load">Inhalt laden</button>
+		<p class="party-consent__hint" hidden>Bitte zuerst die Zustimmung bestätigen.</p>
+	`;
+
+/**
  * Show the lander (consent form) on top of an iframe.
  *
  * @param iframe
@@ -206,16 +238,7 @@ const showLander = (iframe: HTMLIFrameElement, onAccept: () => void): void => {
 		: '';
 
 	lander.className = 'party-consent__lander';
-	lander.innerHTML = `
-		<p class="party-consent__text">Erlaube die Weitergabe von persönlichen Daten nach EU Recht über die Domain <a href="https://${escape(provider.domain)}" target="_blank" rel="noopener">${escape(provider.domain)}</a>${' an ' + escape(provider.company) + date + ' und die Anzeige der Inhalte dieser Domain.'}</p>
-		${selection}
-		<label class="party-consent__check" for="${id}">
-			<input type="checkbox" id="${id}" required>
-			<span>Ich stimme zu</span>
-		</label>
-		<button type="submit" class="party-consent__load">Inhalt laden</button>
-		<p class="party-consent__hint" hidden>Bitte zuerst die Zustimmung bestätigen.</p>
-	`;
+	lander.innerHTML = landerHtml(provider, id, date, selection);
 
 	lander.addEventListener('submit', (event) => {
 		event.preventDefault();
@@ -364,3 +387,74 @@ export const loadWithConsent = (
 export const initConsentFrame = (iframe: HTMLElement): void => {
 	requestConsent(iframe as HTMLIFrameElement);
 };
+
+/**
+ * Ask for the consent before an external script is loaded for an element (e.g. the
+ * Cloudflare Turnstile widget). The lander is shown in place of the element.
+ *
+ * @param element
+ * @param url the URL of the external resource
+ * @return a promise that resolves after the consent
+ */
+export const requestElementConsent = (
+	element: HTMLElement,
+	url: string
+): Promise<void> =>
+	new Promise<void>((resolve) => {
+		const provider = providerOf(url);
+
+		if (hasConsent(provider)) {
+			resolve();
+
+			return;
+		}
+
+		const wrapper = document.createElement('div');
+
+		wrapper.className = 'party-consent party-consent--element';
+		element.parentNode.insertBefore(wrapper, element);
+		wrapper.appendChild(element);
+
+		const lander = document.createElement('form');
+		const id = `party-consent-${Math.random().toString(36).slice(2, 9)}`;
+		const date = provider.date
+			? ' (Stand ' + escape(provider.date) + ')'
+			: '';
+
+		lander.className = 'party-consent__lander';
+		lander.innerHTML = landerHtml(provider, id, date);
+
+		const accept = (): void => {
+			window.removeEventListener(CONSENT_EVENT, onConsent);
+			lander.remove();
+			wrapper.classList.add('party-consent--loaded');
+			resolve();
+		};
+
+		const onConsent = (event: Event): void => {
+			if ((event as CustomEvent).detail === provider.key) {
+				accept();
+			}
+		};
+
+		lander.addEventListener('submit', (event) => {
+			event.preventDefault();
+
+			if (!lander.querySelector<HTMLInputElement>('input').checked) {
+				lander.querySelector<HTMLElement>(
+					'.party-consent__hint'
+				).hidden = false;
+
+				return;
+			}
+
+			storeConsent(provider, true);
+			accept();
+			window.dispatchEvent(
+				new CustomEvent(CONSENT_EVENT, { detail: provider.key })
+			);
+		});
+
+		window.addEventListener(CONSENT_EVENT, onConsent);
+		wrapper.appendChild(lander);
+	});

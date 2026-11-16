@@ -242,14 +242,31 @@
 		}
 	}
 
+	// Phones: the player sits above the demands in full width instead of covering them.
 	@media (max-width: 700px) {
 		.stained-glass__player {
-			top: 1.5rem;
-			left: 1.5rem;
+			position: relative;
+			top: auto;
+			left: auto;
+			align-self: start;
+			align-items: stretch;
+			margin: 1.25rem 1rem 0;
+		}
+
+		&.stained-glass--player-small,
+		&.stained-glass--player-medium,
+		&.stained-glass--player-large {
+			.stained-glass__frame {
+				width: 100%;
+			}
+		}
+
+		.stained-glass__frame {
+			width: 100%;
 		}
 
 		.stained-glass__content {
-			margin-top: 12rem;
+			margin-top: 1rem;
 		}
 	}
 }
