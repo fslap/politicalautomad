@@ -1,0 +1,181 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// Open church window (OpenWindow): a dark room, a bright window with clear panes and the
+// view outside, text and demands next to it.
+.am-party .open-window {
+	--ow-wall: #0f1a22;
+	--ow-text: #eef3f5;
+	--ow-accent: #f1b9a4;
+	--ow-dot: #3aa5a6;
+
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+	align-items: center;
+	gap: clamp(1.5rem, 4vw, 4rem);
+	padding: clamp(2rem, 5vw, 4.5rem) clamp(1.25rem, 5vw, 4rem);
+	overflow: hidden;
+	background: var(--ow-wall);
+	color: var(--ow-text);
+
+	> a[id] {
+		position: absolute;
+		top: 0;
+	}
+
+	.open-window__window {
+		position: relative;
+		width: 100%;
+		max-width: 34rem;
+		justify-self: center;
+	}
+
+	.open-window__view {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		min-width: 0;
+		object-fit: cover;
+	}
+
+	.open-window__svg {
+		position: relative;
+		z-index: 1;
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.open-window__wall {
+		fill: var(--ow-wall);
+	}
+
+	// With a view image the image shows through the clear panes instead of the sky.
+	&.open-window--image .open-window__sky {
+		fill: transparent;
+	}
+
+	.open-window__light {
+		position: absolute;
+		left: 5%;
+		right: 5%;
+		top: 100%;
+		z-index: 0;
+		height: 45%;
+		background: radial-gradient(
+			ellipse 50% 60% at 50% 0%,
+			rgba(190, 225, 238, 0.32),
+			transparent 72%
+		);
+		pointer-events: none;
+		opacity: 0;
+	}
+
+	&.open-window--glow .open-window__light {
+		opacity: 1;
+		animation: open-window-light 7s ease-in-out infinite;
+	}
+
+	.open-window__content {
+		max-width: 40rem;
+		padding: clamp(1.25rem, 3vw, 2rem);
+		border: 1px solid rgba(238, 243, 245, 0.16);
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.05);
+	}
+
+	.open-window__title {
+		margin: 0 0 0.6em;
+		color: var(--ow-accent);
+	}
+
+	.open-window__text {
+		color: var(--ow-text);
+
+		p,
+		li {
+			color: inherit;
+		}
+
+		a {
+			color: var(--ow-accent);
+		}
+	}
+
+	.open-window__items {
+		display: grid;
+		gap: 0.55rem;
+		margin: 1rem 0 0;
+		padding: 0;
+		list-style: none;
+
+		li {
+			position: relative;
+			padding-left: 1.4rem;
+			line-height: 1.45;
+		}
+
+		li::before {
+			content: '';
+			position: absolute;
+			left: 0.2rem;
+			top: 0.45em;
+			width: 0.55rem;
+			height: 0.55rem;
+			border-radius: 50%;
+			background: var(--ow-dot);
+			box-shadow: 0 0 0 3px rgba(58, 165, 166, 0.25);
+		}
+
+		strong {
+			color: var(--ow-accent);
+		}
+	}
+
+	&.open-window--right {
+		.open-window__window {
+			order: 2;
+		}
+	}
+
+	&.open-window--center {
+		grid-template-columns: minmax(0, 1fr);
+		justify-items: center;
+
+		.open-window__window {
+			max-width: 28rem;
+		}
+	}
+
+	@media (max-width: 800px) {
+		grid-template-columns: minmax(0, 1fr);
+
+		.open-window__window {
+			order: 0;
+			max-width: 22rem;
+		}
+	}
+}
+
+@keyframes open-window-light {
+	0%,
+	100% {
+		opacity: 0.65;
+	}
+
+	50% {
+		opacity: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.am-party .open-window__light {
+		animation: none !important;
+	}
+}
