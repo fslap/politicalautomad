@@ -42,9 +42,10 @@ use Automad\Party\Traits\ComponentConfig;
 defined('AUTOMAD') or die('Direct access not permitted!');
 
 /**
- * Party component OpenWindow: a simple, open church window (Gothic tracery with rosettes,
- * flower glass in the lancet heads and large clear panes that show the view outside).
- * A lighter alternative to the StainedGlass section.
+ * Party component OpenWindow: an open glass front in green. A wall with a row of tall
+ * windows and a round window, filled with free, formless glass (organic color fields and
+ * flowing lead lines, no symbols), light falling on the floor and text in front of it.
+ * A lighter, more open alternative to the StainedGlass section.
  *
  * @author Florian Leon Steenbuck
  * @copyright Copyright (c) 2026 by Florian Leon Steenbuck - https://kil.ls
@@ -54,28 +55,60 @@ class OpenWindow extends AbstractDynamicTemplateBlock {
 	use ComponentConfig;
 
 	const PALETTE_LABELS = array(
-		'evangelisch' => 'Evangelisch offen (Pfirsich, Creme, Türkis)',
-		'blau' => 'Hellblau',
-		'gruen' => 'Hellgrün'
+		'gruen' => 'Grün (mit allen Farben als Akzent)',
+		'bunt' => 'Bunt mit grünem Stich',
+		'blau' => 'Blau-grün'
 	);
 
 	/**
-	 * The glass palettes: frame, cream, petal, center, accent, sky top, sky bottom.
+	 * Palettes: wall top, wall bottom, lead, glass light, glass base, the glass colors
+	 * (weighted by repetition, green first) and the light on the floor.
 	 */
 	const PALETTES = array(
-		'evangelisch' => array('#1a1d24', '#f6ecdf', '#f1b9a4', '#3aa5a6', '#d9879b', '#d8e8f1', '#f5ece6'),
-		'blau' => array('#141b26', '#eef3f7', '#9cc3e0', '#2f6f9f', '#e1b45a', '#d6e6f2', '#eef2f6'),
-		'gruen' => array('#151d18', '#f2f1e4', '#b9d7a6', '#3f7a52', '#e5a46b', '#dfeee2', '#f3f1e8')
+		'gruen' => array(
+			'wall' => array('#123029', '#0b1d19'),
+			'lead' => '#0a1714',
+			'glass' => array('#e4f3e8', '#b9dcc6'),
+			'colors' => array('#7fbf9a', '#5aa98a', '#9fd3b0', '#3f8f78', '#c4e3b8', '#7fbf7a', '#3aa5a6', '#f1b9a4', '#e8c27a', '#d9879b', '#9cc3e0', '#a99bd6', '#e98a6b'),
+			'light' => 'rgba(190, 236, 210, 0.34)'
+		),
+		'bunt' => array(
+			'wall' => array('#152a2b', '#0c1a1b'),
+			'lead' => '#0a1414',
+			'glass' => array('#f1f5ec', '#cfe6d6'),
+			'colors' => array('#7fbf9a', '#3aa5a6', '#f1b9a4', '#e8c27a', '#d9879b', '#9cc3e0', '#a99bd6', '#e98a6b', '#9fd3b0', '#f2d48a'),
+			'light' => 'rgba(236, 224, 200, 0.32)'
+		),
+		'blau' => array(
+			'wall' => array('#132433', '#0b1724'),
+			'lead' => '#091320',
+			'glass' => array('#e8f1f7', '#bcd6e8'),
+			'colors' => array('#9cc3e0', '#6fa6cf', '#3aa5a6', '#a99bd6', '#9fd3b0', '#f1b9a4', '#e8c27a'),
+			'light' => 'rgba(200, 225, 245, 0.32)'
+		)
 	);
+
+	/**
+	 * Id of the glass gradient of the current SVG.
+	 */
+	private string $glassId = '';
+
+	/**
+	 * State of the seeded random generator.
+	 */
+	private int $state = 1;
 
 	public function __construct() {
 		parent::__construct(__DIR__, 'openwindow');
 	}
 
 	public function context(array $config): array {
-		$palette = isset(self::PALETTES[$config['palette']]) ? (string) $config['palette'] : 'evangelisch';
-		$layout = in_array($config['layout'], array('left', 'right', 'center'), true) ? $config['layout'] : 'left';
-		$lancets = max(2, min(4, (int) $config['lancets']));
+		$palette = isset(self::PALETTES[$config['palette']]) ? (string) $config['palette'] : 'gruen';
+		$position = in_array($config['text_position'], array('center', 'left', 'right', 'bottom'), true) ? $config['text_position'] : 'bottom';
+		$windows = in_array((string) $config['windows'], array('3', '5', '7', '9'), true) ? (int) $config['windows'] : 7;
+		$height = preg_replace('/[^a-zA-Z0-9.%()+\-\s]/', '', (string) $config['height']) ?: '100vh';
+		$seed = trim((string) $config['seed']);
+		$sectionId = preg_replace('/[^a-zA-Z0-9_\-]/', '', (string) $config['section_id']);
 		$items = array();
 
 		foreach (array_values(array_filter(array_map(fn ($text) => trim((string) $text), (array) $config['items']), fn ($text) => $text !== '')) as $text) {
@@ -88,209 +121,127 @@ class OpenWindow extends AbstractDynamicTemplateBlock {
 		}
 
 		$text = trim((string) $config['text']);
+		$this->state = (crc32(($seed === '' || $seed === 'auto') ? ($sectionId ?: 'glasfront') : $seed) & 0x7fffffff) ?: 1;
 
 		return array(
-			'section_id' => preg_replace('/[^a-zA-Z0-9_\-]/', '', (string) $config['section_id']),
+			'section_id' => $sectionId,
 			'title' => $config['title'],
 			'text_html' => $text === '' ? '' : Str::markdown($text),
 			'items' => $items,
 			'has_items' => !empty($items),
 			'has_content' => $config['title'] !== '' || $text !== '' || !empty($items),
-			'view_image' => trim((string) $config['view_image']),
-			'svg' => self::svg($palette, $lancets, (bool) $config['side_window'], uniqid('ow')),
-			'layout' => $layout,
-			'side' => (bool) $config['side_window'] ? 'with-side' : 'single',
-			'has_image' => trim((string) $config['view_image']) !== '',
+			'svg' => $this->svg(self::PALETTES[$palette], $windows, (bool) $config['rose'], uniqid('gf')),
+			'position' => $position,
 			'glow' => (bool) $config['glow'],
+			'style' => "--gf-height: $height;",
 			'classes' => $this->getClasses($config)
 		);
 	}
 
-	/**
-	 * Build the window as SVG. The wall around the window is drawn as a frame with the window
-	 * cut out, so an image behind the SVG shows through the clear panes.
-	 *
-	 * @param string $palette
-	 * @param int $lancets
-	 * @param bool $side
-	 * @param string $id
-	 * @return string
-	 */
-	public static function svg(string $palette, int $lancets, bool $side, string $id): string {
-		[$frame, $cream, $petal, $center, $accent, $skyTop, $skyBottom] = self::PALETTES[$palette] ?? self::PALETTES['evangelisch'];
-		$width = $side ? 820 : 600;
-		$left = 40;
-		$right = 560;
-		$spring = 360;
-		$bottom = 880;
-		$radius = 360;
-
-		$arch = self::archPath($left, $right, $spring, $bottom, $radius);
-		$parts = array();
-
-		// Wall with the window opening(s) cut out.
-		$cutouts = $arch;
-		$sideArch = '';
-
-		if ($side) {
-			$sideArch = self::archPath(660, 760, 560, $bottom, 90);
-			$cutouts .= ' ' . $sideArch;
-		}
-
-		$defs = '<defs>'
-			. '<clipPath id="' . $id . 'c"><path d="' . $arch . '"/></clipPath>'
-			. '<linearGradient id="' . $id . 's" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' . $skyTop . '"/><stop offset="0.6" stop-color="' . $skyBottom . '"/><stop offset="1" stop-color="#ead0c8"/></linearGradient>'
-			. '<pattern id="' . $id . 'p" width="34" height="34" patternUnits="userSpaceOnUse">'
-			. '<rect width="34" height="34" fill="' . $cream . '"/>'
-			. '<g fill="' . $petal . '" stroke="' . $frame . '" stroke-width="1.4">'
-			. '<ellipse cx="17" cy="9" rx="5" ry="7"/><ellipse cx="17" cy="25" rx="5" ry="7"/><ellipse cx="9" cy="17" rx="7" ry="5"/><ellipse cx="25" cy="17" rx="7" ry="5"/>'
-			. '</g><circle cx="17" cy="17" r="3.4" fill="' . $center . '" stroke="' . $frame . '" stroke-width="1.2"/>'
-			. '<path d="M0 0L34 34M34 0L0 34" stroke="' . $frame . '" stroke-width="1" opacity="0.35"/>'
-			. '</pattern></defs>';
-
-		// Clear panes over the whole opening (image or sky shows through).
-		$parts[] = '<path class="open-window__sky" d="' . $cutouts . '" fill="url(#' . $id . 's)"/>';
-
-		// Tracery head: two rosettes and a quatrefoil cluster.
-		$head = '';
-
-		foreach (array(array(200, 286), array(400, 286)) as [$cx, $cy]) {
-			$head .= self::rosette($cx, $cy, 58, 82, 19, $cream, $petal, $center, $accent, $frame);
-		}
-
-		$head .= self::cluster(300, 150, 22, 38, 15, $cream, $petal, $center, $accent, $frame);
-		$head .= self::cluster(300, 400, 14, 26, 10, $cream, $petal, $center, $accent, $frame);
-
-		// Lancets with pointed heads, flower glass on top and clear panes below.
-		$inner = $right - $left - 24;
-		$gap = 14;
-		$lancetWidth = ($inner - ($lancets - 1) * $gap) / $lancets;
-		$lancetsSvg = '';
-
-		for ($i = 0; $i < $lancets; $i++) {
-			$x1 = $left + 12 + $i * ($lancetWidth + $gap);
-			$x2 = $x1 + $lancetWidth;
-			$top = self::archPath($x1, $x2, 520, 600, $lancetWidth * 0.62);
-			$lancetsSvg .= '<path d="' . $top . '" fill="url(#' . $id . 'p)" stroke="' . $frame . '" stroke-width="6"/>';
-			$lancetsSvg .= '<rect x="' . self::n($x1) . '" y="600" width="' . self::n($lancetWidth) . '" height="' . ($bottom - 600 - 12) . '" fill="none" stroke="' . $frame . '" stroke-width="7"/>';
-			$lancetsSvg .= '<line x1="' . self::n($x1) . '" y1="740" x2="' . self::n($x2) . '" y2="740" stroke="' . $frame . '" stroke-width="6"/>';
-
-			// Stone mullion between the lancets.
-			if ($i < $lancets - 1) {
-				$lancetsSvg .= '<rect x="' . self::n($x2) . '" y="560" width="' . $gap . '" height="' . ($bottom - 560) . '" fill="' . $frame . '"/>';
-			}
-		}
-
-		$parts[] = '<g clip-path="url(#' . $id . 'c)">' . $head . $lancetsSvg . '</g>';
-
-		// Side lancet: quatrefoil on top, flower glass head, clear panes.
-		if ($side) {
-			$parts[] = self::cluster(710, 420, 11, 20, 8, $cream, $petal, $center, $accent, $frame);
-			$parts[] = '<path d="' . self::archPath(670, 750, 520, 580, 52) . '" fill="url(#' . $id . 'p)" stroke="' . $frame . '" stroke-width="5"/>';
-
-			foreach (array(680, 760) as $y) {
-				$parts[] = '<line x1="660" y1="' . $y . '" x2="760" y2="' . $y . '" stroke="' . $frame . '" stroke-width="6"/>';
-			}
-
-			$parts[] = '<path d="' . $sideArch . '" fill="none" stroke="' . $frame . '" stroke-width="10"/>';
-		}
-
-		// The wall (section background) with the openings cut out, then the outer frame.
-		$wall = 'M0 0H' . $width . 'V900H0Z ' . $cutouts;
-		$parts[] = '<path class="open-window__wall" d="' . $wall . '" fill-rule="evenodd"/>';
-		$parts[] = '<path d="' . $arch . '" fill="none" stroke="' . $frame . '" stroke-width="16"/>';
-		$parts[] = '<line x1="' . $left . '" y1="' . $bottom . '" x2="' . ($side ? 760 : $right) . '" y2="' . $bottom . '" stroke="' . $frame . '" stroke-width="18"/>';
-
-		return '<svg class="open-window__svg" viewBox="0 0 ' . $width . ' 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kirchenfenster" preserveAspectRatio="xMidYMax meet">'
-			. $defs . implode('', $parts) . '</svg>';
-	}
-
 	protected function definition(): array {
 		return array(
-			'title' => 'Offenes Kirchenfenster',
+			'title' => 'Offene Glasfront (grün)',
 			'icon' => 'window',
-			'description' => 'Einfaches, offenes Kirchenfenster (Maßwerk mit Rosetten, Blütenglas, klare Scheiben mit Blick nach draußen) neben Text und Forderungen.',
+			'description' => 'Eine ganze Fensterfront mit grünem Stich: freie, formlose Glasflächen in allen Farben, fließende Bleilinien, Licht auf dem Boden und Text mit Forderungen davor.',
 			'fields' => array(
-				self::sectionIdField('offenes_fenster'),
+				self::sectionIdField('glasfront'),
 				self::titleField('Offen für alle'),
-				array('name' => 'text', 'type' => 'markdown', 'label' => 'Text (Markdown)', 'default' => 'Ein Fenster, durch das man hinaussieht: hell, offen und für alle.'),
+				array('name' => 'text', 'type' => 'markdown', 'label' => 'Text (Markdown)', 'default' => 'Hell, offen und für alle.'),
 				array('name' => 'items', 'type' => 'strings', 'label' => 'Forderungen (eine pro Zeile, „Forderung: Erklärung“ setzt den Anfang fett)', 'default' => array()),
-				array('name' => 'view_image', 'type' => 'image', 'label' => 'Blick durchs Fenster (Bild hinter den klaren Scheiben, optional)', 'default' => ''),
-				array('name' => 'palette', 'type' => 'select', 'label' => 'Glasfarben', 'default' => 'evangelisch', 'options' => self::PALETTE_LABELS),
-				array('name' => 'lancets', 'type' => 'select', 'label' => 'Bahnen (Spitzbögen)', 'default' => '3', 'options' => array('2' => '2', '3' => '3', '4' => '4')),
-				array('name' => 'side_window', 'type' => 'toggle', 'label' => 'Schmales Seitenfenster', 'default' => true),
-				array('name' => 'layout', 'type' => 'select', 'label' => 'Anordnung', 'default' => 'left', 'options' => array('left' => 'Fenster links, Text rechts', 'right' => 'Fenster rechts, Text links', 'center' => 'Fenster oben, Text darunter')),
-				array('name' => 'glow', 'type' => 'toggle', 'label' => 'Lichtschein auf dem Boden', 'default' => true),
+				array('name' => 'palette', 'type' => 'select', 'label' => 'Farben', 'default' => 'gruen', 'options' => self::PALETTE_LABELS),
+				array('name' => 'windows', 'type' => 'select', 'label' => 'Fenster in der Front', 'default' => '7', 'options' => array('3' => '3', '5' => '5', '7' => '7', '9' => '9')),
+				array('name' => 'rose', 'type' => 'toggle', 'label' => 'Rundes Fenster oben', 'default' => true),
+				array('name' => 'seed', 'type' => 'text', 'label' => 'Variante (Startwert, „auto“ = Section-ID)', 'default' => 'auto', 'help' => 'Ein anderes Wort ergibt eine andere, aber feste Komposition.'),
+				array('name' => 'text_position', 'type' => 'select', 'label' => 'Text', 'default' => 'bottom', 'options' => array('bottom' => 'Unten vor der Front', 'center' => 'Mitte', 'left' => 'Links', 'right' => 'Rechts')),
+				array('name' => 'height', 'type' => 'text', 'label' => 'Höhe', 'default' => '100vh'),
+				array('name' => 'glow', 'type' => 'toggle', 'label' => 'Licht auf dem Boden', 'default' => true),
 				self::classesField('')
 			)
 		);
 	}
 
 	/**
-	 * A pointed (Gothic) arch from the springing line down to the bottom.
-	 *
+	 * A window shape: a pointed or round arch.
 	 * @param float $x1
 	 * @param float $x2
-	 * @param float $spring
+	 * @param float $top
 	 * @param float $bottom
-	 * @param float $radius
-	 * @return string
+	 * @param string $type
 	 */
-	private static function archPath(float $x1, float $x2, float $spring, float $bottom, float $radius): string {
+	private function arch(float $x1, float $x2, float $top, float $bottom, string $type): string {
 		$half = ($x2 - $x1) / 2;
-		$radius = max($radius, $half + 1);
-		$dx = $radius - $half;
-		$apex = $spring - sqrt($radius * $radius - $dx * $dx);
 		$mid = $x1 + $half;
 
+		if ($type === 'round') {
+			$spring = $top + $half;
+
+			return 'M' . self::n($x1) . ' ' . self::n($bottom) . 'V' . self::n($spring) . 'A' . self::n($half) . ' ' . self::n($half) . ' 0 0 1 ' . self::n($x2) . ' ' . self::n($spring) . 'V' . self::n($bottom) . 'Z';
+		}
+
+		$radius = $half * 1.6;
+		$spring = $top + sqrt($radius * $radius - ($radius - $half) * ($radius - $half));
+
 		return 'M' . self::n($x1) . ' ' . self::n($bottom) . 'V' . self::n($spring)
-			. 'A' . self::n($radius) . ' ' . self::n($radius) . ' 0 0 1 ' . self::n($mid) . ' ' . self::n($apex)
+			. 'A' . self::n($radius) . ' ' . self::n($radius) . ' 0 0 1 ' . self::n($mid) . ' ' . self::n($top)
 			. 'A' . self::n($radius) . ' ' . self::n($radius) . ' 0 0 1 ' . self::n($x2) . ' ' . self::n($spring)
 			. 'V' . self::n($bottom) . 'Z';
 	}
 
 	/**
-	 * A small cluster: a center circle with four circles around it (quatrefoil).
+	 * A closed, smooth organic shape (a formless color field).
 	 * @param float $cx
 	 * @param float $cy
-	 * @param float $r
-	 * @param float $distance
-	 * @param float $small
-	 * @param string $cream
-	 * @param string $petal
-	 * @param string $center
-	 * @param string $accent
-	 * @param string $frame
+	 * @param float $rx
+	 * @param float $ry
 	 */
-	private static function cluster(float $cx, float $cy, float $r, float $distance, float $small, string $cream, string $petal, string $center, string $accent, string $frame): string {
-		$svg = '';
+	private function blob(float $cx, float $cy, float $rx, float $ry): string {
+		$points = array();
+		$count = 6 + (int) floor($this->random() * 3);
+		$offset = $this->random() * M_PI * 2;
 
-		foreach (array(array(0, -1), array(1, 0), array(0, 1), array(-1, 0)) as [$x, $y]) {
-			$svg .= self::medallion($cx + $x * $distance, $cy + $y * $distance, $small, $cream, $petal, $accent, $frame);
+		for ($i = 0; $i < $count; $i++) {
+			$angle = $offset + $i / $count * M_PI * 2;
+			$factor = 0.6 + $this->random() * 0.55;
+			$points[] = array($cx + cos($angle) * $rx * $factor, $cy + sin($angle) * $ry * $factor);
 		}
 
-		return $svg . self::medallion($cx, $cy, $r, $cream, $petal, $center, $frame);
+		return self::smooth($points, true);
 	}
 
 	/**
-	 * A round glass medallion with a ring of petals and a colored center.
-	 * @param float $cx
-	 * @param float $cy
-	 * @param float $r
-	 * @param string $cream
-	 * @param string $petal
-	 * @param string $center
-	 * @param string $frame
+	 * A glass color: mostly the greens at the start of the list, the other colors as accents.
+	 *
+	 * @param array $colors
+	 * @return string
 	 */
-	private static function medallion(float $cx, float $cy, float $r, string $cream, string $petal, string $center, string $frame): string {
-		$svg = '<circle cx="' . self::n($cx) . '" cy="' . self::n($cy) . '" r="' . self::n($r) . '" fill="' . $cream . '" stroke="' . $frame . '" stroke-width="' . self::n(max(2, $r / 6)) . '"/>';
+	private function color(array $colors): string {
+		$greens = min(6, count($colors));
 
-		for ($i = 0; $i < 6; $i++) {
-			$angle = deg2rad($i * 60);
-			$svg .= '<circle cx="' . self::n($cx + cos($angle) * $r * 0.55) . '" cy="' . self::n($cy + sin($angle) * $r * 0.55) . '" r="' . self::n($r * 0.26) . '" fill="' . $petal . '" stroke="' . $frame . '" stroke-width="1"/>';
+		if ($this->random() < 0.6 || $greens === count($colors)) {
+			return $colors[(int) floor($this->random() * $greens)];
 		}
 
-		return $svg . '<circle cx="' . self::n($cx) . '" cy="' . self::n($cy) . '" r="' . self::n($r * 0.24) . '" fill="' . $center . '" stroke="' . $frame . '" stroke-width="1"/>';
+		return $colors[$greens + (int) floor($this->random() * (count($colors) - $greens))];
+	}
+
+	/**
+	 * A flowing lead line across a window.
+	 * @param float $x
+	 * @param float $y
+	 * @param float $width
+	 * @param float $height
+	 */
+	private function flow(float $x, float $y, float $width, float $height): string {
+		$points = array();
+		$steps = 4;
+		$start = $y + $this->random() * $height;
+		$slope = ($this->random() - 0.5) * $height * 1.6;
+
+		for ($i = 0; $i <= $steps; $i++) {
+			$points[] = array($x - 20 + $i / $steps * ($width + 40), $start + $slope * ($i / $steps - 0.5) + ($this->random() - 0.5) * $height * 0.5);
+		}
+
+		return self::smooth($points, false);
 	}
 
 	private static function n(float $value): string {
@@ -298,34 +249,140 @@ class OpenWindow extends AbstractDynamicTemplateBlock {
 	}
 
 	/**
-	 * A rosette: a large wheel with spokes and six medallions around it.
-	 * @param float $cx
-	 * @param float $cy
-	 * @param float $r
-	 * @param float $distance
-	 * @param float $small
-	 * @param string $cream
-	 * @param string $petal
-	 * @param string $center
-	 * @param string $accent
-	 * @param string $frame
+	 * The glass of one window: light base glass, formless color fields, flowing lead lines
+	 * and the frame.
+	 * @param string $shape
+	 * @param float $x
+	 * @param float $y
+	 * @param float $w
+	 * @param float $h
+	 * @param array $p
+	 * @param string $clip
+	 * @param string $defs
 	 */
-	private static function rosette(float $cx, float $cy, float $r, float $distance, float $small, string $cream, string $petal, string $center, string $accent, string $frame): string {
-		$svg = '';
+	private function pane(string $shape, float $x, float $y, float $w, float $h, array $p, string $clip, string &$defs): string {
+		$defs .= '<clipPath id="' . $clip . '"><path d="' . $shape . '"/></clipPath>';
+		$svg = '<path d="' . $shape . '" fill="url(#' . $this->glassId . ')"/>';
+		$fields = '';
+		$amount = 5 + (int) round($h / 110);
 
-		for ($i = 0; $i < 6; $i++) {
-			$angle = deg2rad($i * 60 - 90);
-			$svg .= self::medallion($cx + cos($angle) * $distance, $cy + sin($angle) * $distance, $small, $cream, $petal, $i % 2 ? $accent : $center, $frame);
+		for ($i = 0; $i < $amount; $i++) {
+			$color = $this->color($p['colors']);
+			$fields .= '<path d="' . $this->blob($x + $this->random() * $w, $y + $this->random() * $h, $w * (0.25 + $this->random() * 0.35), $h * (0.06 + $this->random() * 0.1)) . '" fill="' . $color . '" opacity="' . self::n(0.55 + $this->random() * 0.35) . '"/>';
 		}
 
-		$svg .= '<circle cx="' . self::n($cx) . '" cy="' . self::n($cy) . '" r="' . self::n($r) . '" fill="' . $cream . '" stroke="' . $frame . '" stroke-width="7"/>';
+		$lines = '';
 
-		for ($i = 0; $i < 8; $i++) {
-			$angle = deg2rad($i * 45);
-			$svg .= '<line x1="' . self::n($cx) . '" y1="' . self::n($cy) . '" x2="' . self::n($cx + cos($angle) * $r) . '" y2="' . self::n($cy + sin($angle) * $r) . '" stroke="' . $frame . '" stroke-width="2.4"/>';
-			$svg .= '<circle cx="' . self::n($cx + cos($angle + deg2rad(22.5)) * $r * 0.66) . '" cy="' . self::n($cy + sin($angle + deg2rad(22.5)) * $r * 0.66) . '" r="' . self::n($r * 0.12) . '" fill="' . ($i % 2 ? $petal : $accent) . '" stroke="' . $frame . '" stroke-width="1.2"/>';
+		for ($i = 0; $i < 3 + (int) round($h / 220); $i++) {
+			$lines .= '<path d="' . $this->flow($x, $y + $i * $h / (3 + round($h / 220)), $w, $h / (3 + round($h / 220))) . '" fill="none" stroke="' . $p['lead'] . '" stroke-width="3" opacity="0.75"/>';
 		}
 
-		return $svg . '<circle cx="' . self::n($cx) . '" cy="' . self::n($cy) . '" r="' . self::n($r * 0.2) . '" fill="' . $center . '" stroke="' . $frame . '" stroke-width="2"/>';
+		$svg .= '<g clip-path="url(#' . $clip . ')">' . $fields . $lines
+			. '<line x1="' . self::n($x + $w / 2) . '" y1="' . self::n($y) . '" x2="' . self::n($x + $w / 2) . '" y2="' . self::n($y + $h) . '" stroke="' . $p['lead'] . '" stroke-width="2" opacity="0.35"/></g>';
+
+		return $svg . '<path d="' . $shape . '" fill="none" stroke="' . $p['lead'] . '" stroke-width="9"/>';
+	}
+
+	/**
+	 * Seeded random number between 0 and 1 (stable compositions for every seed).
+	 */
+	private function random(): float {
+		$this->state = ($this->state * 1103515245 + 12345) & 0x7fffffff;
+
+		return $this->state / 0x7fffffff;
+	}
+
+	/**
+	 * A smooth path through points (Catmull-Rom as cubic Bézier curves).
+	 *
+	 * @param array $points
+	 * @param bool $closed
+	 * @return string
+	 */
+	private static function smooth(array $points, bool $closed): string {
+		$count = count($points);
+		$path = 'M' . self::n($points[0][0]) . ' ' . self::n($points[0][1]);
+		$last = $closed ? $count : $count - 1;
+
+		for ($i = 0; $i < $last; $i++) {
+			$p0 = $points[($i - 1 + $count) % $count];
+			$p1 = $points[$i];
+			$p2 = $points[($i + 1) % $count];
+			$p3 = $points[($i + 2) % $count];
+
+			if (!$closed) {
+				$p0 = $points[max(0, $i - 1)];
+				$p3 = $points[min($count - 1, $i + 2)];
+			}
+
+			$path .= 'C' . self::n($p1[0] + ($p2[0] - $p0[0]) / 6) . ' ' . self::n($p1[1] + ($p2[1] - $p0[1]) / 6)
+				. ' ' . self::n($p2[0] - ($p3[0] - $p1[0]) / 6) . ' ' . self::n($p2[1] - ($p3[1] - $p1[1]) / 6)
+				. ' ' . self::n($p2[0]) . ' ' . self::n($p2[1]);
+		}
+
+		return $path . ($closed ? 'Z' : '');
+	}
+
+	/**
+	 * Build the glass front.
+	 *
+	 * @param array $p
+	 * @param int $count
+	 * @param bool $rose
+	 * @param string $id
+	 * @return string
+	 */
+	private function svg(array $p, int $count, bool $rose, string $id): string {
+		$width = 1600;
+		$height = 1000;
+		$floor = 820;
+		$gap = 34;
+		$side = 90;
+		$windowWidth = ($width - 2 * $side - ($count - 1) * $gap) / $count;
+		$defs = '<linearGradient id="' . $id . 'w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' . $p['wall'][0] . '"/><stop offset="1" stop-color="' . $p['wall'][1] . '"/></linearGradient>'
+			. '<linearGradient id="' . $id . 'g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' . $p['glass'][0] . '"/><stop offset="1" stop-color="' . $p['glass'][1] . '"/></linearGradient>'
+			. '<filter id="' . $id . 'b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>'
+			. '<radialGradient id="' . $id . 'l" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="' . $p['light'] . '"/><stop offset="1" stop-color="rgba(0,0,0,0)"/></radialGradient>';
+		$this->glassId = $id . 'g';
+		$glass = '';
+		$light = '';
+		$middle = ($count - 1) / 2;
+
+		for ($i = 0; $i < $count; $i++) {
+			// The middle windows are higher, the outer ones lower.
+			$distance = abs($i - $middle) / max(1, $middle);
+			$x = $side + $i * ($windowWidth + $gap);
+			$top = ($rose ? 330 : 170) + $distance * 140 + ($i === (int) $middle && !$rose ? -40 : 0);
+
+			if ($rose && abs($i - $middle) < 1) {
+				$top = 380;
+			}
+
+			$shape = $this->arch($x, $x + $windowWidth, $top, $floor - 40, $i % 3 === 1 ? 'round' : 'pointed');
+			$glass .= $this->pane($shape, $x, $top, $windowWidth, $floor - 40 - $top, $p, $id . 'c' . $i, $defs);
+			// Colored light falling through the glass onto the floor.
+			$light .= '<ellipse cx="' . self::n($x + $windowWidth / 2) . '" cy="' . ($floor + 70) . '" rx="' . self::n($windowWidth * 0.95) . '" ry="70" fill="url(#' . $id . 'l)"/>';
+
+			for ($k = 0; $k < 2; $k++) {
+				$light .= '<ellipse cx="' . self::n($x + $windowWidth * (0.25 + $this->random() * 0.5)) . '" cy="' . self::n($floor + 50 + $this->random() * 80) . '" rx="' . self::n($windowWidth * (0.25 + $this->random() * 0.3)) . '" ry="' . self::n(18 + $this->random() * 20) . '" fill="' . $this->color($p['colors']) . '" opacity="0.16" filter="url(#' . $id . 'b)"/>';
+			}
+		}
+
+		if ($rose) {
+			$cx = $width / 2;
+			$cy = 200;
+			$r = 120;
+			$circle = 'M' . self::n($cx - $r) . ' ' . $cy . 'A' . $r . ' ' . $r . ' 0 1 0 ' . self::n($cx + $r) . ' ' . $cy . 'A' . $r . ' ' . $r . ' 0 1 0 ' . self::n($cx - $r) . ' ' . $cy . 'Z';
+			$glass .= $this->pane($circle, $cx - $r, $cy - $r, 2 * $r, 2 * $r, $p, $id . 'r', $defs);
+		}
+
+		return '<svg class="glass-front__svg" viewBox="0 0 ' . $width . ' ' . $height . '" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Glasfront">'
+			. '<defs>' . $defs . '</defs>'
+			. '<rect width="' . $width . '" height="' . $height . '" fill="url(#' . $id . 'w)"/>'
+			. '<rect y="' . $floor . '" width="' . $width . '" height="' . ($height - $floor) . '" fill="' . $p['wall'][1] . '"/>'
+			. '<line x1="0" y1="' . $floor . '" x2="' . $width . '" y2="' . $floor . '" stroke="' . $p['lead'] . '" stroke-width="4" opacity="0.6"/>'
+			. '<g class="glass-front__light">' . $light . '</g>'
+			. $glass
+			. '</svg>';
 	}
 }

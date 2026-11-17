@@ -4100,7 +4100,7 @@
 		},
 		"partyOpenWindow": {
 			"type": "object",
-			"description": "Party component \"Offenes Kirchenfenster\": Einfaches, offenes Kirchenfenster (Maßwerk mit Rosetten, Blütenglas, klare Scheiben mit Blick nach draußen) neben Text und Forderungen.",
+			"description": "Party component \"Offene Glasfront (grün)\": Eine ganze Fensterfront mit grünem Stich: freie, formlose Glasflächen in allen Farben, fließende Bleilinien, Licht auf dem Boden und Text mit Forderungen davor.",
 			"properties": {
 				"id": {
 					"$ref": "#/$defs/blockId"
@@ -4146,44 +4146,50 @@
 							},
 							"description": "Forderungen (eine pro Zeile, „Forderung: Erklärung“ setzt den Anfang fett)"
 						},
-						"view_image": {
-							"type": "string",
-							"description": "Blick durchs Fenster (Bild hinter den klaren Scheiben, optional)"
-						},
 						"palette": {
 							"type": "string",
 							"enum": [
-								"evangelisch",
-								"blau",
-								"gruen"
+								"gruen",
+								"bunt",
+								"blau"
 							],
-							"description": "Glasfarben"
+							"description": "Farben"
 						},
-						"lancets": {
+						"windows": {
 							"type": "string",
 							"enum": [
-								"2",
 								"3",
-								"4"
+								"5",
+								"7",
+								"9"
 							],
-							"description": "Bahnen (Spitzbögen)"
+							"description": "Fenster in der Front"
 						},
-						"side_window": {
+						"rose": {
 							"type": "boolean",
-							"description": "Schmales Seitenfenster"
+							"description": "Rundes Fenster oben"
 						},
-						"layout": {
+						"seed": {
+							"type": "string",
+							"description": "Variante (Startwert, „auto“ = Section-ID). Ein anderes Wort ergibt eine andere, aber feste Komposition"
+						},
+						"text_position": {
 							"type": "string",
 							"enum": [
+								"bottom",
+								"center",
 								"left",
-								"right",
-								"center"
+								"right"
 							],
-							"description": "Anordnung"
+							"description": "Text"
+						},
+						"height": {
+							"type": "string",
+							"description": "Höhe"
 						},
 						"glow": {
 							"type": "boolean",
-							"description": "Lichtschein auf dem Boden"
+							"description": "Licht auf dem Boden"
 						},
 						"classes": {
 							"type": "string",

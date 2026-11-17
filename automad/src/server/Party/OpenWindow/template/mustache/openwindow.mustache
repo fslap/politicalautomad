@@ -1,17 +1,13 @@
-<div class="open-window open-window--{{layout}} open-window--{{side}} {{#glow}}open-window--glow{{/glow}} {{#has_image}}open-window--image{{/has_image}} {{classes}}">
+<div class="glass-front glass-front--text-{{position}} {{#glow}}glass-front--glow{{/glow}} {{classes}}" style="{{style}}">
     {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
-    <div class="open-window__window">
-        {{#view_image}}<img class="open-window__view" src="{{view_image}}" alt="" decoding="async">{{/view_image}}
-        {{{svg}}}
-        <span class="open-window__light" aria-hidden="true"></span>
-    </div>
+    <div class="glass-front__front">{{{svg}}}</div>
 
     {{#has_content}}
-        <div class="open-window__content">
-            {{#title}}<h2 class="open-window__title">{{title}}</h2>{{/title}}
-            {{#text_html}}<div class="open-window__text">{{{text_html}}}</div>{{/text_html}}
+        <div class="glass-front__content">
+            {{#title}}<h2 class="glass-front__title">{{title}}</h2>{{/title}}
+            {{#text_html}}<div class="glass-front__text">{{{text_html}}}</div>{{/text_html}}
             {{#has_items}}
-                <ul class="open-window__items">
+                <ul class="glass-front__items">
                     {{#items}}<li>{{#lead}}<strong>{{lead}}:</strong> {{/lead}}{{text}}</li>{{/items}}
                 </ul>
             {{/has_items}}

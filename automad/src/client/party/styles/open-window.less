@@ -5,113 +5,95 @@
  * See LICENSE_PARTY_PURPOSE.md for license information.
  */
 
-// Open church window (OpenWindow): a dark room, a bright window with clear panes and the
-// view outside, text and demands next to it.
-.am-party .open-window {
-	--ow-wall: #0f1a22;
-	--ow-text: #eef3f5;
-	--ow-accent: #f1b9a4;
-	--ow-dot: #3aa5a6;
+// Open glass front in green (OpenWindow): the front fills the section, the text lies in
+// front of it.
+.am-party .glass-front {
+	--gf-text: #eef6f1;
+	--gf-accent: #bfe7cf;
+	--gf-dot: #7fbf9a;
 
 	position: relative;
 	display: grid;
-	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-	align-items: center;
-	gap: clamp(1.5rem, 4vw, 4rem);
-	padding: clamp(2rem, 5vw, 4.5rem) clamp(1.25rem, 5vw, 4rem);
+	min-height: min(var(--gf-height, 100vh), 1100px);
+	padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1.25rem, 5vw, 4rem);
 	overflow: hidden;
-	background: var(--ow-wall);
-	color: var(--ow-text);
+	isolation: isolate;
+	background: #0b1d19;
+	color: var(--gf-text);
 
 	> a[id] {
 		position: absolute;
 		top: 0;
 	}
 
-	.open-window__window {
-		position: relative;
-		width: 100%;
-		max-width: 34rem;
-		justify-self: center;
-	}
-
-	.open-window__view {
+	.glass-front__front {
 		position: absolute;
 		inset: 0;
-		width: 100%;
-		height: 100%;
-		min-width: 0;
-		object-fit: cover;
+		z-index: -1;
 	}
 
-	.open-window__svg {
-		position: relative;
-		z-index: 1;
+	.glass-front__svg {
 		display: block;
 		width: 100%;
-		height: auto;
+		height: 100%;
 	}
 
-	.open-window__wall {
-		fill: var(--ow-wall);
-	}
-
-	// With a view image the image shows through the clear panes instead of the sky.
-	&.open-window--image .open-window__sky {
-		fill: transparent;
-	}
-
-	.open-window__light {
-		position: absolute;
-		left: 5%;
-		right: 5%;
-		top: 100%;
-		z-index: 0;
-		height: 45%;
-		background: radial-gradient(
-			ellipse 50% 60% at 50% 0%,
-			rgba(190, 225, 238, 0.32),
-			transparent 72%
-		);
-		pointer-events: none;
+	.glass-front__light {
 		opacity: 0;
 	}
 
-	&.open-window--glow .open-window__light {
+	&.glass-front--glow .glass-front__light {
 		opacity: 1;
-		animation: open-window-light 7s ease-in-out infinite;
+		animation: glass-front-light 8s ease-in-out infinite;
 	}
 
-	.open-window__content {
-		max-width: 40rem;
-		padding: clamp(1.25rem, 3vw, 2rem);
-		border: 1px solid rgba(238, 243, 245, 0.16);
-		border-radius: 12px;
-		background: rgba(255, 255, 255, 0.05);
+	.glass-front__content {
+		align-self: end;
+		justify-self: center;
+		width: min(44rem, 100%);
+		padding: clamp(1.1rem, 3vw, 1.75rem) clamp(1.25rem, 3vw, 2rem);
+		border: 1px solid rgba(191, 231, 207, 0.28);
+		border-radius: 14px;
+		background: rgba(9, 26, 22, 0.78);
+		backdrop-filter: blur(6px);
 	}
 
-	.open-window__title {
-		margin: 0 0 0.6em;
-		color: var(--ow-accent);
+	&.glass-front--text-center .glass-front__content {
+		align-self: center;
 	}
 
-	.open-window__text {
-		color: var(--ow-text);
+	&.glass-front--text-left .glass-front__content {
+		align-self: center;
+		justify-self: start;
+		width: min(30rem, 100%);
+	}
 
+	&.glass-front--text-right .glass-front__content {
+		align-self: center;
+		justify-self: end;
+		width: min(30rem, 100%);
+	}
+
+	.glass-front__title {
+		margin: 0 0 0.5em;
+		color: var(--gf-accent);
+	}
+
+	.glass-front__text {
 		p,
 		li {
 			color: inherit;
 		}
 
 		a {
-			color: var(--ow-accent);
+			color: var(--gf-accent);
 		}
 	}
 
-	.open-window__items {
+	.glass-front__items {
 		display: grid;
-		gap: 0.55rem;
-		margin: 1rem 0 0;
+		gap: 0.5rem;
+		margin: 0.9rem 0 0;
 		padding: 0;
 		list-style: none;
 
@@ -124,49 +106,42 @@
 		li::before {
 			content: '';
 			position: absolute;
-			left: 0.2rem;
-			top: 0.45em;
-			width: 0.55rem;
-			height: 0.55rem;
-			border-radius: 50%;
-			background: var(--ow-dot);
-			box-shadow: 0 0 0 3px rgba(58, 165, 166, 0.25);
+			left: 0.15rem;
+			top: 0.42em;
+			width: 0.6rem;
+			height: 0.6rem;
+			border-radius: 55% 45% 60% 40%;
+			background: var(--gf-dot);
 		}
 
 		strong {
-			color: var(--ow-accent);
+			color: var(--gf-accent);
 		}
 	}
 
-	&.open-window--right {
-		.open-window__window {
-			order: 2;
+	// Phones: the front stays visible above the text.
+	@media (max-width: 700px) {
+		min-height: 0;
+		padding-top: 62vw;
+
+		.glass-front__front {
+			bottom: auto;
+			height: 75vw;
 		}
-	}
 
-	&.open-window--center {
-		grid-template-columns: minmax(0, 1fr);
-		justify-items: center;
-
-		.open-window__window {
-			max-width: 28rem;
-		}
-	}
-
-	@media (max-width: 800px) {
-		grid-template-columns: minmax(0, 1fr);
-
-		.open-window__window {
-			order: 0;
-			max-width: 22rem;
+		.glass-front__content,
+		&.glass-front--text-left .glass-front__content,
+		&.glass-front--text-right .glass-front__content {
+			justify-self: stretch;
+			width: 100%;
 		}
 	}
 }
 
-@keyframes open-window-light {
+@keyframes glass-front-light {
 	0%,
 	100% {
-		opacity: 0.65;
+		opacity: 0.6;
 	}
 
 	50% {
@@ -175,7 +150,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.am-party .open-window__light {
+	.am-party .glass-front__light {
 		animation: none !important;
 	}
 }
