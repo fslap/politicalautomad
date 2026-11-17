@@ -148,22 +148,6 @@
 		}
 	}
 
-	// Phones: no nested scroll areas, the whole text is shown.
-	@media (max-width: 700px) {
-		.text-split__scroll,
-		.side-menu-text__text {
-			overflow: visible;
-		}
-
-		.side-menu-text__layout {
-			max-height: none;
-		}
-
-		.text-split__media {
-			position: static;
-		}
-	}
-
 	// Side menu with text --------------------------------------------------------------------
 	.side-menu-text {
 		color: var(--party-ink, #1f2128);
@@ -315,6 +299,22 @@
 		.side-menu-text__menu {
 			flex-direction: row;
 			flex-wrap: wrap;
+		}
+	}
+
+	// Phones: no nested scroll areas, the whole text is shown.
+	@media (max-width: 700px) {
+		.text-split__scroll,
+		.side-menu-text__text {
+			overflow: visible;
+		}
+
+		.side-menu-text__layout {
+			max-height: none;
+		}
+
+		.text-split__media {
+			position: static;
 		}
 	}
 }
