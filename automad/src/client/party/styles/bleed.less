@@ -1,0 +1,45 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// Full-bleed sections: the theme layout has a side padding, so stretched blocks with an own
+// background ended in a white edge. Blocks with a background, scenes and visual sections now
+// reach the edges of the window; text-only blocks keep the gutter.
+//
+// margin-left: 50% of the main column minus half of the page = the left page edge,
+// width: the page (body) width.
+// The am-stretched margins of the theme replace the default -padding with this.
+am-stretched:has(
+	> .am-party > [class*=' bg']:not(.bgwhite),
+	> .am-party > [class^='bg']:not(.bgwhite),
+	> .am-party > .darklast,
+	> .am-party-party-header,
+	> .am-party-security-concept,
+	> .am-party-skyline-breaker,
+	> .am-party-water-animation,
+	> .am-party-landscape-scene,
+	> .am-party-house-row,
+	> .am-party-wave-line,
+	> .am-party-stained-glass,
+	> .am-party-open-window,
+	> .am-party-backdrop,
+	> .am-party-alternative-vote,
+	> .am-party-gaze-breaker
+) {
+	display: block;
+	width: 100cqw;
+	max-width: none;
+	// Automad's stretched blocks set the margins with !important.
+	margin-left: calc(50% - 50cqw) !important;
+	margin-right: 0 !important;
+}
+
+// The body is the size container for cqw (the theme reserves space for its own scrollbar,
+// so vw would be wider than the page). Rounding must never cause a horizontal scrollbar.
+html:has(.am-party) body {
+	container-type: inline-size;
+	overflow-x: clip;
+}
