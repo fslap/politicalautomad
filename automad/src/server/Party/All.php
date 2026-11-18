@@ -54,6 +54,8 @@ final class All {
 		'CardRow' => CardRow\CardRow::class,
 		'CaseLeafletRegion' => CaseLeafletRegion\CaseLeafletRegion::class,
 		'ContactCloser' => ContactCloser\ContactCloser::class,
+		'ColorCards' => ColorCards\ColorCards::class,
+		'Curriculum' => Curriculum\Curriculum::class,
 		'DocumentCard' => DocumentCard\DocumentCard::class,
 		'Documents' => Documents\Documents::class,
 		'DonateBlock' => DonateBlock\DonateBlock::class,

@@ -1,0 +1,31 @@
+<div class="curriculum {{classes}}">
+    {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+    <header class="curriculum__head">
+        {{#kicker}}<p class="curriculum__kicker">{{kicker}}</p>{{/kicker}}
+        {{#title}}<h2 class="curriculum__title">{{title}}</h2>{{/title}}
+        {{#intro_html}}<div class="curriculum__intro">{{{intro_html}}}</div>{{/intro_html}}
+    </header>
+    <div class="curriculum__body">
+        {{#has_modules}}
+            <ol class="curriculum__modules">
+                {{#modules}}
+                    <li class="curriculum__module curriculum__module--{{color}} {{#wide}}curriculum__module--wide{{/wide}}">
+                        <div class="curriculum__module-head">
+                            <span class="curriculum__number">{{number}}</span>
+                            {{#symbol}}<span class="curriculum__symbol" aria-hidden="true">{{symbol}}</span>{{/symbol}}
+                        </div>
+                        <h3 class="curriculum__module-title">{{title}}</h3>
+                        {{#text}}<p class="curriculum__text">{{text}}</p>{{/text}}
+                        {{#has_topics}}<ul class="curriculum__topics">{{#topics}}<li>{{.}}</li>{{/topics}}</ul>{{/has_topics}}
+                    </li>
+                {{/modules}}
+            </ol>
+        {{/has_modules}}
+        {{#has_demands}}
+            <aside class="curriculum__demands">
+                {{#demands_title}}<h3 class="curriculum__demands-title">{{demands_title}}</h3>{{/demands_title}}
+                <ul>{{#demands}}<li>{{#lead}}<strong>{{lead}}:</strong> {{/lead}}{{text}}</li>{{/demands}}</ul>
+            </aside>
+        {{/has_demands}}
+    </div>
+</div>

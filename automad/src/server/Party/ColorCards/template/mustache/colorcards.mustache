@@ -1,0 +1,23 @@
+<div class="color-cards color-cards--{{theme}} {{classes}}">
+    {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+    <header class="color-cards__head">
+        {{#kicker}}<p class="color-cards__kicker">{{kicker}}</p>{{/kicker}}
+        {{#title}}<h2 class="color-cards__title">{{title}}</h2>{{/title}}
+        {{#text_html}}<div class="color-cards__text">{{{text_html}}}</div>{{/text_html}}
+    </header>
+    {{#has_cards}}
+        <ul class="color-cards__grid">
+            {{#cards}}
+                <li class="color-cards__item color-cards__item--{{color}}" style="{{style}}">
+                    {{#link}}<a class="color-cards__card" href="{{link}}">{{/link}}
+                    {{^link}}<div class="color-cards__card" tabindex="0">{{/link}}
+                        <span class="color-cards__art" aria-hidden="true"><span class="color-cards__symbol">{{symbol}}</span></span>
+                        {{#label}}<span class="color-cards__label">{{label}}</span>{{/label}}
+                        <span class="color-cards__caption">{{caption}}</span>
+                    {{#link}}</a>{{/link}}
+                    {{^link}}</div>{{/link}}
+                </li>
+            {{/cards}}
+        </ul>
+    {{/has_cards}}
+</div>

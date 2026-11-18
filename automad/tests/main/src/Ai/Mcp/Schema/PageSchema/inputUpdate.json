@@ -229,6 +229,12 @@
 					"$ref": "#/$defs/partyContactCloser"
 				},
 				{
+					"$ref": "#/$defs/partyColorCards"
+				},
+				{
+					"$ref": "#/$defs/partyCurriculum"
+				},
+				{
 					"$ref": "#/$defs/partyDocumentCard"
 				},
 				{
@@ -2575,6 +2581,226 @@
 						"raw_content": {
 							"type": "string",
 							"description": "Inhalt (HTML) HTML."
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyColorCards": {
+			"type": "object",
+			"description": "Party component \"Farbkarten (bunte Wand)\": Bunte Wand aus schräg gestellten Karten mit Muster, großem Symbol und Beschriftung. Beim Darüberfahren richtet sich die Karte auf.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyColorCards"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"kicker": {
+							"type": "string",
+							"description": "Kleine Zeile über dem Titel"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"text": {
+							"type": "string",
+							"description": "Text (Markdown) Markdown."
+						},
+						"cards": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"symbol": {
+										"type": "string",
+										"description": "Symbol (Emoji)"
+									},
+									"label": {
+										"type": "string",
+										"description": "Kleine Zeile oben"
+									},
+									"caption": {
+										"type": "string",
+										"description": "Beschriftung (Sticker)"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link (optional)"
+									},
+									"color": {
+										"type": "string",
+										"enum": [
+											"",
+											"pink",
+											"yellow",
+											"blue",
+											"green",
+											"orange",
+											"purple"
+										],
+										"description": "Farbe"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Karten"
+						},
+						"theme": {
+							"type": "string",
+							"enum": [
+								"dark",
+								"light"
+							],
+							"description": "Hintergrund"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyCurriculum": {
+			"type": "object",
+			"description": "Party component \"Studienplan (bunte Module)\": Ein Studiengang als bunte Kachelfläche aus Modulen (Nummer, Symbol, Titel, Text, Themen) neben einer Spalte mit den Forderungen.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyCurriculum"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"kicker": {
+							"type": "string",
+							"description": "Kleine Zeile über dem Titel"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"intro": {
+							"type": "string",
+							"description": "Einleitung (Markdown) Markdown."
+						},
+						"modules": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"symbol": {
+										"type": "string",
+										"description": "Symbol (Emoji)"
+									},
+									"title": {
+										"type": "string",
+										"description": "Modul"
+									},
+									"text": {
+										"type": "string",
+										"description": "Text"
+									},
+									"topics": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "Themen (eines pro Zeile)"
+									},
+									"wide": {
+										"type": "boolean",
+										"description": "Breite Kachel"
+									},
+									"color": {
+										"type": "string",
+										"enum": [
+											"",
+											"pink",
+											"yellow",
+											"blue",
+											"green",
+											"orange",
+											"purple"
+										],
+										"description": "Farbe"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Module"
+						},
+						"demands_title": {
+							"type": "string",
+							"description": "Überschrift der Forderungen"
+						},
+						"demands": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Forderungen (eine pro Zeile, „Forderung: Erklärung“ setzt den Anfang fett)"
 						},
 						"classes": {
 							"type": "string",
@@ -7925,6 +8151,8 @@
 											"partyCardRow",
 											"partyCaseLeafletRegion",
 											"partyContactCloser",
+											"partyColorCards",
+											"partyCurriculum",
 											"partyDocumentCard",
 											"partyDocuments",
 											"partyDonateBlock",
