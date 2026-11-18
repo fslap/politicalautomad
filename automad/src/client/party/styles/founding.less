@@ -1,0 +1,307 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// Party founding (PartyFounding): a representative charter with cards that turn over on
+// hover or tap.
+.am-party .founding {
+	--fd-paper: #f6f0e2;
+	--fd-ink: #14213d;
+	--fd-gold: #b8913c;
+
+	position: relative;
+	padding: clamp(2rem, 5vw, 4.5rem) clamp(1.25rem, 5vw, 4rem);
+	background:
+		repeating-linear-gradient(
+			0deg,
+			transparent 0 31px,
+			rgba(20, 33, 61, 0.04) 31px 32px
+		),
+		var(--fd-paper);
+	color: var(--fd-ink);
+
+	> a[id] {
+		position: absolute;
+		top: 0;
+	}
+
+	.founding__head {
+		position: relative;
+		max-width: 46rem;
+		margin: 0 auto clamp(1.75rem, 4vw, 3rem);
+		padding-bottom: 1.25rem;
+		border-bottom: 3px double var(--fd-gold);
+		text-align: center;
+	}
+
+	.founding__seal {
+		position: absolute;
+		top: -0.5rem;
+		right: 0;
+		display: grid;
+		place-items: center;
+		width: 5.5rem;
+		height: 5.5rem;
+		border: 3px double #a8343f;
+		border-radius: 50%;
+		color: #a8343f;
+		font-size: 0.68rem;
+		font-weight: 900;
+		letter-spacing: 0.08em;
+		line-height: 1.1;
+		text-align: center;
+		text-transform: uppercase;
+		rotate: -12deg;
+		opacity: 0.85;
+	}
+
+	.founding__kicker {
+		margin: 0 0 0.4rem;
+		color: var(--fd-gold);
+		font-size: 0.82rem;
+		font-weight: 800;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+	}
+
+	.founding__title {
+		margin: 0 0 0.4em;
+		color: var(--fd-ink);
+		font-size: clamp(2rem, calc(1.2rem + 3vw), 3.4rem);
+		line-height: 1.04;
+		letter-spacing: -0.01em;
+	}
+
+	.founding__intro {
+		font-size: 1.05rem;
+
+		p {
+			color: inherit;
+		}
+	}
+
+	.founding__steps {
+		position: relative;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+		gap: 1.5rem;
+		max-width: 78rem;
+		margin: 0 auto;
+		padding: 0;
+		list-style: none;
+		counter-reset: none;
+	}
+
+	// Path: every second card is a little lower, a dashed line runs behind the cards.
+	&.founding--path .founding__steps::before {
+		content: '';
+		position: absolute;
+		left: 2%;
+		right: 2%;
+		top: 50%;
+		border-top: 2px dashed var(--fd-gold);
+		opacity: 0.6;
+	}
+
+	&.founding--path .founding__steps {
+		row-gap: 3rem;
+	}
+
+	&.founding--path .founding__step:nth-child(3n + 2) {
+		translate: 0 1.5rem;
+	}
+
+	.founding__step {
+		--step: var(--party-bg-blue, #2b3566);
+
+		position: relative;
+		min-height: 15rem;
+		perspective: 1100px;
+		outline: none;
+	}
+
+	.founding__step--orange {
+		--step: var(--party-bg-orange, #a95a36);
+	}
+
+	.founding__step--gold {
+		--step: #c49a3f;
+	}
+
+	.founding__step--green {
+		--step: var(--party-bg-green, #3e6b56);
+	}
+
+	.founding__step--purple {
+		--step: var(--party-bg-purple, #5c4370);
+	}
+
+	.founding__step--red {
+		--step: var(--party-bg-red, #8a3a40);
+	}
+
+	.founding__card {
+		position: relative;
+		height: 100%;
+		min-height: inherit;
+		transition:
+			transform 0.7s cubic-bezier(0.2, 0.75, 0.25, 1),
+			translate 0.35s ease;
+		transform-style: preserve-3d;
+	}
+
+	.founding__face {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding: 1.25rem 1.25rem 1.4rem;
+		overflow: auto;
+		border: 2px solid var(--fd-ink);
+		backface-visibility: hidden;
+		box-shadow: 6px 6px 0 var(--fd-ink);
+	}
+
+	.founding__face--front {
+		border-top: 10px solid var(--step);
+		background: #fffdf8;
+	}
+
+	.founding__face--back {
+		background: var(--step);
+		color: #fff;
+		transform: rotateY(180deg);
+
+		p,
+		li,
+		a {
+			color: inherit;
+		}
+
+		p {
+			margin: 0 0 0.5em;
+			line-height: 1.45;
+		}
+	}
+
+	.founding__number {
+		color: var(--step);
+		font-size: 2.2rem;
+		font-weight: 900;
+		line-height: 1;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.founding__face--back .founding__number {
+		color: rgba(255, 255, 255, 0.55);
+		font-size: 1.3rem;
+	}
+
+	.founding__symbol {
+		position: absolute;
+		top: 1rem;
+		right: 1.1rem;
+		font-size: 1.6rem;
+		line-height: 1;
+	}
+
+	.founding__step-title {
+		margin: 0;
+		color: var(--fd-ink);
+		font-size: 1.25rem;
+		line-height: 1.2;
+		hyphens: manual;
+	}
+
+	.founding__text {
+		margin: 0;
+		font-size: 0.95rem;
+		line-height: 1.45;
+	}
+
+	.founding__link {
+		margin-top: auto;
+		font-weight: 800;
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 3px;
+	}
+
+	// The hover effect: the card lifts and turns over.
+	.founding__step:hover .founding__card,
+	.founding__step:focus-within .founding__card {
+		translate: 0 -6px;
+	}
+
+	.founding__step--flip:hover .founding__card,
+	.founding__step--flip:focus .founding__card,
+	.founding__step--flip:focus-within .founding__card {
+		transform: rotateY(180deg);
+	}
+
+	.founding__step--flip .founding__face--front::after {
+		content: '↻';
+		position: absolute;
+		right: 1rem;
+		bottom: 0.8rem;
+		color: var(--step);
+		font-size: 1.1rem;
+		font-weight: 900;
+		opacity: 0.7;
+	}
+
+	.founding__hint {
+		max-width: 78rem;
+		margin: 2.75rem auto 0;
+		font-size: 0.85rem;
+		opacity: 0.7;
+		text-align: center;
+	}
+
+	@media (max-width: 700px) {
+		&.founding--path .founding__step:nth-child(3n + 2) {
+			translate: none;
+		}
+
+		&.founding--path .founding__steps {
+			row-gap: 1.5rem;
+		}
+
+		&.founding--path .founding__steps::before {
+			display: none;
+		}
+
+		.founding__seal {
+			position: static;
+			margin: 0 auto 0.75rem;
+		}
+	}
+
+	// No 3D turn for reduced motion: the back side fades in.
+	@media (prefers-reduced-motion: reduce) {
+		.founding__card {
+			transition: none;
+		}
+
+		.founding__step--flip:hover .founding__card,
+		.founding__step--flip:focus .founding__card,
+		.founding__step--flip:focus-within .founding__card {
+			transform: none;
+		}
+
+		.founding__face--back {
+			transform: none;
+			opacity: 0;
+		}
+
+		.founding__step--flip:hover .founding__face--back,
+		.founding__step--flip:focus .founding__face--back,
+		.founding__step--flip:focus-within .founding__face--back {
+			opacity: 1;
+		}
+	}
+}

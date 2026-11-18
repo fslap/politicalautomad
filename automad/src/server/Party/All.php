@@ -76,6 +76,7 @@ final class All {
 		'MusicPlayer' => MusicPlayer\MusicPlayer::class,
 		'NextArrow' => NextArrow\NextArrow::class,
 		'OpenWindow' => OpenWindow\OpenWindow::class,
+		'PartyFounding' => PartyFounding\PartyFounding::class,
 		'PartyHeader' => PartyHeader\PartyHeader::class,
 		'Quote' => Quote\Quote::class,
 		'RegionScroll' => RegionScroll\RegionScroll::class,

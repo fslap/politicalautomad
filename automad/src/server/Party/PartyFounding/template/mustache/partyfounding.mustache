@@ -1,0 +1,34 @@
+<div class="founding founding--{{layout}} {{classes}}">
+    {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+    <header class="founding__head">
+        {{#seal}}<span class="founding__seal" aria-hidden="true">{{seal}}</span>{{/seal}}
+        {{#kicker}}<p class="founding__kicker">{{kicker}}</p>{{/kicker}}
+        {{#title}}<h2 class="founding__title">{{title}}</h2>{{/title}}
+        {{#intro_html}}<div class="founding__intro">{{{intro_html}}}</div>{{/intro_html}}
+    </header>
+
+    {{#has_steps}}
+        <ol class="founding__steps">
+            {{#steps}}
+                <li class="founding__step founding__step--{{color}} {{#has_back}}founding__step--flip{{/has_back}}" tabindex="0">
+                    <div class="founding__card">
+                        <div class="founding__face founding__face--front">
+                            <span class="founding__number">{{number}}</span>
+                            {{#symbol}}<span class="founding__symbol" aria-hidden="true">{{symbol}}</span>{{/symbol}}
+                            <h3 class="founding__step-title">{{title}}</h3>
+                            {{#text}}<p class="founding__text">{{text}}</p>{{/text}}
+                        </div>
+                        {{#has_back}}
+                            <div class="founding__face founding__face--back">
+                                <span class="founding__number">{{number}}</span>
+                                <div class="founding__back">{{{back_html}}}</div>
+                                {{#link}}<a class="founding__link" href="{{link}}">{{link_label}}</a>{{/link}}
+                            </div>
+                        {{/has_back}}
+                    </div>
+                </li>
+            {{/steps}}
+        </ol>
+        {{#hint}}<p class="founding__hint">{{hint}}</p>{{/hint}}
+    {{/has_steps}}
+</div>
