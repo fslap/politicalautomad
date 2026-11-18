@@ -1,0 +1,49 @@
+<div class="step-bars {{classes}}" data-party-step-bars="{{steps_json}}" data-none="{{none_text}}" data-result="{{result_text}}" data-words="{{words_json}}">
+    {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+    <div class="step-bars__head">
+        <div>
+            {{#kicker}}<p class="step-bars__kicker">{{kicker}}</p>{{/kicker}}
+            {{#title}}<h2 class="step-bars__title">{{title}}</h2>{{/title}}
+            {{#text_html}}<div class="step-bars__text">{{{text_html}}}</div>{{/text_html}}
+        </div>
+        {{#highlight}}
+            <div class="step-bars__highlight">
+                <span class="step-bars__highlight-value">{{highlight}}</span>
+                {{#highlight_label}}<span class="step-bars__highlight-label">{{highlight_label}}</span>{{/highlight_label}}
+            </div>
+        {{/highlight}}
+    </div>
+
+    {{#has_steps}}
+        <div class="step-bars__chart">
+            <p class="step-bars__legend">
+                <span class="step-bars__key step-bars__key--part">{{part_label}}</span>
+                <span class="step-bars__key step-bars__key--total">{{total_label}}</span>
+            </p>
+            <ol class="step-bars__rows">
+                {{#steps}}
+                    <li class="step-bars__row" data-step="{{index}}" style="{{style}}">
+                        <span class="step-bars__label">{{label}}</span>
+                        <span class="step-bars__track">
+                            <span class="step-bars__bar"><span class="step-bars__part"></span></span>
+                            <span class="step-bars__value">{{part_text}}</span>
+                        </span>
+                    </li>
+                {{/steps}}
+            </ol>
+            <div class="step-bars__axis" aria-hidden="true">
+                {{#ticks}}<span class="step-bars__tick" style="{{style}}">{{label}}</span>{{/ticks}}
+            </div>
+        </div>
+    {{/has_steps}}
+
+    {{#slider}}
+        <div class="step-bars__slider">
+            <label>
+                <span class="step-bars__slider-label">{{slider_label}} <output class="step-bars__slider-value"></output></span>
+                <input type="range" min="0" max="{{slider_max}}" step="0.25" value="10">
+            </label>
+            <p class="step-bars__result" aria-live="polite"></p>
+        </div>
+    {{/slider}}
+</div>

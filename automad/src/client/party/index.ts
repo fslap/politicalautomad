@@ -35,6 +35,7 @@
 import './styles/index.less';
 import { initCaseMap } from './components/CaseMap';
 import { initConsentFrame } from './components/Consent';
+import { initDarkSurfaces } from './components/DarkSurfaces';
 import { initDonate } from './components/Donate';
 import { initLook } from './components/Look';
 import { initMap } from './components/Map';
@@ -48,6 +49,7 @@ import {
 import { initMusicPlayer } from './components/MusicPlayer';
 import { initSideMenu } from './components/SideMenu';
 import { initStainedGlass } from './components/StainedGlass';
+import { initStepBars } from './components/StepBars';
 import { initTurnstile } from './components/Turnstile';
 import { initVideoCommentary } from './components/VideoCommentary';
 
@@ -71,6 +73,7 @@ const behaviours: Array<
 	['[data-slide-more]', initMore],
 	['[data-md-viewer]', initMarkdownViewer],
 	['[data-side-menu]', initSideMenu],
+	['[data-party-step-bars]', initStepBars],
 	['[data-list-expand]', initListExpand],
 	['[data-party-roll-view]', initRollView],
 ];
@@ -91,8 +94,13 @@ const init = (): void => {
 	});
 };
 
-if (document.readyState === 'loading') {
-	document.addEventListener('DOMContentLoaded', init);
-} else {
+const start = (): void => {
 	init();
+	initDarkSurfaces();
+};
+
+if (document.readyState === 'loading') {
+	document.addEventListener('DOMContentLoaded', start);
+} else {
+	start();
 }

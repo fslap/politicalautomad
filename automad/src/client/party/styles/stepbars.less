@@ -1,0 +1,306 @@
+/*
+ * International Political Party Zone for all Partys also Locally
+ *
+ * (c) Florian Leon Steenbuck - https://kil.ls https://fslap.de
+ * See LICENSE_PARTY_PURPOSE.md for license information.
+ */
+
+// StepBars: stages on an exact time axis, bars grow when they scroll into view.
+.am-party .step-bars {
+	--sb-ink: #14213d;
+	--sb-part: #2b3566;
+	--sb-total: #8fb4ff;
+	--sb-accent: #ffd23f;
+
+	position: relative;
+	padding: clamp(2rem, 5vw, 4.5rem) clamp(1.25rem, 5vw, 4rem);
+	background:
+		radial-gradient(
+			circle at 92% 8%,
+			rgba(255, 210, 63, 0.35) 0 12rem,
+			transparent 12.1rem
+		),
+		linear-gradient(135deg, #eef3ff, #fdf7ec);
+	color: var(--sb-ink);
+
+	> a[id] {
+		position: absolute;
+		top: 0;
+	}
+
+	.step-bars__head {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 1.5rem 2.5rem;
+		align-items: start;
+		margin-bottom: 2rem;
+	}
+
+	.step-bars__kicker {
+		margin: 0 0 0.4rem;
+		color: #d6336c;
+		font-size: 0.85rem;
+		font-weight: 900;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
+
+	.step-bars__title {
+		margin: 0 0 0.4em;
+		color: var(--sb-ink);
+		font-size: clamp(2rem, calc(1.2rem + 3vw), 3.4rem);
+		line-height: 1.02;
+	}
+
+	.step-bars__text {
+		max-width: 44rem;
+
+		p {
+			color: inherit;
+		}
+	}
+
+	.step-bars__highlight {
+		display: grid;
+		place-items: center;
+		width: 11rem;
+		aspect-ratio: 1;
+		padding: 1rem;
+		border: 3px solid var(--sb-ink);
+		border-radius: 50%;
+		background: var(--sb-accent);
+		box-shadow: 6px 6px 0 var(--sb-ink);
+		text-align: center;
+		rotate: -6deg;
+	}
+
+	.step-bars__highlight-value {
+		font-size: 2rem;
+		font-weight: 900;
+		line-height: 1;
+	}
+
+	.step-bars__highlight-label {
+		font-size: 0.85rem;
+		font-weight: 700;
+	}
+
+	.step-bars__chart {
+		padding: 1.25rem 1.25rem 2.25rem;
+		border: 2px solid var(--sb-ink);
+		border-radius: 16px;
+		background: #fff;
+		box-shadow: 6px 6px 0 var(--sb-ink);
+	}
+
+	.step-bars__legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1.25rem;
+		margin: 0 0 1rem;
+		font-size: 0.85rem;
+		font-weight: 700;
+	}
+
+	.step-bars__key::before {
+		content: '';
+		display: inline-block;
+		width: 1.4rem;
+		height: 0.7rem;
+		margin-right: 0.4rem;
+		border-radius: 3px;
+		vertical-align: middle;
+	}
+
+	.step-bars__key--part::before {
+		background: var(--sb-part);
+	}
+
+	.step-bars__key--total::before {
+		background: var(--sb-total);
+	}
+
+	.step-bars__rows {
+		display: grid;
+		gap: 0.55rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.step-bars__row {
+		display: grid;
+		grid-template-columns: 11rem minmax(0, 1fr);
+		gap: 1rem;
+		align-items: center;
+		padding: 0.25rem 0.4rem;
+		border-radius: 8px;
+		transition: background 0.25s ease;
+	}
+
+	.step-bars__row--active {
+		background: rgba(255, 210, 63, 0.45);
+
+		.step-bars__label {
+			font-weight: 900;
+		}
+	}
+
+	.step-bars__label {
+		font-size: 0.9rem;
+		font-weight: 700;
+		text-align: right;
+	}
+
+	.step-bars__track {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		min-height: 1.6rem;
+		// Room for the value next to the longest bar.
+		padding-right: 5.5rem;
+	}
+
+	.step-bars__bar {
+		position: relative;
+		flex: none;
+		width: var(--sb-w);
+		min-width: 3px;
+		height: 1.1rem;
+		overflow: hidden;
+		border-radius: 0 6px 6px 0;
+		background: var(--sb-total);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.9s cubic-bezier(0.2, 0.75, 0.25, 1)
+			var(--sb-delay, 0ms);
+	}
+
+	.step-bars__part {
+		position: absolute;
+		inset: 0 auto 0 0;
+		width: var(--sb-p);
+		background: var(--sb-part);
+	}
+
+	.step-bars__value {
+		flex: none;
+		font-size: 0.82rem;
+		font-weight: 800;
+		white-space: nowrap;
+		opacity: 0;
+		transition: opacity 0.4s ease calc(var(--sb-delay, 0ms) + 0.6s);
+	}
+
+	&.step-bars--visible {
+		.step-bars__bar {
+			transform: scaleX(1);
+		}
+
+		.step-bars__value {
+			opacity: 1;
+		}
+	}
+
+	// The axis lines up with the tracks (label column + gap).
+	.step-bars__axis {
+		position: relative;
+		height: 1.2rem;
+		margin: 0.6rem 0 0 calc(11rem + 1rem + 0.4rem);
+		margin-right: calc(5.5rem + 0.4rem);
+		border-top: 2px solid var(--sb-ink);
+	}
+
+	.step-bars__tick {
+		position: absolute;
+		top: 0.25rem;
+		font-size: 0.75rem;
+		font-weight: 800;
+		translate: -50% 0;
+
+		&::before {
+			content: '';
+			position: absolute;
+			left: 50%;
+			top: -0.55rem;
+			height: 0.4rem;
+			border-left: 2px solid var(--sb-ink);
+		}
+	}
+
+	.step-bars__slider {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: 1rem 2rem;
+		align-items: center;
+		margin-top: 1.5rem;
+		padding: 1.1rem 1.25rem;
+		border-radius: 16px;
+		background: var(--sb-ink);
+		color: #fff;
+
+		label {
+			display: grid;
+			gap: 0.5rem;
+			font-weight: 700;
+		}
+
+		input {
+			width: 100%;
+			accent-color: var(--sb-accent);
+		}
+	}
+
+	.step-bars__slider-value {
+		color: var(--sb-accent);
+		font-weight: 900;
+	}
+
+	.step-bars__result {
+		margin: 0;
+		color: #fff;
+		font-size: 1.15rem;
+		font-weight: 800;
+	}
+
+	@media (max-width: 760px) {
+		.step-bars__head,
+		.step-bars__slider {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.step-bars__highlight {
+			width: 8.5rem;
+		}
+
+		.step-bars__row {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.2rem;
+		}
+
+		.step-bars__label {
+			text-align: left;
+		}
+
+		.step-bars__axis {
+			margin-left: 0.4rem;
+			margin-right: calc(4.5rem + 0.4rem);
+		}
+
+		.step-bars__track {
+			padding-right: 4.5rem;
+		}
+
+		.step-bars__tick:nth-child(even) {
+			display: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.step-bars__bar,
+		.step-bars__value {
+			transition: none;
+		}
+	}
+}

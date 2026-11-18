@@ -355,6 +355,9 @@
 					"$ref": "#/$defs/partyStainedGlass"
 				},
 				{
+					"$ref": "#/$defs/partyStepBars"
+				},
+				{
 					"$ref": "#/$defs/partyTagOverlay"
 				},
 				{
@@ -7753,6 +7756,146 @@
 			],
 			"additionalProperties": false
 		},
+		"partyStepBars": {
+			"type": "object",
+			"description": "Party component \"Stufen auf der Zeitachse (animiert)\": Stufen als Balken auf einer genauen Zeitachse in Jahren, mit hervorgehobenem Anteil. Die Balken wachsen beim Hineinscrollen, ein Schieberegler zeigt die passende Stufe.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyStepBars"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"kicker": {
+							"type": "string",
+							"description": "Kleine Zeile über dem Titel"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"text": {
+							"type": "string",
+							"description": "Text (Markdown) Markdown."
+						},
+						"highlight": {
+							"type": "string",
+							"description": "Kennzahl (z.B. 900 EUR)"
+						},
+						"highlight_label": {
+							"type": "string",
+							"description": "Beschriftung der Kennzahl"
+						},
+						"steps": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"label": {
+										"type": "string",
+										"description": "Bezeichnung (optional)"
+									},
+									"total": {
+										"type": "string",
+										"description": "Gesamtlänge in Jahren (z.B. 1.67 für 1 Jahr 8 Monate)"
+									},
+									"part": {
+										"type": "string",
+										"description": "Hervorgehobener Anteil in Jahren (z.B. 0.5)"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Stufen"
+						},
+						"total_label": {
+							"type": "string",
+							"description": "Legende Gesamtlänge"
+						},
+						"part_label": {
+							"type": "string",
+							"description": "Legende Anteil"
+						},
+						"scale_max": {
+							"type": "string",
+							"description": "Ende der Skala in Jahren"
+						},
+						"tick_every": {
+							"type": "number",
+							"description": "Markierung alle … Jahre"
+						},
+						"unit": {
+							"type": "string",
+							"description": "Einheit an der Skala"
+						},
+						"word_year": {
+							"type": "string",
+							"description": "Wort für 1 Jahr"
+						},
+						"word_years": {
+							"type": "string",
+							"description": "Wort für Jahre"
+						},
+						"word_month": {
+							"type": "string",
+							"description": "Wort für 1 Monat"
+						},
+						"word_months": {
+							"type": "string",
+							"description": "Wort für Monate"
+						},
+						"slider": {
+							"type": "boolean",
+							"description": "Schieberegler anzeigen"
+						},
+						"slider_label": {
+							"type": "string",
+							"description": "Text am Schieberegler"
+						},
+						"result_text": {
+							"type": "string",
+							"description": "Ergebnis ({part} = Anteil, {label} = Stufe)"
+						},
+						"none_text": {
+							"type": "string",
+							"description": "Text unterhalb der ersten Stufe"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
 		"partyTagOverlay": {
 			"type": "object",
 			"description": "Party component \"Overlay-Tags\": Schräge, zusammengeschriebene Tags (ohne #), die über einer Section schweben – zum Taggen von Sections im Graffiti-, Sticker- oder Stempel-Stil.",
@@ -8193,6 +8336,7 @@
 											"partySlideViewer",
 											"partySplit",
 											"partyStainedGlass",
+											"partyStepBars",
 											"partyTagOverlay",
 											"partyTeamBlock",
 											"partyTextSplit",
