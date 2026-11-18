@@ -1,0 +1,52 @@
+<div class="candidates {{classes}}">
+    {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+    {{#title}}<h2 class="candidates__title">{{title}}</h2>{{/title}}
+    {{#intro_html}}<div class="candidates__intro">{{{intro_html}}}</div>{{/intro_html}}
+
+    {{#featured}}
+        <article class="candidate candidate--featured candidate--{{color}}">
+            <div class="candidate__portrait">
+                {{#photo}}<img src="{{photo}}" alt="{{name}}" decoding="async">{{/photo}}
+                {{^photo}}<span class="candidate__initials" aria-hidden="true">{{initials}}</span>{{/photo}}
+            </div>
+            <div class="candidate__body">
+                {{#role}}<p class="candidate__role">{{role}}</p>{{/role}}
+                <h3 class="candidate__name">{{name}}</h3>
+                {{#has_facts}}<dl class="candidate__facts">{{#facts}}<div><dt>{{label}}</dt><dd>{{value}}</dd></div>{{/facts}}</dl>{{/has_facts}}
+                {{#quote}}<blockquote class="candidate__quote">{{quote}}</blockquote>{{/quote}}
+                {{#bio_html}}<div class="candidate__bio">{{{bio_html}}}</div>{{/bio_html}}
+                <div class="candidate__columns">
+                    {{#has_topics}}<div><h4>{{topics_label}}</h4><ul class="candidate__topics">{{#topics}}<li>{{.}}</li>{{/topics}}</ul></div>{{/has_topics}}
+                    {{#has_demands}}<div><h4>{{demands_label}}</h4><ul class="candidate__demands">{{#demands}}<li>{{.}}</li>{{/demands}}</ul></div>{{/has_demands}}
+                </div>
+                {{#has_links}}<p class="candidate__links">{{#links}}<a href="{{href}}">{{label}}</a>{{/links}}</p>{{/has_links}}
+            </div>
+        </article>
+    {{/featured}}
+
+    {{#has_others}}
+        <div class="candidates__grid">
+            {{#others}}
+                <article class="candidate candidate--card candidate--{{color}}">
+                    <div class="candidate__portrait">
+                        {{#photo}}<img src="{{photo}}" alt="{{name}}" decoding="async">{{/photo}}
+                        {{^photo}}<span class="candidate__initials" aria-hidden="true">{{initials}}</span>{{/photo}}
+                    </div>
+                    <div class="candidate__body">
+                        {{#role}}<p class="candidate__role">{{role}}</p>{{/role}}
+                        <h3 class="candidate__name">{{name}}</h3>
+                        {{#has_facts}}<dl class="candidate__facts">{{#facts}}<div><dt>{{label}}</dt><dd>{{value}}</dd></div>{{/facts}}</dl>{{/has_facts}}
+                        {{#quote}}<blockquote class="candidate__quote">{{quote}}</blockquote>{{/quote}}
+                        <details class="candidate__details">
+                            <summary>{{details_label}}</summary>
+                            {{#bio_html}}<div class="candidate__bio">{{{bio_html}}}</div>{{/bio_html}}
+                            {{#has_topics}}<h4>{{topics_label}}</h4><ul class="candidate__topics">{{#topics}}<li>{{.}}</li>{{/topics}}</ul>{{/has_topics}}
+                            {{#has_demands}}<h4>{{demands_label}}</h4><ul class="candidate__demands">{{#demands}}<li>{{.}}</li>{{/demands}}</ul>{{/has_demands}}
+                            {{#has_links}}<p class="candidate__links">{{#links}}<a href="{{href}}">{{label}}</a>{{/links}}</p>{{/has_links}}
+                        </details>
+                    </div>
+                </article>
+            {{/others}}
+        </div>
+    {{/has_others}}
+</div>

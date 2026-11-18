@@ -1,0 +1,27 @@
+<div class="backdrop backdrop--{{mode}} backdrop--{{scene}} backdrop--side-{{side}} {{classes}}">
+    {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+    <div class="backdrop__stage">
+        {{{svg}}}
+        <div class="backdrop__head">
+            {{#emblem_svg}}<div class="backdrop__emblem">{{{emblem_svg}}}</div>{{/emblem_svg}}
+            {{#kicker}}<p class="backdrop__kicker">{{kicker}}</p>{{/kicker}}
+            {{#title}}<h2 class="backdrop__title">{{title}}</h2>{{/title}}
+            {{#text_html}}<div class="backdrop__text">{{{text_html}}}</div>{{/text_html}}
+        </div>
+    </div>
+
+    {{#has_demands}}
+        <div class="backdrop__demands">
+            <ol class="backdrop__list {{#numbered}}backdrop__list--numbered{{/numbered}}">
+                {{#demands}}
+                    <li class="backdrop__demand {{#focus}}backdrop__demand--focus{{/focus}}">
+                        {{#numbered}}<span class="backdrop__number" aria-hidden="true">{{number}}</span>{{/numbered}}
+                        <h3 class="backdrop__demand-title">{{title}}</h3>
+                        {{#text}}<p class="backdrop__demand-text">{{text}}</p>{{/text}}
+                    </li>
+                {{/demands}}
+            </ol>
+            {{#note}}<p class="backdrop__note">{{note}}</p>{{/note}}
+        </div>
+    {{/has_demands}}
+</div>

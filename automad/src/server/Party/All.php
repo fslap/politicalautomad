@@ -47,7 +47,10 @@ defined('AUTOMAD') or die('Direct access not permitted!');
 final class All {
 	/** @var array<string, class-string> */
 	public static array $components = array(
+		'AlternativeVote' => AlternativeVote\AlternativeVote::class,
 		'ArtMotivation' => ArtMotivation\ArtMotivation::class,
+		'Backdrop' => Backdrop\Backdrop::class,
+		'Candidates' => Candidates\Candidates::class,
 		'CardRow' => CardRow\CardRow::class,
 		'CaseLeafletRegion' => CaseLeafletRegion\CaseLeafletRegion::class,
 		'ContactCloser' => ContactCloser\ContactCloser::class,

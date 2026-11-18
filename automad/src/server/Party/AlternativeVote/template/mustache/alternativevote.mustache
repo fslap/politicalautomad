@@ -1,0 +1,31 @@
+<div class="alt-vote alt-vote--{{layout}} {{classes}}">
+    {{#section_id}}<a id="{{section_id}}"></a>{{/section_id}}
+    <div class="alt-vote__intro">
+        {{#kicker}}<p class="alt-vote__kicker">{{kicker}}</p>{{/kicker}}
+        {{#title}}<h2 class="alt-vote__title">{{title}}</h2>{{/title}}
+        {{#text_html}}<div class="alt-vote__text">{{{text_html}}}</div>{{/text_html}}
+    </div>
+    <div class="alt-vote__tiles">
+        {{#options}}
+            <article class="alt-vote__tile alt-vote__tile--{{color}}">
+                {{#label}}<p class="alt-vote__label">{{label}}</p>{{/label}}
+                <h3 class="alt-vote__option">{{title}}</h3>
+                {{#text}}<p class="alt-vote__desc">{{text}}</p>{{/text}}
+                {{#hint}}<p class="alt-vote__hint">{{hint}}</p>{{/hint}}
+                {{#has_picks}}
+                    <ul class="alt-vote__picks">
+                        {{#picks}}
+                            <li class="alt-vote__pick alt-vote__pick--{{type}}">
+                                <span class="alt-vote__pick-label">{{label}}</span>
+                                {{#link}}<a class="alt-vote__pick-name" href="{{link}}">{{name}}</a>{{/link}}
+                                {{^link}}<span class="alt-vote__pick-name">{{name}}</span>{{/link}}
+                            </li>
+                        {{/picks}}
+                    </ul>
+                {{/has_picks}}
+                {{#link}}<a class="alt-vote__link" href="{{link}}">{{link_label}}</a>{{/link}}
+            </article>
+        {{/options}}
+    </div>
+    {{#note}}<p class="alt-vote__note">{{note}}</p>{{/note}}
+</div>

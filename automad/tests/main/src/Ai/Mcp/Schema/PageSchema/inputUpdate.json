@@ -208,7 +208,16 @@
 					"$ref": "#/$defs/video"
 				},
 				{
+					"$ref": "#/$defs/partyAlternativeVote"
+				},
+				{
 					"$ref": "#/$defs/partyArtMotivation"
+				},
+				{
+					"$ref": "#/$defs/partyBackdrop"
+				},
+				{
+					"$ref": "#/$defs/partyCandidates"
 				},
 				{
 					"$ref": "#/$defs/partyCardRow"
@@ -1682,6 +1691,148 @@
 			],
 			"additionalProperties": false
 		},
+		"partyAlternativeVote": {
+			"type": "object",
+			"description": "Party component \"Alternative Wahl (Vorschläge)\": Vorschläge zur alternativen Wahl als farbige Kachelwand mit harten Schatten neben einer Textspalte oder als dunkle Kartenreihe.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyAlternativeVote"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"kicker": {
+							"type": "string",
+							"description": "Kleine Zeile über dem Titel"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"text": {
+							"type": "string",
+							"description": "Text (Markdown) Markdown."
+						},
+						"options": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"label": {
+										"type": "string",
+										"description": "Kleine Zeile (z.B. Erststimme)"
+									},
+									"title": {
+										"type": "string",
+										"description": "Vorschlag"
+									},
+									"text": {
+										"type": "string",
+										"description": "Text"
+									},
+									"hint": {
+										"type": "string",
+										"description": "Hinweis (fett unten)"
+									},
+									"person": {
+										"type": "string",
+										"description": "Empfehlung: Person (Name)"
+									},
+									"person_link": {
+										"type": "string",
+										"description": "Link zur Person"
+									},
+									"party": {
+										"type": "string",
+										"description": "Empfehlung: Partei (Name)"
+									},
+									"party_link": {
+										"type": "string",
+										"description": "Link zur Partei"
+									},
+									"link": {
+										"type": "string",
+										"description": "Link"
+									},
+									"link_label": {
+										"type": "string",
+										"description": "Linktext"
+									},
+									"color": {
+										"type": "string",
+										"enum": [
+											"",
+											"blue",
+											"orange",
+											"gold",
+											"green",
+											"purple",
+											"red",
+											"white"
+										],
+										"description": "Farbe"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Vorschläge"
+						},
+						"person_label": {
+							"type": "string",
+							"description": "Bezeichnung Person"
+						},
+						"party_label": {
+							"type": "string",
+							"description": "Bezeichnung Partei"
+						},
+						"layout": {
+							"type": "string",
+							"enum": [
+								"wall",
+								"row"
+							],
+							"description": "Darstellung"
+						},
+						"note": {
+							"type": "string",
+							"description": "Fußnote (optional)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
 		"partyArtMotivation": {
 			"type": "object",
 			"description": "Party component \"Kunst / Motivation\": Collage aus Kunstwerken nach dem Art Builder: relative Leinwand, Spalten werden automatisch gefüllt.",
@@ -1800,6 +1951,302 @@
 						"generate_mobile": {
 							"type": "boolean",
 							"description": "Zusätzlich ein Collage-Bild für Mobilgeräte erzeugen"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyBackdrop": {
+			"type": "object",
+			"description": "Party component \"Kulisse (halb oder voll)\": Bühnenbild hinter Forderungen: halb (Kulisse neben den Forderungen im Fokus) oder voll (Forderungen vor der Kulisse). Szenen: offizielle Versammlung, Polizei bei Nacht, Partei.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyBackdrop"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"mode": {
+							"type": "string",
+							"enum": [
+								"half",
+								"full"
+							],
+							"description": "Kulisse"
+						},
+						"scene": {
+							"type": "string",
+							"enum": [
+								"official",
+								"police",
+								"party"
+							],
+							"description": "Szene"
+						},
+						"side": {
+							"type": "string",
+							"enum": [
+								"left",
+								"right"
+							],
+							"description": "Kulisse (halb) auf der Seite"
+						},
+						"kicker": {
+							"type": "string",
+							"description": "Kleine Zeile über dem Titel"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"text": {
+							"type": "string",
+							"description": "Text (Markdown) Markdown."
+						},
+						"demands": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string",
+										"description": "Forderung"
+									},
+									"text": {
+										"type": "string",
+										"description": "Erklärung"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Forderungen"
+						},
+						"focus_first": {
+							"type": "boolean",
+							"description": "Erste Forderung groß im Fokus"
+						},
+						"numbered": {
+							"type": "boolean",
+							"description": "Forderungen nummerieren"
+						},
+						"emblem": {
+							"type": "boolean",
+							"description": "Siegel anzeigen"
+						},
+						"seal_text": {
+							"type": "string",
+							"description": "Text im Siegel"
+						},
+						"note": {
+							"type": "string",
+							"description": "Fußnote (optional)"
+						},
+						"classes": {
+							"type": "string",
+							"description": "CSS-Klassen. Hilfsklassen: inner-container, widthcontainer, bgorange, bgblue, bgpink, bgextrared, bgcoolgreen, bggold, bgpurple, bgwhite, bgmilitary (Tarnmuster), overlay-up, overlay-down"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"type"
+			],
+			"additionalProperties": false
+		},
+		"partyCandidates": {
+			"type": "object",
+			"description": "Party component \"Kandidat:innen (erweitertes Profil)\": Erweiterte Profile: großes Porträt mit Fakten, Zitat, Lebenslauf, Schwerpunkten, Forderungen und Kontakt; weitere Kandidat:innen als Karten zum Aufklappen.",
+			"properties": {
+				"id": {
+					"$ref": "#/$defs/blockId"
+				},
+				"type": {
+					"const": "partyCandidates"
+				},
+				"width": {
+					"type": "string",
+					"description": "The block width as a fraction, only used inside of layoutSection blocks.",
+					"enum": [
+						"1/4",
+						"1/3",
+						"1/2",
+						"2/3",
+						"3/4",
+						"1/1"
+					]
+				},
+				"stretched": {
+					"type": "boolean",
+					"description": "If true the block is stretched to the full width."
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"section_id": {
+							"type": "string",
+							"description": "Section-ID (Anker)"
+						},
+						"title": {
+							"type": "string",
+							"description": "Titel"
+						},
+						"intro": {
+							"type": "string",
+							"description": "Einleitung Markdown."
+						},
+						"candidates": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"photo": {
+										"type": "string",
+										"description": "Foto (ohne Foto: Initialen)"
+									},
+									"name": {
+										"type": "string",
+										"description": "Name"
+									},
+									"role": {
+										"type": "string",
+										"description": "Rolle (z.B. Direktkandidat:in)"
+									},
+									"district": {
+										"type": "string",
+										"description": "Wahlkreis"
+									},
+									"list_position": {
+										"type": "string",
+										"description": "Listenplatz"
+									},
+									"age": {
+										"type": "string",
+										"description": "Alter"
+									},
+									"profession": {
+										"type": "string",
+										"description": "Beruf"
+									},
+									"quote": {
+										"type": "string",
+										"description": "Zitat"
+									},
+									"bio": {
+										"type": "string",
+										"description": "Lebenslauf / Über mich (Markdown) Markdown."
+									},
+									"topics": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "Schwerpunkte (einer pro Zeile)"
+									},
+									"demands": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "Forderungen (eine pro Zeile)"
+									},
+									"email": {
+										"type": "string",
+										"description": "E-Mail"
+									},
+									"website": {
+										"type": "string",
+										"description": "Website"
+									},
+									"instagram": {
+										"type": "string",
+										"description": "Instagram"
+									},
+									"color": {
+										"type": "string",
+										"enum": [
+											"",
+											"blue",
+											"orange",
+											"green",
+											"gold",
+											"purple",
+											"red"
+										],
+										"description": "Farbe"
+									}
+								},
+								"additionalProperties": false
+							},
+							"description": "Kandidat:innen"
+						},
+						"show_links": {
+							"type": "boolean",
+							"description": "Kontakt-Links anzeigen (E-Mail, Website, Instagram)"
+						},
+						"feature_first": {
+							"type": "boolean",
+							"description": "Erste:n Kandidat:in groß zeigen"
+						},
+						"details_label": {
+							"type": "string",
+							"description": "Text des Aufklappers"
+						},
+						"topics_label": {
+							"type": "string",
+							"description": "Überschrift Schwerpunkte"
+						},
+						"demands_label": {
+							"type": "string",
+							"description": "Überschrift Forderungen"
+						},
+						"label_district": {
+							"type": "string",
+							"description": "Bezeichnung Wahlkreis"
+						},
+						"label_list_position": {
+							"type": "string",
+							"description": "Bezeichnung Listenplatz"
+						},
+						"label_age": {
+							"type": "string",
+							"description": "Bezeichnung Alter"
+						},
+						"label_profession": {
+							"type": "string",
+							"description": "Bezeichnung Beruf"
 						},
 						"classes": {
 							"type": "string",
@@ -7347,7 +7794,10 @@
 									"component": {
 										"type": "string",
 										"enum": [
+											"partyAlternativeVote",
 											"partyArtMotivation",
+											"partyBackdrop",
+											"partyCandidates",
 											"partyCardRow",
 											"partyCaseLeafletRegion",
 											"partyContactCloser",
